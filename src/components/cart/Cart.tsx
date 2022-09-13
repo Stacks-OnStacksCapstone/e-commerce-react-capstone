@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { CartContext } from "../../context/cart.context";
 import Navbar from "../navbar/Narbar";
+import Product from "../../models/Product";
 
 const Container = styled.div``;
 
@@ -37,7 +38,7 @@ const Info = styled.div`
   flex: 3;
 `;
 
-const Product = styled.div`
+const ProductDisplay = styled.div`
   display: flex;
   justify-content: space-between;
 `;
@@ -130,8 +131,41 @@ const Button = styled.button`
   font-weight: 600;
 `;
 
+const AddQuantity = styled.button``;
+
+const RemoveQuantity = styled.button``;
+
+const RemoveItem = styled.button``;
+
 export const Cart = () => {
   const { cart, setCart } = useContext(CartContext);
+
+    const changeQuantity = (product: Product) => {
+
+      const newCart = [...cart]
+      const index = newCart.findIndex((searchProduct) => {
+        return searchProduct.id === product.id
+      })
+
+      if (index === -1) newCart.push(product)
+      else if (!(product.quantity < 0 && newCart[index].quantity === 1)) newCart[index].quantity += product.quantity
+
+      setCart(newCart)
+    }
+
+    const removeProduct = (product: Product) => {
+
+      const newCart = [...cart]
+      const index = newCart.findIndex((searchProduct) => {
+        return searchProduct.id === product.id
+      })
+
+      for (let i = 0; i < newCart.length; i++) {
+        if (i === index) newCart.splice(i, 1);
+      }
+
+      setCart(newCart)
+    }
 
   const navigate = useNavigate();
 
@@ -149,7 +183,7 @@ export const Cart = () => {
             {
               cart.map((product)=> (
                 <>
-                  <Product>
+                  <ProductDisplay>
                     <ProductDetail>
                       <Image src={product.image} />
                       <Details>
@@ -163,11 +197,14 @@ export const Cart = () => {
                     </ProductDetail>
                     <PriceDetail>
                       <ProductAmountContainer>
+                        <Button onClick={() => {changeQuantity({...product, quantity: -1})}} >-</Button>
                         <ProductAmount> {product.quantity} </ProductAmount>
+                        <Button onClick={() => {changeQuantity({...product, quantity: 1})}} >+</Button>
                       </ProductAmountContainer>
                       <ProductPrice>$ {product.price}</ProductPrice>
                     </PriceDetail>
-                  </Product>
+                    <Button onClick={() => {removeProduct(product)}} >Remove from Cart</Button>
+                  </ProductDisplay>
                   <Hr/>
                 </>
               ))
