@@ -135,7 +135,22 @@ const AddQuantity = styled.button``;
 
 const RemoveQuantity = styled.button``;
 
-const RemoveItem = styled.button``;
+const RemoveContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const RemoveItem = styled.button`
+  background-color: black;
+  color: white;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  margin: 20px;
+  height: 50px;
+  width: 100px;
+`;
 
 export const Cart = () => {
   const { cart, setCart } = useContext(CartContext);
@@ -201,9 +216,11 @@ export const Cart = () => {
                         <ProductAmount> {product.quantity} </ProductAmount>
                         <Button onClick={() => {changeQuantity({...product, quantity: 1})}} >+</Button>
                       </ProductAmountContainer>
-                      <ProductPrice>$ {product.price}</ProductPrice>
+                      <ProductPrice>$ {product.price * product.quantity}</ProductPrice>
                     </PriceDetail>
-                    <Button onClick={() => {removeProduct(product)}} >Remove from Cart</Button>
+                    <RemoveContainer>
+                      <RemoveItem onClick={() => {removeProduct(product)}} >Remove from Cart</RemoveItem>
+                    </RemoveContainer>
                   </ProductDisplay>
                   <Hr/>
                 </>
