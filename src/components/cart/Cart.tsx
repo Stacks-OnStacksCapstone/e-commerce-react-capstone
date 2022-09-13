@@ -131,9 +131,7 @@ const Button = styled.button`
   font-weight: 600;
 `;
 
-const AddQuantity = styled.button``;
-
-const RemoveQuantity = styled.button``;
+const ChangeQuantity = styled.button``;
 
 const RemoveContainer = styled.div`
   display: flex;
@@ -163,7 +161,7 @@ export const Cart = () => {
       })
 
       if (index === -1) newCart.push(product)
-      else if (!(product.quantity < 0 && newCart[index].quantity === 1)) newCart[index].quantity += product.quantity
+      else if (!(product.quantity < 0 && newCart[index].quantity == 1)) newCart[index].quantity += product.quantity
 
       setCart(newCart)
     }
@@ -212,9 +210,9 @@ export const Cart = () => {
                     </ProductDetail>
                     <PriceDetail>
                       <ProductAmountContainer>
-                        <Button onClick={() => {changeQuantity({...product, quantity: -1})}} >-</Button>
+                        <ChangeQuantity onClick={() => {changeQuantity({...product, quantity: -1})}} >-</ChangeQuantity>
                         <ProductAmount> {product.quantity} </ProductAmount>
-                        <Button onClick={() => {changeQuantity({...product, quantity: 1})}} >+</Button>
+                        <ChangeQuantity onClick={() => {changeQuantity({...product, quantity: 1})}} >+</ChangeQuantity>
                       </ProductAmountContainer>
                       <ProductPrice>$ {product.price * product.quantity}</ProductPrice>
                     </PriceDetail>
