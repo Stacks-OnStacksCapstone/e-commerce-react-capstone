@@ -5,6 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import Product from '../../models/Product';
+import { useNavigate } from 'react-router-dom';
 
 interface productProps {
     product: Product,
@@ -12,24 +13,28 @@ interface productProps {
 }
 
 export const EditProductCard = (props: productProps) => {
-    
+  const navigate = useNavigate();    
+
+  function onClick() {
+    navigate("/admin/product/" + props.product.id);
+  }
+
   return(
     <>
-      <Card sx={{ maxWidth: 345 }}>
-        <CardActionArea>
+      <Card sx={{ width: 345, height: 260, margin: 2 }}>
+        <CardActionArea onClick={onClick} sx={{ height: 260 }}>
           <CardMedia
             component="img"
             height="140"
             image={props.product.image}
-            alt="green iguana"
+            alt="product image"
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
-              Lizard
+              {props.product.name}
             </Typography>
             <Typography variant="body2">
-              Lizards are a widespread group of squamate reptiles, with over 6,000
-              species, ranging across all continents except Antarctica
+              {props.product.description}
             </Typography>
           </CardContent>
         </CardActionArea>

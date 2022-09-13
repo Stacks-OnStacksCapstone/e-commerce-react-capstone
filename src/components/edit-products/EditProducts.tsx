@@ -11,7 +11,8 @@ const Container = styled.div`
     padding: 40px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    align-items: center;
+    justify-content: center;
 `;
 
 export const EditProducts = () => {
