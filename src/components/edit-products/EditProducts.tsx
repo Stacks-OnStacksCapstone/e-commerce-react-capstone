@@ -19,7 +19,6 @@ const Container = styled.div`
 export const EditProducts = () => {
 
     const [products, setProducts] = useState<Product[]>([])
-    const {page} = useParams();
 
     useEffect(() => {
       const fetchData = async () => {
