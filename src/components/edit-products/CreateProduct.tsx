@@ -1,13 +1,17 @@
 import { Box, Button, Container, Grid, Paper, TextField, Typography } from "@material-ui/core"
+import { getSuggestedQuery } from "@testing-library/react";
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Product from "../../models/Product";
+import { apiGetCurrentUser } from "../../remote/e-commerce-api/authService";
+import { eCommerceApiResponse } from "../../remote/e-commerce-api/eCommerceClient";
 import { apiUpsertProduct } from "../../remote/e-commerce-api/productService";
 
 
 export const CreateProduct = () => {
 
   const [formData, setFormData] = useState<Product>(new Product(0, "", 0, "", 0, ""));
+  const [user, setUser] = useState<eCommerceApiResponse>();
   const navigate = useNavigate();
 
   async function onSubmit() {
@@ -20,6 +24,19 @@ export const CreateProduct = () => {
     }
   }
 
+  async function getUser() {
+    let usr = await apiGetCurrentUser();
+    setUser(usr);
+  }
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  if (user === undefined || user.payload.admin != true) {
+    return <h1>Unauthorized</h1>
+  }
+
   return <>
     <br />
     <Container maxWidth="sm">
@@ -30,6 +47,7 @@ export const CreateProduct = () => {
           <br />
           <TextField
             required
+
             id="outlined-required"
             label="Product Name"
             onChange={(event: React.ChangeEvent<HTMLInputElement>
