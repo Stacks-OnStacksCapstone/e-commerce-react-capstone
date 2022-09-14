@@ -1,10 +1,15 @@
 import { Badge } from "@material-ui/core";
 import { ShoppingCartOutlined } from "@material-ui/icons";
 import React from "react";
-import { useContext } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { CartContext } from "../../context/cart.context";
+import { ThemeProvider } from 'styled-components';
+import { GlobalStyles } from '../global-style/globalStyles';
+import {lightTheme, darkTheme} from '../dark-mode/Theme';
+import { Switch } from '@material-ui/core';
+
 
 const Container = styled.div`
   height: 60px;
@@ -39,9 +44,15 @@ const MenuItem = styled.div`
   margin-left: 25px;
 `;
 
+
 const Navbar = () => {
   const {cart,setCart} = useContext(CartContext);
   const navigate = useNavigate();
+
+  const [theme, setTheme] = useState('light');
+  const themeToggler = () => {
+  theme === 'light' ? setTheme('dark') : setTheme('light')
+  }
 
   const cartTotal = () => {
     let total = 0;
@@ -58,6 +69,12 @@ const Navbar = () => {
         <Logo onClick={() => {navigate('/')}}>Revature Swag Shop</Logo>
         </Left>
         <Right>
+          <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
+            <>
+            <GlobalStyles/>
+            <Switch onChange={themeToggler}></Switch>
+            </>
+          </ThemeProvider>
           <MenuItem onClick={() => {navigate('/register')}}>REGISTER</MenuItem>
           <MenuItem onClick={() => {navigate('/login')}}>SIGN IN</MenuItem>
           <MenuItem onClick={() => {navigate('/cart')}}>
