@@ -121,6 +121,9 @@ export const EditProductPage = () => {
                 <Box>
                     <Container maxWidth="md">
                         <Paper elevation={3}>
+                            <Grid container spacing={0} justify="flex-end">
+                                <Button variant="contained" onClick={()=> {navigate("/admin/products"); }}> Back to Products </Button>
+                            </Grid>
                             <Grid container spacing={0} direction="column" alignItems="center" justify="center">
 
                                 <Typography variant="h3">{defaultValue.name}</Typography>

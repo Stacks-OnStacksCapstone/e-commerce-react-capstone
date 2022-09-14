@@ -43,6 +43,9 @@ export const CreateProduct = () => {
       <Paper elevation={3}>
         <Grid container spacing={0} direction="column" alignItems="center" justify="center">
           <br />
+          <Grid container spacing={0} justify="flex-end">
+              <Button variant="contained" onClick={() => { navigate("/admin/products"); }}> Return to Products</Button><span>&nbsp;&nbsp;</span>
+          </Grid>
           <Typography variant="h4">Create Product</Typography>
           <br />
           <TextField
