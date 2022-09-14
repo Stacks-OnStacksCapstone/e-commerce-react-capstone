@@ -17,6 +17,9 @@ import Button from '@mui/material/Button';
 import * as React from 'react';
 import { styled as muiStyled } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import DeleteIcon from '@mui/icons-material/Delete';
+
   
   const Info = styled.div`
     opacity: 0;
@@ -138,10 +141,38 @@ import AddIcon from '@mui/icons-material/Add';
 
   export default function ProductDetailDialogs(props: productProps) {
     const [open, setOpen] = React.useState(false);
+    const { cart, setCart } = useContext(CartContext);
     var formatter = new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
     });
+
+    const changeQuantity = (product: Product) => {
+
+      const newCart = [...cart]
+      const index = newCart.findIndex((searchProduct) => {
+        return searchProduct.id === product.id
+      })
+  
+      if (index === -1) newCart.push(product)
+      else if (!(product.quantity < 0 && newCart[index].quantity == 1)) newCart[index].quantity += product.quantity
+  
+      setCart(newCart)
+    }
+
+    const removeProduct = (product: Product) => {
+
+      const newCart = [...cart]
+      const index = newCart.findIndex((searchProduct) => {
+        return searchProduct.id === product.id
+      })
+  
+      for (let i = 0; i < newCart.length; i++) {
+        if (i === index) newCart.splice(i, 1);
+      }
+  
+      setCart(newCart)
+    }
   
     const handleClickOpen = () => {
       setOpen(true);
@@ -180,8 +211,14 @@ import AddIcon from '@mui/icons-material/Add';
             {/* <Button autoFocus onClick={handleClose}>
               Here we need to implement add to cart
             </Button> */}
-            <IconButton>
+            <IconButton onClick={() => {changeQuantity({...props.product, quantity: 1})}}>
               <AddIcon/>
+            </IconButton>
+            <IconButton onClick={() => {changeQuantity({...props.product, quantity: -1})}}>
+              <RemoveIcon/>
+            </IconButton>
+            <IconButton onClick={() => {removeProduct(props.product)}}>
+              <DeleteIcon/>
             </IconButton>
           </DialogActions>
         </BootstrapDialog>
