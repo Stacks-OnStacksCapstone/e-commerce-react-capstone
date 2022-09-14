@@ -16,6 +16,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import * as React from 'react';
 import { styled as muiStyled } from '@mui/material/styles';
+import AddIcon from '@mui/icons-material/Add';
   
   const Info = styled.div`
     opacity: 0;
@@ -137,6 +138,10 @@ import { styled as muiStyled } from '@mui/material/styles';
 
   export default function ProductDetailDialogs(props: productProps) {
     const [open, setOpen] = React.useState(false);
+    var formatter = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    });
   
     const handleClickOpen = () => {
       setOpen(true);
@@ -163,7 +168,7 @@ import { styled as muiStyled } from '@mui/material/styles';
           </DialogContent>
           <DialogContent dividers>
           <Typography gutterBottom>
-            Price: ${props.product.price}
+            Price: {formatter.format(props.product.price)}
           </Typography>
           </DialogContent>
           <DialogContent dividers>
@@ -172,9 +177,12 @@ import { styled as muiStyled } from '@mui/material/styles';
             </Typography>
           </DialogContent>
           <DialogActions>
-            <Button autoFocus onClick={handleClose}>
+            {/* <Button autoFocus onClick={handleClose}>
               Here we need to implement add to cart
-            </Button>
+            </Button> */}
+            <IconButton>
+              <AddIcon/>
+            </IconButton>
           </DialogActions>
         </BootstrapDialog>
       </div>
@@ -183,6 +191,7 @@ import { styled as muiStyled } from '@mui/material/styles';
 
   export const ProductCard = (props: productProps) => {
     const { cart, setCart } = useContext(CartContext);
+    
 
     const addItemToCart = (product: Product) => {
 
