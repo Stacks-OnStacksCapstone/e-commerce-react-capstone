@@ -9,6 +9,8 @@ import { ThemeProvider } from 'styled-components';
 import { GlobalStyles } from '../global-style/globalStyles';
 import {lightTheme, darkTheme} from '../dark-mode/Theme';
 import { Switch } from '@material-ui/core';
+import { useDarkMode } from "../dark-mode/useDarkMode";
+import Toggler from "../dark-mode/Toggler";
 
 
 const Container = styled.div`
@@ -49,10 +51,14 @@ const Navbar = () => {
   const {cart,setCart} = useContext(CartContext);
   const navigate = useNavigate();
 
-  const [theme, setTheme] = useState('light');
-  const themeToggler = () => {
-  theme === 'light' ? setTheme('dark') : setTheme('light')
-  }
+  // const [theme, setTheme] = useState('light');
+  // const themeToggler = () => {
+  // theme === 'light' ? setTheme('dark') : setTheme('light')
+  // }
+
+  const [theme, themeToggler] = useDarkMode();
+  const themeMode = theme === 'light' ? lightTheme : darkTheme;
+  
 
   const cartTotal = () => {
     let total = 0;
@@ -69,11 +75,9 @@ const Navbar = () => {
         <Logo onClick={() => {navigate('/')}}>Revature Swag Shop</Logo>
         </Left>
         <Right>
-          <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
-            <>
+          <ThemeProvider theme={themeMode}>
             <GlobalStyles/>
-            <Switch onChange={themeToggler}></Switch>
-            </>
+            <Toggler theme={theme} toggleTheme={themeToggler} />
           </ThemeProvider>
           <MenuItem onClick={() => {navigate('/register')}}>REGISTER</MenuItem>
           <MenuItem onClick={() => {navigate('/login')}}>SIGN IN</MenuItem>
