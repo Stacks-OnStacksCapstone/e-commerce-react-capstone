@@ -60,6 +60,14 @@ import { styled as muiStyled } from '@mui/material/styles';
     height: 75%;
     z-index: 2;
   `;
+
+  const DialogImage = styled.img`
+    display: block;
+    width: 75%;
+    height: 75%;
+    margin: auto;
+    z-index: 2;
+  `;
   
   const Icon = styled.div`
     width: 40px;
@@ -76,6 +84,12 @@ import { styled as muiStyled } from '@mui/material/styles';
       transform: scale(1.1);
     }
   `;
+
+  const DialogContentStyle = {
+    DialogContent:{
+      padding: "50px"
+    },
+}
   
   interface productProps {
       product: Product,
@@ -121,7 +135,7 @@ import { styled as muiStyled } from '@mui/material/styles';
     );
   };
 
-  export default function CustomizedDialogs() {
+  export default function ProductDetailDialogs(props: productProps) {
     const [open, setOpen] = React.useState(false);
   
     const handleClickOpen = () => {
@@ -133,45 +147,39 @@ import { styled as muiStyled } from '@mui/material/styles';
   
     return (
       <div>
-        <IconButton aria-label="delete" onClick={handleClickOpen}>
+        <Icon aria-label="view-product-details" onClick={handleClickOpen}>
           <SearchOutlined />
-        </IconButton>
-        {/*<Button variant="outlined" onClick={handleClickOpen}>
-          Open dialog
-    </Button>*/}
+        </Icon>
         <BootstrapDialog
           onClose={handleClose}
           aria-labelledby="customized-dialog-title"
           open={open}
         >
           <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
-            Modal title
+            {props.product.name}
           </BootstrapDialogTitle>
           <DialogContent dividers>
+            <DialogImage src={props.product.image}/>
+          </DialogContent>
+          <DialogContent dividers>
+          <Typography gutterBottom>
+            Price: ${props.product.price}
+          </Typography>
+          </DialogContent>
+          <DialogContent dividers>
             <Typography gutterBottom>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-              consectetur ac, vestibulum at eros.
-            </Typography>
-            <Typography gutterBottom>
-              Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-              Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-            </Typography>
-            <Typography gutterBottom>
-              Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus
-              magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec
-              ullamcorper nulla non metus auctor fringilla.
+              {props.product.description}
             </Typography>
           </DialogContent>
           <DialogActions>
             <Button autoFocus onClick={handleClose}>
-              Save changes
+              Here we need to implement add to cart
             </Button>
           </DialogActions>
         </BootstrapDialog>
       </div>
     );
-  }
+    }
 
   export const ProductCard = (props: productProps) => {
     const { cart, setCart } = useContext(CartContext);
@@ -206,7 +214,7 @@ import { styled as muiStyled } from '@mui/material/styles';
           <Icon>
             <ShoppingCartOutlined onClick={() => {addItemToCart({...props.product, quantity: 1})}} />
           </Icon>
-          <CustomizedDialogs></CustomizedDialogs>
+          <ProductDetailDialogs product={props.product} key={props.product.id}></ProductDetailDialogs>
         </Info>
       </Container>
 
