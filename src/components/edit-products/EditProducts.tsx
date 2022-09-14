@@ -6,6 +6,7 @@ import { apiGetAllProducts } from "../../remote/e-commerce-api/productService"
 import Navbar from "../navbar/Narbar"
 import { EditProductCard } from "./EditProductCard"
 import styled from "styled-components";
+import { Typography } from "@material-ui/core"
 
 const Container = styled.div`
     padding: 40px;
@@ -31,6 +32,8 @@ export const EditProducts = () => {
     return(
         <React.Fragment>
             <Navbar/>
+            <br />
+            <Typography variant="h3">Edit Products</Typography>
             <Container>
                 {products.map((item) => (
                     <EditProductCard product={item} key={item.id} />
