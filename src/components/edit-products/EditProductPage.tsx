@@ -119,15 +119,17 @@ export const EditProductPage = () => {
                 <Navbar />
                 <br />
                 <Box>
-                    <Container maxWidth="sm">
+                    <Container maxWidth="md">
                         <Paper elevation={3}>
                             <Grid container spacing={0} direction="column" alignItems="center" justify="center">
 
-                                <Typography variant="h1">{defaultValue.name}</Typography>
+                                <Typography variant="h3">{defaultValue.name}</Typography>
                                 <img src={defaultValue.image} alt={defaultValue.name} height="250px" />
-                                <Typography variant="h2">${defaultValue.price}.00</Typography>
-                                <Typography variant="h3">{defaultValue.description}</Typography>
-
+                                <Typography variant="h4">${defaultValue.price}.00</Typography>
+                                <Typography variant="h5">{defaultValue.description}</Typography>
+                                <br />
+                                <br />
+                                <br />
 
                                 <TextField
                                     defaultValue={defaultValue.name}
@@ -158,10 +160,11 @@ export const EditProductPage = () => {
                                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => { setProduct({ ...product, "price": event.target.valueAsNumber }) }}
                                 />
                                 <br /><br />
+                            </Grid>
+                            <Grid container spacing={2} alignItems="center" justify="center">
                                 <Button variant="contained" onClick={updateProduct}> Update </Button>
-                                <br /><br />
+                                <span>&nbsp;&nbsp;</span>
                                 <Button variant="contained" onClick={deleteProduct}> Delete </Button>
-                                <br /><br />
                             </Grid>
                         </Paper>
                     </Container>
