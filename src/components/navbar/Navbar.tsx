@@ -1,8 +1,10 @@
 import { Badge } from "@material-ui/core";
 import { ShoppingCartOutlined } from "@material-ui/icons";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { apiGetCurrentUser } from "../../remote/e-commerce-api/authService";
+import { eCommerceApiResponse } from "../../remote/e-commerce-api/eCommerceClient";
 
 const Container = styled.div`
   height: 60px;
@@ -39,6 +41,16 @@ const MenuItem = styled.div`
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const [user, setUser] = useState<eCommerceApiResponse>();
+  
+  async function getUser() {
+    let usr = await apiGetCurrentUser();
+    setUser(usr);
+  }
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   return (
     <Container>
@@ -47,6 +59,7 @@ const Navbar = () => {
         <Logo onClick={() => {navigate('/')}}>Revature Swag Shop</Logo>
         </Left>
         <Right>
+          {!(user === undefined || user.payload.admin != true) && <MenuItem onClick={() => {navigate('/admin/products')}}>EDIT PRODUCTS</MenuItem>}
           <MenuItem onClick={() => {navigate('/register')}}>REGISTER</MenuItem>
           <MenuItem onClick={() => {navigate('/login')}}>SIGN IN</MenuItem>
           <MenuItem onClick={() => {navigate('/cart')}}>
