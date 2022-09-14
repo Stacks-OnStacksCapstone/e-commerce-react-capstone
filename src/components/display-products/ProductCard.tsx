@@ -3,7 +3,7 @@ import {
     ShoppingCartOutlined,
   } from "@material-ui/icons";
 import { useContext } from "react";
-  import styled from "styled-components";
+  import styled from "styled-components" ;
 import { CartContext } from "../../context/cart.context";
 import Product from "../../models/Product";
 import Dialog from '@mui/material/Dialog';
@@ -15,10 +15,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import * as React from 'react';
+import { styled as muiStyled } from '@mui/material/styles';
   
   const Info = styled.div`
     opacity: 0;
-    width: 100%;
+    width: 100%;s
     height: 100%;
     position: absolute;
     top: 0;
@@ -81,7 +82,7 @@ import * as React from 'react';
       key: number
   }
 
-  const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  const BootstrapDialog = muiStyled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
       padding: theme.spacing(2),
     },
@@ -135,9 +136,9 @@ import * as React from 'react';
         <IconButton aria-label="delete" onClick={handleClickOpen}>
           <SearchOutlined />
         </IconButton>
-        <Button variant="outlined" onClick={handleClickOpen}>
+        {/*<Button variant="outlined" onClick={handleClickOpen}>
           Open dialog
-        </Button>
+    </Button>*/}
         <BootstrapDialog
           onClose={handleClose}
           aria-labelledby="customized-dialog-title"
@@ -205,40 +206,9 @@ import * as React from 'react';
           <Icon>
             <ShoppingCartOutlined onClick={() => {addItemToCart({...props.product, quantity: 1})}} />
           </Icon>
-          <Icon>
-            <SearchOutlined onClick={handleClickOpen} />
-          </Icon>
-          <BootstrapDialog
-            onClose={handleClose}
-            aria-labelledby="customized-dialog-title"
-            open={open}
-          >
-          <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
-            Modal title
-          </BootstrapDialogTitle>
-          <DialogContent dividers>
-            <Typography gutterBottom>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-              consectetur ac, vestibulum at eros.
-            </Typography>
-            <Typography gutterBottom>
-              Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-              Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-            </Typography>
-            <Typography gutterBottom>
-              Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus
-              magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec
-              ullamcorper nulla non metus auctor fringilla.
-            </Typography>
-          </DialogContent>
-          <DialogActions>
-            <Button autoFocus onClick={handleClose}>
-              Save changes
-            </Button>
-          </DialogActions>
-        </BootstrapDialog>
+          <CustomizedDialogs></CustomizedDialogs>
         </Info>
       </Container>
+
     );
   };
