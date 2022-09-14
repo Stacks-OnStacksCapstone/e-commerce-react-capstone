@@ -1,8 +1,10 @@
 import { Badge } from "@material-ui/core";
 import { ShoppingCartOutlined } from "@material-ui/icons";
 import React from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { CartContext } from "../../context/cart.context";
 
 const Container = styled.div`
   height: 60px;
@@ -38,7 +40,16 @@ const MenuItem = styled.div`
 `;
 
 const Navbar = () => {
+  const {cart,setCart} = useContext(CartContext);
   const navigate = useNavigate();
+
+  const cartTotal = () => {
+    let total = 0;
+    for (let i = 0; i < cart.length; i++) {
+      total += cart[i].quantity;
+    }
+    return total;
+  }
 
   return (
     <Container>
@@ -50,7 +61,7 @@ const Navbar = () => {
           <MenuItem onClick={() => {navigate('/register')}}>REGISTER</MenuItem>
           <MenuItem onClick={() => {navigate('/login')}}>SIGN IN</MenuItem>
           <MenuItem onClick={() => {navigate('/cart')}}>
-            <Badge color="primary">
+            <Badge badgeContent={cartTotal()} color="primary">
               <ShoppingCartOutlined />
             </Badge>
           </MenuItem>
