@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { CartContext } from "../../context/cart.context";
-import Navbar from "../navbar/Narbar";
+import Navbar from "../navbar/Navbar";
 
 const Container = styled.div``;
 
