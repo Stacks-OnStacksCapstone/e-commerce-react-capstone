@@ -4,6 +4,9 @@ import styled from "styled-components";
 import { CartContext } from "../../context/cart.context";
 import Navbar from "../navbar/Narbar";
 import Product from "../../models/Product";
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import Button from "@material-ui/core/Button";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
 
 const Container = styled.div``;
 
@@ -93,6 +96,7 @@ const ProductAmount = styled.div`
 const ProductPrice = styled.div`
   font-size: 30px;
   font-weight: 200;
+  margin-top: 20px;
 `;
 
 const Hr = styled.hr`
@@ -123,62 +127,50 @@ const SummaryItemText = styled.span``;
 
 const SummaryItemPrice = styled.span``;
 
-const Button = styled.button`
-  width: 100%;
-  padding: 10px;
-  background-color: black;
-  color: white;
-  font-weight: 600;
-`;
-
-const ChangeQuantity = styled.button``;
-
-const RemoveContainer = styled.div`
+const CheckoutButton = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
-`;
-
-const RemoveItem = styled.button`
-  background-color: black;
-  color: white;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  margin: 20px;
-  height: 50px;
-  width: 100px;
 `;
 
 export const Cart = () => {
   const { cart, setCart } = useContext(CartContext);
 
-    const changeQuantity = (product: Product) => {
+  // Create our number formatter.
+  var formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
 
-      const newCart = [...cart]
-      const index = newCart.findIndex((searchProduct) => {
-        return searchProduct.id === product.id
-      })
+  // These options are needed to round to whole numbers if that's what you want.
+  //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+  //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+  });
 
-      if (index === -1) newCart.push(product)
-      else if (!(product.quantity < 0 && newCart[index].quantity == 1)) newCart[index].quantity += product.quantity
+  const changeQuantity = (product: Product) => {
 
-      setCart(newCart)
+    const newCart = [...cart]
+    const index = newCart.findIndex((searchProduct) => {
+      return searchProduct.id === product.id
+    })
+
+    if (index === -1) newCart.push(product)
+    else if (!(product.quantity < 0 && newCart[index].quantity == 1)) newCart[index].quantity += product.quantity
+
+    setCart(newCart)
+  }
+
+  const removeProduct = (product: Product) => {
+
+    const newCart = [...cart]
+    const index = newCart.findIndex((searchProduct) => {
+      return searchProduct.id === product.id
+    })
+
+    for (let i = 0; i < newCart.length; i++) {
+      if (i === index) newCart.splice(i, 1);
     }
 
-    const removeProduct = (product: Product) => {
-
-      const newCart = [...cart]
-      const index = newCart.findIndex((searchProduct) => {
-        return searchProduct.id === product.id
-      })
-
-      for (let i = 0; i < newCart.length; i++) {
-        if (i === index) newCart.splice(i, 1);
-      }
-
-      setCart(newCart)
-    }
+    setCart(newCart)
+  }
 
   const navigate = useNavigate();
 
@@ -188,8 +180,8 @@ export const Cart = () => {
       <Wrapper>
         <Title>YOUR BAG</Title>
         <Top>
-          <TopButton onClick={() => {navigate('/')}}>CONTINUE SHOPPING</TopButton>
-          <TopButton onClick={() => {navigate('/checkout')}}>CHECKOUT NOW</TopButton>
+          <Button variant="contained" color="secondary" onClick={() => {navigate('/')}}>CONTINUE SHOPPING</Button>
+          {/* <TopButton onClick={() => {navigate('/checkout')}}>CHECKOUT NOW</TopButton> */}
         </Top>
         <Bottom>
           <Info>
@@ -210,15 +202,17 @@ export const Cart = () => {
                     </ProductDetail>
                     <PriceDetail>
                       <ProductAmountContainer>
-                        <ChangeQuantity onClick={() => {changeQuantity({...product, quantity: -1})}} >-</ChangeQuantity>
                         <ProductAmount> {product.quantity} </ProductAmount>
-                        <ChangeQuantity onClick={() => {changeQuantity({...product, quantity: 1})}} >+</ChangeQuantity>
                       </ProductAmountContainer>
-                      <ProductPrice>$ {product.price * product.quantity}</ProductPrice>
+                      <ButtonGroup >
+                        <Button onClick={() => {changeQuantity({...product, quantity: -1})}} >-</Button>
+                        <Button onClick={() => {removeProduct(product)}} >
+                          <DeleteOutlinedIcon />
+                        </Button>
+                        <Button onClick={() => {changeQuantity({...product, quantity: 1})}} >+</Button>
+                      </ButtonGroup>
+                      <ProductPrice>{formatter.format(product.price * product.quantity)}</ProductPrice>
                     </PriceDetail>
-                    <RemoveContainer>
-                      <RemoveItem onClick={() => {removeProduct(product)}} >Remove from Cart</RemoveItem>
-                    </RemoveContainer>
                   </ProductDisplay>
                   <Hr/>
                 </>
@@ -229,25 +223,25 @@ export const Cart = () => {
             <SummaryTitle>ORDER SUMMARY</SummaryTitle>
             <SummaryItem>
               <SummaryItemText>Subtotal</SummaryItemText>
-              <SummaryItemPrice>$ 
-                  {cart.reduce<number>((total, product) => total + product.price * product.quantity, 0)}
+              <SummaryItemPrice>
+                  {formatter.format(cart.reduce<number>((total, product) => total + product.price * product.quantity, 0))}
               </SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
               <SummaryItemText>Estimated Shipping</SummaryItemText>
-              <SummaryItemPrice>$ 5.90</SummaryItemPrice>
+              <SummaryItemPrice>{formatter.format(5.90)}</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
               <SummaryItemText>Shipping Discount</SummaryItemText>
-              <SummaryItemPrice>$ -5.90</SummaryItemPrice>
+              <SummaryItemPrice>{formatter.format(-5.90)}</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
               <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>$ 
-                {cart.reduce<number>((total, product) => total + product.price * product.quantity, 0)}
+              <SummaryItemPrice>
+              {formatter.format(cart.reduce<number>((total, product) => total + product.price * product.quantity, 0))}
               </SummaryItemPrice>
             </SummaryItem>
-            <Button onClick={() => {navigate('/checkout')}}>CHECKOUT NOW</Button>
+            <Button fullWidth={true} variant="contained" color="secondary" onClick={() => {navigate('/checkout')}}>CHECKOUT NOW</Button>
           </Summary>
         </Bottom>
       </Wrapper>
