@@ -4,7 +4,8 @@ import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import Product from "../../models/Product"
 import { apiDeleteProduct, apiGetProductById, apiUpsertProduct } from "../../remote/e-commerce-api/productService"
-import Navbar from "../navbar/Narbar"
+import Navbar from "../navbar/Navbar"
+
 
 
 export const EditProductPage = () => {
