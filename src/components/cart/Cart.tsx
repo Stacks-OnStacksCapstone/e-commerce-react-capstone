@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { CartContext } from "../../context/cart.context";
-import Navbar from "../navbar/Narbar";
+import Navbar from "../navbar/Navbar";
 import Product from "../../models/Product";
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import Button from "@material-ui/core/Button";

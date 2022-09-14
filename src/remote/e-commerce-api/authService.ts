@@ -10,6 +10,14 @@ export const apiLogin = async (email: string, password: string): Promise<eCommer
     return { status: response.status, payload: response.data };
 }
 
+export const apiGetCurrentUser = async (): Promise<eCommerceApiResponse> => {
+    const response = await eCommerceClient.get<any>(
+        `${baseURL}`
+    );
+    
+    return { status: response.status, payload: response.data };
+}
+
 export const apiLogout = async (): Promise<eCommerceApiResponse> => {
     const response = await eCommerceClient.post<any>(
         `${baseURL}/logout`
