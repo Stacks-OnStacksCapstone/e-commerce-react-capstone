@@ -76,7 +76,6 @@ export const DisplayProducts = () => {
 
   return (
     <React.Fragment>
-        <Navbar/>
         <Container>
         {products.map((item) => (
             <ProductCard product={item} key={item.id} />

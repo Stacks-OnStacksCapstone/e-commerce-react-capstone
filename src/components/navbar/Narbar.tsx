@@ -57,7 +57,8 @@ const Navbar = () => {
   // }
 
   const [theme, themeToggler] = useDarkMode();
-  const themeMode = theme === 'light' ? lightTheme : darkTheme;
+  
+  const themeMode = theme === 'light' ? lightTheme: darkTheme;
   
 
   const cartTotal = () => {
@@ -76,8 +77,10 @@ const Navbar = () => {
         </Left>
         <Right>
           <ThemeProvider theme={themeMode}>
+            <>
             <GlobalStyles/>
             <Toggler theme={theme} toggleTheme={themeToggler} />
+            </>
           </ThemeProvider>
           <MenuItem onClick={() => {navigate('/register')}}>REGISTER</MenuItem>
           <MenuItem onClick={() => {navigate('/login')}}>SIGN IN</MenuItem>

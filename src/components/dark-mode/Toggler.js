@@ -1,18 +1,18 @@
 import React from "react";
-import { func, bool} from 'prop-types';
+import { func, string} from 'prop-types';
 import { Switch } from "@material-ui/core";
 
 const Toggler = ({theme, toggleTheme}) => {
     return (
         <>
-        <>Light</><Switch onChange={toggleTheme}></Switch><>Dark</>
+        <>Dark</><Switch onChange={toggleTheme}></Switch><>Light</>
         </>
     );       
 };
 
-Toggler.propTypes = {
-    theme: bool.isRequired,
-    toggleTheme: func.isRequired,
-}
+// Toggler.propTypes = {
+//     theme: string.isRequired,
+//     toggleTheme: func.isRequired,
+// }
 
 export default Toggler;
