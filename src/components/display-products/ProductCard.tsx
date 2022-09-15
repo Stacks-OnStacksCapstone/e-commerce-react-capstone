@@ -19,6 +19,7 @@ import { styled as muiStyled } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Badge } from "@material-ui/core";
 
   
   const Info = styled.div`
@@ -169,6 +170,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
       if (newCart[index].quantity <= 0) removeProduct(product)
     }
 
+    const cartTotal = () => {
+      let total = 0;
+      for (let i = 0; i < cart.length; i++) {
+        total += cart[i].quantity;
+      }
+      return total;
+    }
+
     const showProductQuantity = (product: Product) => {
       const index = cart.findIndex((searchProduct) => {
         return searchProduct.id === product.id
@@ -275,13 +284,25 @@ import DeleteIcon from '@mui/icons-material/Delete';
       setOpen(false);
     };
 
+    const showProductQuantity = (product: Product) => {
+      const index = cart.findIndex((searchProduct) => {
+        return searchProduct.id === product.id
+      })
+      if (index === -1) return (0)      
+      console.log(index)
+      console.log(cart)
+      return cart[index].quantity
+    }
+  
     return (
       <Container>
         <Circle />
         <Image src={props.product.image} />
         <Info>
           <Icon>
-            <ShoppingCartOutlined onClick={() => {addItemToCart({...props.product, quantity: 1})}} />
+            <Badge badgeContent={showProductQuantity(props.product)} color="primary">
+             <ShoppingCartOutlined onClick={() => {addItemToCart({...props.product, quantity: 1})}} />
+            </Badge>         
           </Icon>
           <ProductDetailDialogs product={props.product} key={props.product.id}></ProductDetailDialogs>
         </Info>
