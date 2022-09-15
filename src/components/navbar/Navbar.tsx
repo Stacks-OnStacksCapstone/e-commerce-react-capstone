@@ -1,12 +1,16 @@
 import { Badge } from "@material-ui/core";
 import { ShoppingCartOutlined } from "@material-ui/icons";
-import React, { useEffect, useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { CartContext } from "../../context/cart.context";
+import { ThemeProvider } from 'styled-components';
+import { GlobalStyles } from '../global-style/globalStyles';
+import {lightTheme, darkTheme} from '../dark-mode/Theme';
+import { useDarkMode } from "../dark-mode/useDarkMode";
+import Toggler from "../dark-mode/Toggler";
 import { apiGetCurrentUser } from "../../remote/e-commerce-api/authService";
 import { eCommerceApiResponse } from "../../remote/e-commerce-api/eCommerceClient";
-import { useContext } from "react";
 
 const Container = styled.div`
   height: 60px;
@@ -41,6 +45,7 @@ const MenuItem = styled.div`
   margin-left: 25px;
 `;
 
+
 const Navbar = () => {
   const {cart,setCart} = useContext(CartContext);
   const navigate = useNavigate();
@@ -54,6 +59,16 @@ const Navbar = () => {
   useEffect(() => {
     getUser();
   }, []);
+
+  // const [theme, setTheme] = useState('light');
+  // const themeToggler = () => {
+  // theme === 'light' ? setTheme('dark') : setTheme('light')
+  // }
+
+  const [theme, themeToggler] = useDarkMode();
+  
+  const themeMode = theme === 'light' ? lightTheme: darkTheme;
+  
 
   const cartTotal = () => {
     let total = 0;
@@ -71,6 +86,12 @@ const Navbar = () => {
         </Left>
         <Right>
           {!(user === undefined || user.payload.admin != true) && <MenuItem onClick={() => {navigate('/admin/products')}}>EDIT PRODUCTS</MenuItem>}
+          <ThemeProvider theme={themeMode}>
+            <>
+            <GlobalStyles/>
+            <Toggler theme={theme} toggleTheme={themeToggler} />
+            </>
+          </ThemeProvider>
           <MenuItem onClick={() => {navigate('/register')}}>REGISTER</MenuItem>
           <MenuItem onClick={() => {navigate('/login')}}>SIGN IN</MenuItem>
           <MenuItem onClick={() => {navigate('/cart')}}>
