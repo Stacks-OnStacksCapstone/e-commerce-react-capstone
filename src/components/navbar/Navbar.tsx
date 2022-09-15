@@ -1,17 +1,16 @@
 import { Badge } from "@material-ui/core";
 import { ShoppingCartOutlined } from "@material-ui/icons";
-import React from "react";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { CartContext } from "../../context/cart.context";
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyles } from '../global-style/globalStyles';
 import {lightTheme, darkTheme} from '../dark-mode/Theme';
-import { Switch } from '@material-ui/core';
 import { useDarkMode } from "../dark-mode/useDarkMode";
 import Toggler from "../dark-mode/Toggler";
-
+import { apiGetCurrentUser } from "../../remote/e-commerce-api/authService";
+import { eCommerceApiResponse } from "../../remote/e-commerce-api/eCommerceClient";
 
 const Container = styled.div`
   height: 60px;
@@ -50,6 +49,16 @@ const MenuItem = styled.div`
 const Navbar = () => {
   const {cart,setCart} = useContext(CartContext);
   const navigate = useNavigate();
+  const [user, setUser] = useState<eCommerceApiResponse>();
+  
+  async function getUser() {
+    let usr = await apiGetCurrentUser();
+    setUser(usr);
+  }
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   // const [theme, setTheme] = useState('light');
   // const themeToggler = () => {
@@ -76,6 +85,7 @@ const Navbar = () => {
         <Logo onClick={() => {navigate('/')}}>Revature Swag Shop</Logo>
         </Left>
         <Right>
+          {!(user === undefined || user.payload.admin != true) && <MenuItem onClick={() => {navigate('/admin/products')}}>EDIT PRODUCTS</MenuItem>}
           <ThemeProvider theme={themeMode}>
             <>
             <GlobalStyles/>
