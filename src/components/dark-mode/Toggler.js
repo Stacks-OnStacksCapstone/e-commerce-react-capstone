@@ -2,10 +2,14 @@ import React from "react";
 import { func, string} from 'prop-types';
 import { Switch } from "@material-ui/core";
 
+
+
+
 const Toggler = ({theme, toggleTheme}) => {
+    const isLight = theme === 'light';
     return (
         <>
-        <>Dark</><Switch onChange={toggleTheme}></Switch><>Light</>
+        <>Dark</><Switch checked={isLight} onChange={toggleTheme}></Switch><>Light</>
         </>
     );       
 };
