@@ -77,6 +77,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
     width: 40px;
     height: 40px;
     border-radius: 50%;
+    color: black;
     background-color: white;
     display: flex;
     align-items: center;
