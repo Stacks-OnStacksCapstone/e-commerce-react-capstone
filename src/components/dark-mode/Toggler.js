@@ -1,6 +1,8 @@
 import React from "react";
 import { func, string} from 'prop-types';
 import { Switch } from "@material-ui/core";
+import { DarkModeRounded } from "@mui/icons-material";
+import { LightModeRounded } from "@mui/icons-material";
 
 
 
@@ -9,7 +11,7 @@ const Toggler = ({theme, toggleTheme}) => {
     const isLight = theme === 'light';
     return (
         <>
-        <>Dark</><Switch checked={isLight} onChange={toggleTheme}></Switch><>Light</>
+        <DarkModeRounded/><Switch checked={isLight} onChange={toggleTheme}></Switch><LightModeRounded/>
         </>
     );       
 };
