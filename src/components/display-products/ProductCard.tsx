@@ -154,11 +154,30 @@ import DeleteIcon from '@mui/icons-material/Delete';
         return searchProduct.id === product.id
       })
   
-      if (index === -1) newCart.push(product)
-      else if (!(product.quantity < 0 && newCart[index].quantity == 1)) newCart[index].quantity += product.quantity
-  
+      if (index === -1 && product.quantity === 1) {
+        
+        newCart.push(product)
+
+      }
+    
+      
+      else if (product.quantity === 1 || (product.quantity === -1 && newCart[index].quantity >=1)) newCart[index].quantity+=product.quantity;
+      
       setCart(newCart)
+      
+      if (newCart[index].quantity <= 0) removeProduct(product)
     }
+
+    const showProductQuantity = (product: Product) => {
+      const index = cart.findIndex((searchProduct) => {
+        return searchProduct.id === product.id
+      })
+      if (index === -1) return (0)      
+      console.log(index)
+      console.log(cart)
+      return cart[index].quantity
+    }
+  
 
     const removeProduct = (product: Product) => {
 
@@ -214,6 +233,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
             <IconButton onClick={() => {changeQuantity({...props.product, quantity: 1})}}>
               <AddIcon/>
             </IconButton>
+            <Typography>
+              {showProductQuantity(props.product)}
+            </Typography>
             <IconButton onClick={() => {changeQuantity({...props.product, quantity: -1})}}>
               <RemoveIcon/>
             </IconButton>
