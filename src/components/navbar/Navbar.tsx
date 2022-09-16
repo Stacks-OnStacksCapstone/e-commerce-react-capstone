@@ -94,6 +94,7 @@ const Navbar = () => {
           </ThemeProvider>
           <MenuItem onClick={() => {navigate('/register')}}>REGISTER</MenuItem>
           <MenuItem onClick={() => {navigate('/login')}}>SIGN IN</MenuItem>
+          <MenuItem onClick={() => {navigate('/dashboard')}}>DASHBOARD</MenuItem>
           <MenuItem onClick={() => {navigate('/cart')}}>
             <Badge badgeContent={cartTotal()} color="primary">
               <ShoppingCartOutlined />
