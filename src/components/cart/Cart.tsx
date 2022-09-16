@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { CartContext } from "../../context/cart.context";
@@ -134,6 +134,9 @@ const CheckoutButton = styled.div`
 
 export const Cart = () => {
   const { cart, setCart } = useContext(CartContext);
+  const [isDisabled, setDisabled] = useState(true)
+
+
 
   // Create our number formatter.
   var formatter = new Intl.NumberFormat('en-US', {
