@@ -17,12 +17,16 @@ const theme = createTheme();
 
 export default function Login() {
   const navigate = useNavigate();
+  const [message, setMessage] = React.useState(String);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const response = await apiLogin(`${data.get('email')}`, `${data.get('password')}`);
-    if (response.status >= 200 && response.status < 300) navigate('/')
+    if (response.status >= 400) setMessage(`Invalid user input, please enter a valid email and password`);
+    if (response.status >= 200 && response.status < 300) {
+      navigate('/')
+    }
   };
 
   return (
@@ -43,6 +47,7 @@ export default function Login() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
+          {message === undefined ? <p></p> : <p>{message}</p>}
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
@@ -76,6 +81,11 @@ export default function Login() {
               <Grid item>
                 <Link href="register" variant="body2">
                   {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="reset-password" variant="body2">
+                  {"Forgot your password? Reset your password here"}
                 </Link>
               </Grid>
             </Grid>
