@@ -4,6 +4,7 @@ import Product from '../../models/Product';
 import { apiGetAllProducts } from '../../remote/e-commerce-api/productService';
 import Navbar from '../navbar/Navbar';
 import { ProductCard } from "./ProductCard";
+import SearchbarProducts from './SearchbarProducts';
 
 const Container = styled.div`
     padding: 20px;
@@ -76,11 +77,15 @@ export const DisplayProducts = () => {
 
   return (
     <React.Fragment>
-        <Container>
+      
+      <Container style={{alignItems: 'center', justifyContent: 'center'}}>
+        <SearchbarProducts/>
+      </Container>
+      <Container>
         {products.map((item) => (
             <ProductCard product={item} key={item.id} />
         ))}
-        </Container>
+      </Container>
     </React.Fragment>
     
   );
