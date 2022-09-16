@@ -62,8 +62,10 @@ import { Badge } from "@material-ui/core";
   `;
   
   const Image = styled.img`
-    height: 75%;
+    max-height: 75%;
+    max-width: 95%;
     z-index: 2;
+    
   `;
 
   const DialogImage = styled.img`
