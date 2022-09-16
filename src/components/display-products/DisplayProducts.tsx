@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from "styled-components";
+import { ProductContext } from '../../context/product.context';
 import Product from '../../models/Product';
 import { apiGetAllProducts } from '../../remote/e-commerce-api/productService';
 import Navbar from '../navbar/Navbar';
 import { ProductCard } from "./ProductCard";
 import SearchbarProducts from './SearchbarProducts';
+
 
 const Container = styled.div`
     padding: 20px;
@@ -15,12 +17,12 @@ const Container = styled.div`
 
 export const DisplayProducts = () => {
 
-  const [products, setProducts] = useState<Product[]>([])
+  const {productList, setProductList} = useContext(ProductContext)
 
   useEffect(() => {
     const fetchData = async () => {
       const result = await apiGetAllProducts()
-      setProducts(result.payload)
+      setProductList(result.payload)
     }
     fetchData()
   }, [])
@@ -82,7 +84,7 @@ export const DisplayProducts = () => {
         <SearchbarProducts/>
       </Container>
       <Container>
-        {products.map((item) => (
+        {productList.map((item) => (
             <ProductCard product={item} key={item.id} />
         ))}
       </Container>
