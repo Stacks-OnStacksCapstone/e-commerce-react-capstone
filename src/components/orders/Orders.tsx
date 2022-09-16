@@ -27,7 +27,8 @@ export const Orders = () => {
         </Box>
         <Container>
             {orders.map((item) => {
-                return <Link href={`orderDetails/${item.id}`}><OrderCard order={item} key={item.id} /></Link>
+                console.log(item["paymentId"])
+                return <Link href={`orderDetails/${item["orderId"]}`}><OrderCard order={item} key={item["orderId"]} /></Link>
             })}
         </Container>
         </>

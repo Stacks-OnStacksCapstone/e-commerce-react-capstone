@@ -1,17 +1,17 @@
 
 export default class Order {
-    id: number;
+    orderId: number;
     paymentId: number;
     orderDate: string;
     shipmentAddress: string;
 
     constructor(
-        id: number,
+        orderId: number,
         paymentId: number,
         orderDate: string,
         shipmentAddress: string
     ){
-        this.id = id;
+        this.orderId = orderId;
         this.paymentId = paymentId;
         this.orderDate = orderDate;
         this.shipmentAddress = shipmentAddress;

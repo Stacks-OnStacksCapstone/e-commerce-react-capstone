@@ -1,4 +1,6 @@
-import { Box, Card, Typography } from "@material-ui/core";
+import { CardContent, Typography } from "@material-ui/core";
+import Card from '@mui/material/Card';
+import grey from "@mui/material/colors/grey";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 import OrderDetail from "../../models/OrderDetail";
@@ -11,6 +13,8 @@ export const OrderDetails = () => {
    useEffect(() => {
         const fetchResponse = async () => {
             const response = await apiGetOrderDetails(id);
+            console.log(response);
+            console.log(id);
             setOrderDetailsInfo(response.payload);
         }
         fetchResponse();
@@ -18,9 +22,16 @@ export const OrderDetails = () => {
 
    return(
     <>
-    <Card>
+    <Card sx={{ width: 345, margin: 2, backgroundColor: grey[200] }}>
     {orderDetailsInfo.map((item) => {
-        return <>item</>;
+        return <>
+        <CardContent>
+            <Typography>OrderDetail ID: {item.id}</Typography>
+            <Typography>Order ID: {item.ordersId}</Typography>
+            <Typography>Product ID: {item.productId}</Typography>
+            <Typography>Quantity: {item.quantity}</Typography>
+        </CardContent>
+        </>
     })}
     </Card>
     </>

@@ -9,6 +9,7 @@ import { CreateProduct } from '../components/edit-products/CreateProduct';
 import Login from '../components/login/Login';
 import Register from '../components/register/Register';
 import { Orders } from '../components/orders/Orders';
+import { OrderDetails } from '../components/orders/OrderDetails';
 
 export const AppRoutes: React.FC<unknown> = () => (
   <Routes>
@@ -18,6 +19,7 @@ export const AppRoutes: React.FC<unknown> = () => (
     <Route path="/checkout" element={<Checkout />} />
     <Route path="/cart" element={<Cart />} />
     <Route path="/orders" element={<Orders />}></Route>
+    <Route path="/orderdetails/:id" element={<OrderDetails />}></Route>
     <Route path="/admin/products/" element={<EditProducts />} />
     <Route path="/admin/products/:page" element={<EditProducts />} />
     <Route path="/admin/product/:id" element={<EditProductPage />} />
