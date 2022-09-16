@@ -1,9 +1,8 @@
-import Users from "../../models/Users";
 import eCommerceClient, { eCommerceApiResponse } from "./eCommerceClient"
 
-const baseURL = "/api/product"
+const baseURL = "/api/order/history"
 
-export const apiGetAllUserOrders = async (user: Users): Promise<eCommerceApiResponse> => {
+export const apiGetAllUserOrders = async (): Promise<eCommerceApiResponse> => {
     const response = await eCommerceClient.get<any>(
         `${baseURL}`
     );
