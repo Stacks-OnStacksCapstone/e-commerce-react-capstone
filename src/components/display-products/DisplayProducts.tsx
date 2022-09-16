@@ -16,16 +16,20 @@ const Container = styled.div`
 `;
 
 export const DisplayProducts = () => {
-
-  const {productList, setProductList} = useContext(ProductContext)
+  const [productList, setProductList] = useState<Product[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
+      
       const result = await apiGetAllProducts()
       setProductList(result.payload)
     }
     fetchData()
   }, [])
+
+  useEffect(() => {
+    console.log(productList, "HELLLO")
+  }, [productList])
   // const products: Product[] = [
   //   {
   //       id:1,
@@ -79,15 +83,18 @@ export const DisplayProducts = () => {
 
   return (
     <React.Fragment>
-      
+      <ProductContext.Provider value={{productList, setProductList}}>
       <Container style={{alignItems: 'center', justifyContent: 'center'}}>
         <SearchbarProducts/>
       </Container>
       <Container>
-        {productList.map((item) => (
-            <ProductCard product={item} key={item.id} />
-        ))}
+        {productList.map((item) => {
+            console.log(item)
+            return <ProductCard product={item} key={item.id} />
+        }
+        )}
       </Container>
+      </ProductContext.Provider>
     </React.Fragment>
     
   );
