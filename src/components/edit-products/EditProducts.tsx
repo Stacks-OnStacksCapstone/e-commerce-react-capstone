@@ -44,7 +44,6 @@ export const EditProducts = () => {
 
     return (
         <React.Fragment>
-            <Navbar />
             <br />
             <Box>
                 <Container>

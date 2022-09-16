@@ -6,7 +6,6 @@ import Product from "../../models/Product"
 import { apiGetCurrentUser } from "../../remote/e-commerce-api/authService"
 import { eCommerceApiResponse } from "../../remote/e-commerce-api/eCommerceClient"
 import { apiDeleteProduct, apiGetProductById, apiUpsertProduct } from "../../remote/e-commerce-api/productService"
-import Navbar from "../navbar/Navbar"
 
 
 
@@ -96,7 +95,6 @@ export const EditProductPage = () => {
     if (id === undefined || product === undefined) {
         return (
             <>
-                <Navbar />
                 <Box sx={{
                     display: 'flex',
                     flexWrap: 'wrap',
@@ -116,7 +114,6 @@ export const EditProductPage = () => {
         console.log(defaultValue)
         return (
             <>
-                <Navbar />
                 <br />
                 <Box>
                     <Container maxWidth="md">
