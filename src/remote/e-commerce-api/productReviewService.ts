@@ -12,21 +12,28 @@ export const apiGetAllReviews = async (): Promise<eCommerceApiResponse> => {
 }
 
 export const apiGetAllReviewsForProduct = async (productId: number): Promise<eCommerceApiResponse> => {
-    const response = await eCommerceClient.get<ProductReview>(
-        `${baseURL}/${productId}`
-    );
-    return { status: response.status, payload: response.data };
+    try {
+        const response = await eCommerceClient.get<ProductReview>(
+            `${baseURL}/${productId}`
+        );
+        return { status: response.status, payload: response.data };
+    }
+    catch (error) {
+        console.log(error);
+    }
+
+    return { status: 0, payload: null };
 }
 
-export const apiUpsertProductReview = async (): Promise<eCommerceApiResponse> => {
-    const response = await eCommerceClient.put<ProductReview>(
-        `${baseURL}`
+export const apiUpsertProductReview = async (productRequest: any): Promise<eCommerceApiResponse> => {
+    const response = await eCommerceClient.put<any>(
+        `${baseURL}`, productRequest
     );
     return { status: response.status, payload: response.data };
 }
 
 export const apiDeleteProductReview = async (reviewId: number): Promise<eCommerceApiResponse> => {
-    const response = await eCommerceClient.put<ProductReview>(
+    const response = await eCommerceClient.delete<ProductReview>(
         `${baseURL}/${reviewId}`
     );
     return { status: response.status, payload: response.data };
