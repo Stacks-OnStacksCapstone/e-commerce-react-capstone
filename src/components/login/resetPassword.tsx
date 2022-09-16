@@ -62,7 +62,7 @@ export default function ResetPassword() {
                     margin="normal"
                     required
                     fullWidth
-                    name="new password"
+                    name="password"
                     label="New Password"
                     type="password"
                     id="password"
