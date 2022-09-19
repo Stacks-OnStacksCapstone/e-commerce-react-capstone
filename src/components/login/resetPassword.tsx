@@ -11,6 +11,7 @@ import Container from '@mui/material/Container';
 import { useNavigate } from "react-router-dom";
 import { apiResetPassword } from '../../remote/e-commerce-api/authService';
 import { useState } from 'react';
+import { AxiosError } from 'axios';
 
 export default function ResetPassword() {
     const navigate = useNavigate();
@@ -18,14 +19,23 @@ export default function ResetPassword() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-
-        const data = new FormData(event.currentTarget);
-        const response = await apiResetPassword(`${data.get('email')}`, `${data.get('password')}`);
-        if (response.status === 404) setMessage("Entered email does not correspond to a registered user");
-        if (response.status === 400) setMessage("Entered password was invalid");
-        if (response.status >= 200 && response.status < 300) {
-            setMessage(`Password has been updated for '${data.get('email')}'!`);
-            navigate('/login');
+        try {
+            const data = new FormData(event.currentTarget);
+            const response = await apiResetPassword(`${data.get('email')}`, `${data.get('password')}`);
+            if (response.status >= 200 && response.status < 300) {
+                setMessage(`Password has been updated for '${data.get('email')}'!`);
+                // navigate('/login');
+            }
+        } catch (error: unknown) {
+            if (typeof error === "string") console.error(error);
+            else if (error instanceof AxiosError) {
+                console.error(error);
+                let errResponse = error.response;
+                if (errResponse !== undefined) {
+                    if (errResponse.status === 404) setMessage("Entered email does not correspond to a registered user");
+                    if (errResponse.status === 400) setMessage("Entered password was invalid");
+                }
+            }
         }
     };
 
@@ -59,6 +69,10 @@ export default function ResetPassword() {
                     autoFocus
                 />
                 <TextField
+                    // TODO: Implement error handling with states!
+                    // error
+                    // helperText="this will be the error from axios"
+                    // onChange={notEmpty}
                     margin="normal"
                     required
                     fullWidth
