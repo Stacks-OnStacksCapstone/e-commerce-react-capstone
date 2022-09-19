@@ -4,6 +4,8 @@ import { apiDeactivateUser, apiGetProfile, apiUpdateUser } from "../../remote/e-
 import User from "../../models/User";
 import { apiLogout } from "../../remote/e-commerce-api/authService";
 import { useNavigate } from "react-router-dom";
+import Button from "@material-ui/core/Button";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
 
 export default function Dashboard(){
 
@@ -98,10 +100,10 @@ export default function Dashboard(){
             <br/>
             <br/>
             
-            <button onClick={update}>Update</button>
+            <Button variant="contained" onClick={update}>Update</Button>
         </form>
         {persisted === undefined ? <p>Please make selections</p> : <p>{persisted}</p>}
-        <button onClick= {() => deactivateUser()}>Deactivate</button>
+        <Button variant="contained" onClick= {() => deactivateUser()}>Deactivate</Button>
         </>
     );
 }
