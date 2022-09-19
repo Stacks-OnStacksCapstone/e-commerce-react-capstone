@@ -8,7 +8,7 @@ import { EditProducts } from '../components/edit-products/EditProducts';
 import { CreateProduct } from '../components/edit-products/CreateProduct';
 import Login from '../components/login/Login';
 import Register from '../components/register/Register';
-import Dashboard from '../components/user/dashboard';
+import UserProfile from '../components/user/UserProfile';
 
 export const AppRoutes: React.FC<unknown> = () => (
   <Routes>
@@ -22,6 +22,6 @@ export const AppRoutes: React.FC<unknown> = () => (
     <Route path="/admin/product/:id" element={<EditProductPage />} />
     <Route path="/admin/createproduct" element={<CreateProduct />} />
     <Route path="/admin/products" element={<EditProducts />} />
-    <Route path="/dashboard" element={<Dashboard/>} />
+    <Route path="/userProfile" element={<UserProfile/>} />
   </Routes>
 )

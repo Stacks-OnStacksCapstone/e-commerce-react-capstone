@@ -12,18 +12,31 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { apiLogin } from '../../remote/e-commerce-api/authService';
 import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
 
 const theme = createTheme();
 
 export default function Login() {
   const navigate = useNavigate();
 
+  const [persisted, setPersisted] = useState<String>();
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    try{
     const response = await apiLogin(`${data.get('email')}`, `${data.get('password')}`);
     if (response.status >= 200 && response.status < 300) navigate('/');
-  };
+  
+      
+    } catch(error :any) {
+      
+      console.log(error);
+      if (error.response.status >= 400)
+      setPersisted("Login was unsuccessful because your account has been deactivated!");
+  }};
+  
 
   return (
     <ThemeProvider theme={theme}>
@@ -77,10 +90,12 @@ export default function Login() {
                 <Link href="register" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
+                {persisted === undefined ? <p></p> : <p>{persisted}</p>}
               </Grid>
             </Grid>
           </Box>
         </Box>
+        
       </Container>
     </ThemeProvider>
   );

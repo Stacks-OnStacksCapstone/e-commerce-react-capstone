@@ -2,7 +2,7 @@ export default class User{
 
     userId: number;
     email: string;
-    firtName: string;
+    firstName: string;
     lastName: string;
     isAdmin: boolean;
     isActive: boolean;
@@ -11,7 +11,7 @@ export default class User{
                 isAdmin: boolean, isActive: boolean){
                     this.userId = userId;
                     this.email = email;
-                    this.firtName = firstName;
+                    this.firstName = firstName;
                     this.lastName = lastName;
                     this.isAdmin = isAdmin;
                     this.isActive = isActive;

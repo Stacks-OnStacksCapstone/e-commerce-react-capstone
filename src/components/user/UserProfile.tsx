@@ -1,42 +1,48 @@
 import { useEffect, useState } from "react";
 import eCommerceClient from "../../remote/e-commerce-api/eCommerceClient";
+import { apiDeactivateUser, apiGetProfile, apiUpdateUser } from "../../remote/e-commerce-api/UserService";
+import User from "../../models/User";
+import { apiLogout } from "../../remote/e-commerce-api/authService";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard(){
 
-    const [user, setUser] = useState()
-    const [persisted, setPersisted] = useState()
+
+    const [user, setUser] = useState<User>()
+    const [persisted, setPersisted] = useState<String>();
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
         password:""
     });
+    const navigate = useNavigate();
+
 
 
     useEffect(() => {
         console.log("effect invoked");
-        findAll();
+        getProfile();
     }, []);
 
-    async function update(event) {
+    async function update(event: { preventDefault: () => void; }) {
         event.preventDefault();
         try{
-            await eCommerceClient.put("/user", {
-                firstName: formData.firstName,
-                lastName: formData.lastName,
-                password: formData.password,
-                
-            });
-            setPersisted(`You successfully updated your profile!`);
-            findAll();
+            await apiUpdateUser(formData.firstName, formData.lastName, formData.password);
             
-        } catch (error) {
-            setPersisted(`Update was unsuccessful because ${error.response.data}`);
+            setPersisted("You successfully updated your profile!");
+            getProfile();
+            
+        } catch (error :any) {
+            setPersisted(`Update was unsuccessful because ${error.payload}`);
         }
     }
 
-    async function deactivateUser(userId) {
+    async function deactivateUser() {
         try {
-            await eCommerceClient.put("/user/deactivate");
+            
+            await apiDeactivateUser();
+            await apiLogout();
+            navigate('/login');
             console.log(user);
             setPersisted(`You successfully deactivated your profile!`);
             
@@ -45,14 +51,14 @@ export default function Dashboard(){
         }
     }
 
-    async function findAll() {
+    async function getProfile() {
         try {
-            const response = await eCommerceClient.get("/user");
-            setUser(response.data);
+            const result = await apiGetProfile()
+            setUser(result.payload);
             setFormData({
-                firstName: response.data.firstName,
-                lastName: response.data.lastName,
-                password:response.data.password,
+                firstName: result.payload.firstName,
+                lastName: result.payload.lastName,
+                password:result.payload.password,
             });   
         } catch (error) {
             console.error(error)
@@ -68,8 +74,7 @@ export default function Dashboard(){
             <form>
 
             <label>First Name:</label>
-            <input 
-                class="registration" 
+            <input
                 placeholder="First"
                 value={formData.firstName}
                 onChange={(event) => setFormData({ ...formData, firstName: event.target.value})} 
@@ -78,7 +83,6 @@ export default function Dashboard(){
 
             <label>Last Name:</label>
             <input 
-                class="registration" 
                 placeholder="Last"
                 value={formData.lastName}
                 onChange={(event) => setFormData({ ...formData, lastName: event.target.value})} 
@@ -87,7 +91,6 @@ export default function Dashboard(){
 
             <label>Password:</label>
             <input 
-                class="registration" 
                 type="password"
                 placeholder="password"
                 onChange={(event) => setFormData({ ...formData, password: event.target.value})} 
@@ -98,7 +101,7 @@ export default function Dashboard(){
             <button onClick={update}>Update</button>
         </form>
         {persisted === undefined ? <p>Please make selections</p> : <p>{persisted}</p>}
-        <button onClick= {() => deactivateUser(user.userId)}>Deactivate</button>
+        <button onClick= {() => deactivateUser()}>Deactivate</button>
         </>
     );
 }
