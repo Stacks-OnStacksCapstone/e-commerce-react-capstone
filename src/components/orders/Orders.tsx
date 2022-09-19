@@ -22,7 +22,7 @@ export const Orders = () => {
         <br/>
         <Box>
             <Container>
-                <Typography variant="h2">Howdy pardner</Typography>
+                <Typography variant="h2">Orders</Typography>
             </Container>
         </Box>
         <Container>
