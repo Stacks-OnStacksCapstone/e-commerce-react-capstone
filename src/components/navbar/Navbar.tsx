@@ -94,6 +94,7 @@ const Navbar = () => {
           {!(user === undefined || user.payload.admin != true) && <MenuItem onClick={() => {navigate('/admin/products')}}>EDIT PRODUCTS</MenuItem>}
           <MenuItem onClick={() => {navigate('/register')}}>REGISTER</MenuItem>
           <MenuItem onClick={() => {navigate('/login')}}>SIGN IN</MenuItem>
+          <MenuItem onClick={() => {navigate('/orders')}}>ORDERS</MenuItem>
           <MenuItem onClick={() => {navigate('/cart')}}>
             <Badge badgeContent={cartTotal()} color="primary">
               <ShoppingCartOutlined />

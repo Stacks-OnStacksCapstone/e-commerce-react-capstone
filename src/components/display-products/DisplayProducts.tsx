@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from "styled-components";
+import { ProductContext } from '../../context/product.context';
 import Product from '../../models/Product';
 import { apiGetAllProducts } from '../../remote/e-commerce-api/productService';
 import Navbar from '../navbar/Navbar';
 import { ProductCard } from "./ProductCard";
+import SearchbarProducts from './SearchbarProducts';
+
 
 const Container = styled.div`
     padding: 20px;
@@ -13,16 +16,20 @@ const Container = styled.div`
 `;
 
 export const DisplayProducts = () => {
-
-  const [products, setProducts] = useState<Product[]>([])
+  const [productList, setProductList] = useState<Product[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
+      
       const result = await apiGetAllProducts()
-      setProducts(result.payload)
+      setProductList(result.payload)
     }
     fetchData()
   }, [])
+
+  useEffect(() => {
+    console.log(productList, "HELLLO")
+  }, [productList])
   // const products: Product[] = [
   //   {
   //       id:1,
@@ -76,11 +83,18 @@ export const DisplayProducts = () => {
 
   return (
     <React.Fragment>
-        <Container>
-        {products.map((item) => (
-            <ProductCard product={item} key={item.id} />
-        ))}
-        </Container>
+      <ProductContext.Provider value={{productList, setProductList}}>
+      <Container style={{alignItems: 'center', justifyContent: 'center'}}>
+        <SearchbarProducts/>
+      </Container>
+      <Container>
+        {productList.map((item) => {
+            console.log(item)
+            return <ProductCard product={item} key={item.id} />
+        }
+        )}
+      </Container>
+      </ProductContext.Provider>
     </React.Fragment>
     
   );
