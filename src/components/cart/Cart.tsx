@@ -5,8 +5,8 @@ import { CartContext } from "../../context/cart.context";
 import Navbar from "../navbar/Navbar";
 import Product from "../../models/Product";
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
 
 const Container = styled.div``;
 
