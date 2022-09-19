@@ -24,7 +24,7 @@ import { apiGetAllReviewsForProduct, apiUpsertProductReview } from "../../remote
 import { eCommerceApiResponse } from "../../remote/e-commerce-api/eCommerceClient";
 import { ReviewCard } from "../reviews/ReviewCard";
 import ProductReview from "../../models/ProductReview";
-import { Rating } from "@mui/material";
+import { Card, CardContent, CardMedia, Rating } from "@mui/material";
 
 
 const Info = styled.div`
@@ -44,15 +44,11 @@ const Info = styled.div`
   `;
 
 const Container = styled.div`
-    flex: 1;
-    margin: 5px;
-    min-width: 280px;
-    height: 350px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f5fbfd;
     position: relative;
+    margin: 1%;
     &:hover ${Info}{
       opacity: 1;
     }
@@ -268,7 +264,7 @@ export default function ProductDetailDialogs(props: productProps) {
     reviewsMap = <Typography>No reviews..</Typography>;
     if (reviews.payload.length > 0) {
       reviewsMap = reviews.payload.slice(0).reverse().map((o: any, index: number) => {
-        return <ReviewCard review={o} key={index} refreshReviews={refreshReviews}/>
+        return <ReviewCard review={o} key={index} refreshReviews={refreshReviews} />
       });
     }
   }
@@ -304,14 +300,14 @@ export default function ProductDetailDialogs(props: productProps) {
           {/* <Button autoFocus onClick={handleClose}>
               Here we need to implement add to cart
             </Button> */}
-          <IconButton onClick={() => { changeQuantity({ ...props.product, quantity: 1 }) }}>
-            <AddIcon />
+          <IconButton onClick={() => { changeQuantity({ ...props.product, quantity: -1 }) }}>
+            <RemoveIcon />
           </IconButton>
           <Typography>
             {showProductQuantity(props.product)}
           </Typography>
-          <IconButton onClick={() => { changeQuantity({ ...props.product, quantity: -1 }) }}>
-            <RemoveIcon />
+          <IconButton onClick={() => { changeQuantity({ ...props.product, quantity: 1 }) }}>
+            <AddIcon />
           </IconButton>
           <IconButton onClick={() => { removeProduct(props.product) }}>
             <DeleteIcon />
@@ -319,7 +315,7 @@ export default function ProductDetailDialogs(props: productProps) {
         </DialogActions>
         <DialogContent dividers>
           <Typography variant="h4" align="center">Leave a Review</Typography>
-          <Rating name="rating" value={newReview.rating} onChange={((event: React.SyntheticEvent<Element, Event>, value: number | null)=> { if (value !== null) setNewReview({...newReview, rating: value }) })}/>
+          <Rating name="rating" value={newReview.rating} onChange={((event: React.SyntheticEvent<Element, Event>, value: number | null) => { if (value !== null) setNewReview({ ...newReview, rating: value }) })} />
           <TextField
             id="outlined-multiline-flexible"
             label="Product Review"
@@ -328,7 +324,7 @@ export default function ProductDetailDialogs(props: productProps) {
             minRows={8}
             maxRows={8}
             value={newReview.comment}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>)=> { setNewReview({...newReview, comment: event.target.value }) }}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => { setNewReview({ ...newReview, comment: event.target.value }) }}
           />
           <br /><br />
           <Grid container spacing={2} direction="column" alignItems="center" justifyContent="center"><Button variant="contained" onClick={onSubmitReview}>Submit Review</Button></Grid>
@@ -337,7 +333,7 @@ export default function ProductDetailDialogs(props: productProps) {
           <Typography variant="h4" align="center">Product Reviews</Typography>
           <Grid container spacing={2} direction="column" alignItems="center" justify="center">
             <Grid item xs={8}>
-                {reviewsMap}
+              {reviewsMap}
             </Grid>
           </Grid>
         </DialogContent>
@@ -381,6 +377,49 @@ export const ProductCard = (props: productProps) => {
     console.log(cart)
     return cart[index].quantity
   }
+
+
+  return (
+    <>
+    <Container>
+    <Card sx={{ width: 345, height: 260}}>
+      <CardMedia
+        component="img"
+        height="140"
+        image={props.product.image}
+        alt="product image"
+      />
+      <Info>
+        <Icon>
+          <Badge badgeContent={showProductQuantity(props.product)} color="primary">
+            <ShoppingCartOutlined onClick={() => { addItemToCart({ ...props.product, quantity: 1 }) }} />
+          </Badge>
+        </Icon>
+        <ProductDetailDialogs product={props.product} key={props.product.id}></ProductDetailDialogs>
+      </Info>
+      <CardContent>
+        <Grid container spacing={0}>
+          <Grid item>
+            <Typography variant="h5">
+              {props.product.name}
+            </Typography>
+          </Grid>
+          <Grid item xs>
+            <Grid container direction="row-reverse">
+              <Typography variant="subtitle1" align="right">
+                ${props.product.price.toFixed(2)}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Typography variant="body2">
+          {props.product.description}
+        </Typography>
+      </CardContent>
+    </Card>
+    </Container>
+    </>
+  );
 
   return (
     <Container>

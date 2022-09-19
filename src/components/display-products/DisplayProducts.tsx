@@ -9,10 +9,11 @@ import SearchbarProducts from './SearchbarProducts';
 
 
 const Container = styled.div`
-    padding: 20px;
+    padding: 40px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    align-items: center;
+    justify-content: center;
 `;
 
 export const DisplayProducts = () => {
@@ -90,7 +91,7 @@ export const DisplayProducts = () => {
       <Container>
         {productList.map((item) => {
             console.log(item)
-            return <ProductCard product={item} key={item.id} />
+            return <><ProductCard product={item} key={item.id} /></>
         }
         )}
       </Container>
