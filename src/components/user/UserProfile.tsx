@@ -6,8 +6,20 @@ import { apiLogout } from "../../remote/e-commerce-api/authService";
 import { useNavigate } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
+import Typography from '@mui/material/Typography';
+import styled from "styled-components";
+import { Input } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import {Container} from "@mui/material";
 
-export default function Dashboard(){
+
+const theme = createTheme();
+
+
+export default function UserProfile() {
 
 
     const [user, setUser] = useState<User>()
@@ -15,7 +27,7 @@ export default function Dashboard(){
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
-        password:""
+        password: ""
     });
     const navigate = useNavigate();
 
@@ -28,26 +40,26 @@ export default function Dashboard(){
 
     async function update(event: { preventDefault: () => void; }) {
         event.preventDefault();
-        try{
+        try {
             await apiUpdateUser(formData.firstName, formData.lastName, formData.password);
-            
+
             setPersisted("You successfully updated your profile!");
             getProfile();
-            
-        } catch (error :any) {
+
+        } catch (error: any) {
             setPersisted(`Update was unsuccessful because ${error.payload}`);
         }
     }
 
     async function deactivateUser() {
         try {
-            
+
             await apiDeactivateUser();
             await apiLogout();
             navigate('/login');
             console.log(user);
             setPersisted(`You successfully deactivated your profile!`);
-            
+
         } catch (error) {
             console.log(error);
         }
@@ -60,50 +72,70 @@ export default function Dashboard(){
             setFormData({
                 firstName: result.payload.firstName,
                 lastName: result.payload.lastName,
-                password:result.payload.password,
-            });   
+                password: result.payload.password,
+            });
         } catch (error) {
             console.error(error)
         }
     }
 
     return (
-        <>
-            <h1>Welcome to your Dashboard, dear {user?.firstName}!</h1>
-            <p>
+        <ThemeProvider theme={theme}>
+            <Typography variant="h2">Welcome to your Dashboard, dear {user?.firstName}!</Typography>
+            <Typography variant="body1">
                 Here you can update your profile:
-            </p>
-            <form>
+            </Typography>
+            <Container component="main" maxWidth="xs">
+                <Box component="form" noValidate sx={{ mt: 3 }}>
 
-            <label>First Name:</label>
-            <input
-                placeholder="First"
-                value={formData.firstName}
-                onChange={(event) => setFormData({ ...formData, firstName: event.target.value})} 
-            />
-            <br/>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                autoComplete="given-name"
+                                name="firstName"
+                                required
+                                fullWidth
+                                id="firstName"
+                                label="First Name"
+                                value={formData.firstName}
+                                onChange={(event) => setFormData({ ...formData, firstName: event.target.value })}
+                                autoFocus
+                            />
+                        </Grid>
+                        <br />
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                required
+                                fullWidth
+                                id="lastName"
+                                label="Last Name"
+                                name="lastName"
+                                autoComplete="family-name"
+                                value={formData.lastName}
+                                onChange={(event) => setFormData({ ...formData, lastName: event.target.value })}
+                            />
+                        </Grid>
 
-            <label>Last Name:</label>
-            <input 
-                placeholder="Last"
-                value={formData.lastName}
-                onChange={(event) => setFormData({ ...formData, lastName: event.target.value})} 
-            />
-            <br/>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                fullWidth
+                                name="password"
+                                label="Password"
+                                type="password"
+                                id="password"
+                                autoComplete="new-password"
+                                onChange={(event) => setFormData({ ...formData, password: event.target.value })}
+                            />
+                        </Grid>
 
-            <label>Password:</label>
-            <input 
-                type="password"
-                placeholder="password"
-                onChange={(event) => setFormData({ ...formData, password: event.target.value})} 
-            />
-            <br/>
-            <br/>
-            
-            <Button variant="contained" onClick={update}>Update</Button>
-        </form>
-        {persisted === undefined ? <p>Please make selections</p> : <p>{persisted}</p>}
-        <Button variant="contained" onClick= {() => deactivateUser()}>Deactivate</Button>
-        </>
+                        <Button variant="contained" onClick={update}>Update</Button>
+                        {persisted === undefined ? <p>Please make selections</p> : <p>{persisted}</p>}
+    
+                    </Grid>
+                </Box>
+            </Container>
+            <Button variant="contained" onClick={() => deactivateUser()}>Deactivate</Button>
+        </ThemeProvider>
     );
 }
