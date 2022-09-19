@@ -5,8 +5,6 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { CartContext } from "../../context/cart.context";
 import { ThemeProvider } from 'styled-components';
-import { GlobalStyles } from '../global-style/globalStyles';
-import {lightTheme, darkTheme} from '../dark-mode/Theme';
 import { useDarkMode } from "../dark-mode/useDarkMode";
 import Toggler from "../dark-mode/Toggler";
 import { apiGetCurrentUser } from "../../remote/e-commerce-api/authService";
@@ -66,9 +64,6 @@ const Navbar = () => {
   // }
 
   const [theme, themeToggler] = useDarkMode();
-  
-  const themeMode = theme === 'light' ? lightTheme: darkTheme;
-  
 
   const cartTotal = () => {
     let total = 0;
@@ -85,12 +80,7 @@ const Navbar = () => {
         <Logo onClick={() => {navigate('/')}}>Revature Swag Shop</Logo>
         </Left>
         <Right>
-          <ThemeProvider theme={themeMode}>
-            <>
-            <GlobalStyles/>
-            <Toggler theme={theme} toggleTheme={themeToggler} />
-            </>
-          </ThemeProvider>
+          <Toggler theme={theme} toggleTheme={themeToggler} />
           {!(user === undefined || user.payload.admin != true) && <MenuItem onClick={() => {navigate('/admin/products')}}>EDIT PRODUCTS</MenuItem>}
           <MenuItem onClick={() => {navigate('/register')}}>REGISTER</MenuItem>
           <MenuItem onClick={() => {navigate('/login')}}>SIGN IN</MenuItem>

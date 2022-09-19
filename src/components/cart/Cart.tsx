@@ -5,8 +5,8 @@ import { CartContext } from "../../context/cart.context";
 import Navbar from "../navbar/Navbar";
 import Product from "../../models/Product";
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
+import Button from "@mui/material/Button";
 
 const Container = styled.div``;
 
@@ -179,7 +179,7 @@ export const Cart = () => {
       <Wrapper>
         <Title>YOUR BAG</Title>
         <Top>
-          <Button variant="contained" color="secondary" onClick={() => {navigate('/')}}>CONTINUE SHOPPING</Button>
+          <Button variant="contained" onClick={() => {navigate('/')}}>CONTINUE SHOPPING</Button>
           {/* <TopButton onClick={() => {navigate('/checkout')}}>CHECKOUT NOW</TopButton> */}
         </Top>
         <Bottom>
@@ -240,7 +240,7 @@ export const Cart = () => {
               {formatter.format(cart.reduce<number>((total, product) => total + product.price * product.quantity, 0))}
               </SummaryItemPrice>
             </SummaryItem>
-            <Button fullWidth={true} variant="contained" color="secondary" onClick={() => {navigate('/checkout')}}>CHECKOUT NOW</Button>
+            <Button fullWidth={true} variant="contained" onClick={() => {navigate('/checkout')}}>CHECKOUT NOW</Button>
           </Summary>
         </Bottom>
       </Wrapper>

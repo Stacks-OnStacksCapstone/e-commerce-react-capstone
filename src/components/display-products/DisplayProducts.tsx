@@ -29,7 +29,6 @@ export const DisplayProducts = () => {
   }, [])
 
   useEffect(() => {
-    console.log(productList, "HELLLO")
   }, [productList])
   // const products: Product[] = [
   //   {
