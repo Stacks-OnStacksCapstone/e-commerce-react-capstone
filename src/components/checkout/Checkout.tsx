@@ -77,7 +77,7 @@ export default function Checkout() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       {/* <CssBaseline /> */}
       {/* <AppBar
         position="absolute"
@@ -126,6 +126,6 @@ export default function Checkout() {
           </React.Fragment>
         </Paper>
       </Container>
-    </ThemeProvider>
+    </>
   );
 }
