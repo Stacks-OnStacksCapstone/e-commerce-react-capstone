@@ -33,10 +33,10 @@ export const apiRegister = async (firstName: string, lastName: string, email: st
     return { status: response.status, payload: response.data };
 }
 
-export const apiResetPassword = async (email: string, password: string): Promise<eCommerceApiResponse> => {
+export const apiForgotPassword = async (email: string): Promise<eCommerceApiResponse> => {
     const response = await eCommerceClient.put<any>(
-        `${baseURL}/reset-password`,
-        { email: email, password: password }
+        `${baseURL}/forgot-password`,
+        { email: email }
     );
     return { status: response.status, payload: response.data };
 }

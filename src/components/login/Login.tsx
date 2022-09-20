@@ -84,7 +84,7 @@ export default function Login() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="reset-password" variant="body2">
+                <Link href="forgot-password" variant="body2">
                   {"Forgot your password? Reset your password here"}
                 </Link>
               </Grid>
