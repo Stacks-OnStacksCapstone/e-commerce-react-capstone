@@ -1,10 +1,11 @@
-import { Box, CardContent, Typography, CardActions, Button, Grid, Link } from '@material-ui/core';
+import { Box, CardContent, Typography, CardActions, Button, Grid, Link, Container } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
 import { Rating } from '@mui/material';
 import Card from '@mui/material/Card';
 import { useEffect, useState } from "react";
 import Order from "../../models/Order";
 import { apiGetAllUserOrders } from "../../remote/e-commerce-api/orderService";
+import { OrderDetails } from './OrderDetails';
 
 interface orderProps{
     order: Order,
@@ -15,9 +16,8 @@ interface orderProps{
 export const OrderCard = (props: orderProps) => {
 
 
-
     return(
-            <Card sx={{ width: 345, margin: 2, backgroundColor: grey[200] }}>
+            /*<Card sx={{ width: 345, margin: 2, backgroundColor: grey[200] }}>
         <CardContent>
         <Typography variant="body2">
                 {props.order.orderDate}
@@ -28,7 +28,9 @@ export const OrderCard = (props: orderProps) => {
             <Typography variant="body2">
             </Typography>
         </CardContent>
-        </Card>
+        </Card>*/
+            <OrderDetails orderId={props.order.orderId} key={props.order.orderId}></OrderDetails>
+        
     )
 }
     

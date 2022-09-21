@@ -9,39 +9,79 @@ import { apiGetOrderDetails } from "../../remote/e-commerce-api/orderService";
 import { apiGetProductById } from "../../remote/e-commerce-api/productService"
 import OrderProduct from "./OrderProduct";
 
-export const OrderDetails = () => {
-   const {id} = useParams();
+const styles = {
+    outerCardStyling: {
+        padding: "30px",
+        
+    },
+    innerCardStyling: {
+        width: "800", 
+        backgroundColor: grey[200], 
+        display: "flex",
+        marginBottom: "15px",
+    },
+    innerCardStylingNoMargin: {
+        width: "800", 
+        backgroundColor: grey[200], 
+        display: "flex",
+        marginBottom: "0px", 
+    }
+}
+
+interface orderDetailsProps{
+    orderId: number,
+    key: number,
+}
+
+export const OrderDetails = (props : orderDetailsProps) => {
+   const id = props.orderId;
+   console.log(props);
    const [orderDetailsInfo, setOrderDetailsInfo] = useState<OrderDetail[]>([]);
    const [productInfo, setProductInfo] = useState<Product>(new Product(0, "", 0, "", 0, ""));
 
    useEffect(() => {
-        const fetchResponse = async () => {
+        const fetchOrderDetailResponse = async () => {
             const response = await apiGetOrderDetails(id);
-            console.log(response);
-            console.log(id);
             setOrderDetailsInfo(response.payload);
-
         }
-        fetchResponse();
+        fetchOrderDetailResponse();
    }, [])
+
+   const fetchProductInfoResponse = async (id : number) => {
+        const response = await apiGetProductById(id);
+        setProductInfo(response.payload);
+    }
 
    return(
     <>
     <Container style={{alignItems:"center", justifyContent:"center", marginTop:60}}>
-    <Grid container spacing={2} direction="column" alignItems="center" justifyContent="center">
-    {orderDetailsInfo.map((item) => {
-        return <>
-            <Card sx={{ width: 345, backgroundColor: grey[200]}}>
-            <CardContent>
-                <Typography>OrderDetail ID: {item.id}</Typography>
-                <Typography>Order ID: {item.ordersId}</Typography>
-                <OrderProduct product = {item.productId} />
-                <Typography>Quantity: {item.quantity}</Typography>
-            </CardContent>
-            </Card>
-            <br />
-        </>
-    })}
+    <Grid container spacing={0} direction="column">
+        <Grid style={{display:"flex", flexDirection:"column"}}>
+            <Card style={styles.outerCardStyling}>
+        {orderDetailsInfo.map((item, i) => {
+            {console.log(i)}
+            return (<>
+                <Card style={(i === orderDetailsInfo.length - 1 ? styles.innerCardStylingNoMargin : styles.innerCardStyling)}>
+                <Container style={{ display: 'flex', flexDirection: 'row' , justifyContent:"space-between"}}>
+                    <Box>
+                        <CardContent style={{ display: 'flex', flexDirection: 'row', alignItems:"center"}}>
+                            <OrderProduct product = {item.productId} />
+                        </CardContent>
+                    </Box>
+                    <Box style={{display:"flex", alignItems:"center"}}>
+                    <CardContent>
+                        <Typography>OrderDetail ID: {item.id}</Typography>
+                        <Typography>Order ID: {item.ordersId}</Typography>
+                        <Typography>Quantity: {item.quantity}</Typography>
+                        <Typography>Product ID: {item.productId}</Typography>
+                    </CardContent>
+                    </Box>
+                </Container>
+                </Card>
+            </>)
+        })}
+        </Card>
+        </Grid>
     </Grid>
     </Container>
     </>

@@ -17,13 +17,16 @@ export default function OrderProduct(props : any) {
    }, [])
     return(
         <>
-        <Typography>Product Name: {productInfo.name}</Typography>
+        {
+        }
                 <CardMedia
                         component="img"
                         height="140"
+                        width="140"
                         image={productInfo.image}
                         alt={productInfo.name}
-                    />
+                   style={{marginRight:"15px", width: "140px", objectFit:"cover"}} />
+                <Typography>{productInfo.name}</Typography>
         </>
     )
 }

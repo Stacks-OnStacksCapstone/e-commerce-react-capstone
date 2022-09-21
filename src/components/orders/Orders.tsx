@@ -1,4 +1,4 @@
-import { Box, Container, Link, Typography } from "@material-ui/core";
+import { Box, Container, Grid, Link, Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import Order from "../../models/Order";
 import { apiGetAllUserOrders } from "../../remote/e-commerce-api/orderService";
@@ -25,12 +25,18 @@ export const Orders = () => {
                 <Typography variant="h2">Orders</Typography>
             </Container>
         </Box>
-        <Container>
+        {/*<Container>
             {orders.map((item) => {
                 console.log(item["paymentId"])
                 return <Link href={`orderDetails/${item["orderId"]}`}><OrderCard order={item} key={item["orderId"]} /></Link>
             })}
-        </Container>
+        </Container>*/}
+        <Grid container spacing={1} direction="column" justifyContent="space-between">
+        {orders.map((item) => {
+                console.log(item["paymentId"])
+                return <Grid xs={12} md={12} style={{width: "100%"}}><OrderCard order={item} key={item["orderId"]} /></Grid>
+            })}
+        </Grid>
         </>
     )
 }

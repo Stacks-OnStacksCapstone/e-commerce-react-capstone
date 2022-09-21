@@ -19,7 +19,6 @@ export const AppRoutes: React.FC<unknown> = () => (
     <Route path="/checkout" element={<Checkout />} />
     <Route path="/cart" element={<Cart />} />
     <Route path="/orders" element={<Orders />}></Route>
-    <Route path="/orderdetails/:id" element={<OrderDetails />}></Route>
     <Route path="/admin/products/" element={<EditProducts />} />
     <Route path="/admin/products/:page" element={<EditProducts />} />
     <Route path="/admin/product/:id" element={<EditProductPage />} />
