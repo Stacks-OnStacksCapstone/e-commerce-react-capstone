@@ -54,7 +54,7 @@ export default function ForgotPassword() {
                 <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-                Reset your Password
+                Send a link to your Email
             </Typography>
             {message === undefined ? <p></p> : <p>{message}</p>}
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
