@@ -5,7 +5,8 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import { ProductContext } from '../../context/product.context';
 import { apiGetAllProducts, apiGetProductByKeyword } from '../../remote/e-commerce-api/productService';
-import { Icon } from '@material-ui/core';
+import ClearIcon from '@mui/icons-material/Clear';
+import { Button, Container } from '@mui/material';
 
 export default function SearchbarProducts() {
   const {productList, setProductList} = React.useContext(ProductContext)
@@ -22,23 +23,31 @@ export default function SearchbarProducts() {
       console.log(result)
       setProductList(result.payload)
     }
-    
+  }
 
+  const searchOnEnter = async (e: any, keyword:string) =>{
+    if(e.keyCode === 13) searchProduct(keyword)
   }
 
   return (
     <Paper
-      // component="form"
       sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
-    >
+    > 
+      <IconButton onClick={() => {searchProduct(keyword)}} type="button" sx={{ p: '10px' }} aria-label="search">
+        <SearchIcon />
+      </IconButton>
+
       <InputBase
-        onChange={(event) => {searchProduct(event.target.value)}}
+        onChange={(event) => {setKeyword(event.target.value)}}
+        onKeyDownCapture={(e: any) => {searchOnEnter(e, keyword)}}
         sx={{ ml: 1, flex: 1 }}
         placeholder="Search Products"
         inputProps={{ 'aria-label': 'search products' }}
+        value={keyword}
       />
-      <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-        <SearchIcon />
+
+      <IconButton onClick={() => {searchProduct("")}} type="button" sx={{ p: '10px' }} aria-label="clear">
+        <ClearIcon />
       </IconButton>
     </Paper>
   );
