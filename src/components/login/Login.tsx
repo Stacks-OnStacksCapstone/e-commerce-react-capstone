@@ -12,26 +12,32 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { apiLogin } from '../../remote/e-commerce-api/authService';
 import { useNavigate } from 'react-router-dom';
-
-const theme = createTheme();
+import { useState } from "react";
 
 export default function Login() {
   const navigate = useNavigate();
   const [message, setMessage] = React.useState(String);
 
+  const [persisted, setPersisted] = useState<String>();
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    try{
     const response = await apiLogin(`${data.get('email')}`, `${data.get('password')}`);
-    if (response.status >= 400) setMessage(`Invalid user input, please enter a valid email and password`);
-    if (response.status >= 200 && response.status < 300) {
-      navigate('/')
-    }
-  };
+    if (response.status >= 200 && response.status < 300) navigate('/');
+      
+    } catch(error :any) {
+      
+      console.log(error);
+      if (error.response.status >= 400)
+      setPersisted("Login was unsuccessful because your account has been deactivated!");
+  }};
+  
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container color="inherit" component="main" maxWidth="xs">
         {/* <CssBaseline /> */}
         <Box
           sx={{
@@ -48,7 +54,7 @@ export default function Login() {
             Sign in
           </Typography>
           {message === undefined ? <p></p> : <p>{message}</p>}
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box color="inherit" component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
@@ -82,6 +88,7 @@ export default function Login() {
                 <Link href="register" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
+                {persisted === undefined ? <p></p> : <p>{persisted}</p>}
               </Grid>
               <Grid item>
                 <Link href="forgot-password" variant="body2">
@@ -91,7 +98,7 @@ export default function Login() {
             </Grid>
           </Box>
         </Box>
+        
       </Container>
-    </ThemeProvider>
   );
 }

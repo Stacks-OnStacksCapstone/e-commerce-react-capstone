@@ -6,20 +6,21 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import Product from '../../models/Product';
 import { useNavigate } from 'react-router-dom';
+import { Grid } from '@material-ui/core';
 
 interface productProps {
-    product: Product,
-    key: number
+  product: Product,
+  key: number
 }
 
 export const EditProductCard = (props: productProps) => {
-  const navigate = useNavigate();    
+  const navigate = useNavigate();
 
   function onClick() {
     navigate("/admin/product/" + props.product.id);
   }
 
-  return(
+  return (
     <>
       <Card sx={{ width: 345, height: 260, margin: 2 }}>
         <CardActionArea onClick={onClick} sx={{ height: 260 }}>
@@ -30,9 +31,20 @@ export const EditProductCard = (props: productProps) => {
             alt="product image"
           />
           <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              {props.product.name}
-            </Typography>
+            <Grid container spacing={0}>
+              <Grid item>
+                <Typography variant="h5">
+                  {props.product.name}
+                </Typography>
+              </Grid>
+              <Grid item xs>
+                <Grid container direction="row-reverse">
+                  <Typography variant="subtitle1" align="right">
+                    ${props.product.price.toFixed(2)}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Grid>
             <Typography variant="body2">
               {props.product.description}
             </Typography>

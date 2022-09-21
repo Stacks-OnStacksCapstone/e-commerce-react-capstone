@@ -26,9 +26,10 @@ export const apiLogout = async (): Promise<eCommerceApiResponse> => {
 }
 
 export const apiRegister = async (firstName: string, lastName: string, email: string, password: string): Promise<eCommerceApiResponse> => {
+    console.log({firstName: firstName, lastName: lastName, email: email, password: password})
     const response = await eCommerceClient.post<any>(
-        `${baseURL}/register`,
-        { firstName: firstName, lastName: lastName, email: email, password: password }
+        `/user`,
+        {email: email, password: password, firstName: firstName, lastName: lastName}
     );
     return { status: response.status, payload: response.data };
 }
