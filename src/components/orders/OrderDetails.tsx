@@ -11,6 +11,7 @@ import OrderProduct from "./OrderProduct";
 
 export const OrderDetails = () => {
    const {id} = useParams();
+   const [status, setStatus] = useState(String);
    const [orderDetailsInfo, setOrderDetailsInfo] = useState<OrderDetail[]>([]);
    const [productInfo, setProductInfo] = useState<Product>(new Product(0, "", 0, "", 0, ""));
 
