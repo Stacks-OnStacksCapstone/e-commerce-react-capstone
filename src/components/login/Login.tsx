@@ -16,6 +16,7 @@ import { useState } from "react";
 
 export default function Login() {
   const navigate = useNavigate();
+  const [message, setMessage] = React.useState(String);
 
   const [persisted, setPersisted] = useState<String>();
 
@@ -26,7 +27,6 @@ export default function Login() {
     try{
     const response = await apiLogin(`${data.get('email')}`, `${data.get('password')}`);
     if (response.status >= 200 && response.status < 300) navigate('/');
-  
       
     } catch(error :any) {
       
@@ -53,6 +53,7 @@ export default function Login() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
+          {message === undefined ? <p></p> : <p>{message}</p>}
           <Box color="inherit" component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
@@ -82,12 +83,17 @@ export default function Login() {
             >
               Sign In
             </Button>
-            <Grid container>
+            <Grid container direction='column'>
               <Grid item>
                 <Link href="register" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
                 {persisted === undefined ? <p></p> : <p>{persisted}</p>}
+              </Grid>
+              <Grid item>
+                <Link href="forgot-password" variant="body2">
+                  {"Reset your password"}
+                </Link>
               </Grid>
             </Grid>
           </Box>
