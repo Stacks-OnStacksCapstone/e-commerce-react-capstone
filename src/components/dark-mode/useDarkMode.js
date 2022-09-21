@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
+import { RefreshContext } from "../../context/refresh.context";
 
 export const useDarkMode = () => {
+    const {toggle, setToggle} = useContext(RefreshContext)
     const [theme, setTheme] = useState('dark');
 
     const setMode = mode => {
         window.localStorage.setItem('theme', mode)
         setTheme(mode);
+        setToggle(!toggle);
     };
 
     const themeToggler = () => {

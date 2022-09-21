@@ -8,8 +8,11 @@ import { EditProducts } from '../components/edit-products/EditProducts';
 import { CreateProduct } from '../components/edit-products/CreateProduct';
 import Login from '../components/login/Login';
 import Register from '../components/register/Register';
+import UserProfile from '../components/user/UserProfile';
 import { Orders } from '../components/orders/Orders';
 import { OrderDetails } from '../components/orders/OrderDetails';
+import Logout from '../components/logout/logout';
+
 
 export const AppRoutes: React.FC<unknown> = () => (
   <Routes>
@@ -25,5 +28,6 @@ export const AppRoutes: React.FC<unknown> = () => (
     <Route path="/admin/product/:id" element={<EditProductPage />} />
     <Route path="/admin/createproduct" element={<CreateProduct />} />
     <Route path="/admin/products" element={<EditProducts />} />
+    <Route path="/userProfile" element={<UserProfile/>} />
   </Routes>
 )

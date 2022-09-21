@@ -5,12 +5,11 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { CartContext } from "../../context/cart.context";
 import { ThemeProvider } from 'styled-components';
-import { GlobalStyles } from '../global-style/globalStyles';
-import {lightTheme, darkTheme} from '../dark-mode/Theme';
 import { useDarkMode } from "../dark-mode/useDarkMode";
 import Toggler from "../dark-mode/Toggler";
 import { apiGetCurrentUser } from "../../remote/e-commerce-api/authService";
 import { eCommerceApiResponse } from "../../remote/e-commerce-api/eCommerceClient";
+import Logout from "../logout/logout";
 
 const Container = styled.div`
   height: 60px;
@@ -47,10 +46,10 @@ const MenuItem = styled.div`
 
 
 const Navbar = () => {
-  const {cart,setCart} = useContext(CartContext);
+  const { cart, setCart } = useContext(CartContext);
   const navigate = useNavigate();
   const [user, setUser] = useState<eCommerceApiResponse>();
-  
+
   async function getUser() {
     let usr = await apiGetCurrentUser();
     setUser(usr);
@@ -58,7 +57,8 @@ const Navbar = () => {
 
   useEffect(() => {
     getUser();
-  }, []);
+  }, [user]);
+
 
   // const [theme, setTheme] = useState('light');
   // const themeToggler = () => {
@@ -66,9 +66,6 @@ const Navbar = () => {
   // }
 
   const [theme, themeToggler] = useDarkMode();
-  
-  const themeMode = theme === 'light' ? lightTheme: darkTheme;
-  
 
   const cartTotal = () => {
     let total = 0;
@@ -82,20 +79,20 @@ const Navbar = () => {
     <Container>
       <Wrapper>
         <Left>
-        <Logo onClick={() => {navigate('/')}}>Revature Swag Shop</Logo>
+          <Logo onClick={() => { navigate('/') }}>Revature Swag Shop</Logo>
         </Left>
         <Right>
-          <ThemeProvider theme={themeMode}>
-            <>
-            <GlobalStyles/>
-            <Toggler theme={theme} toggleTheme={themeToggler} />
-            </>
-          </ThemeProvider>
-          {!(user === undefined || user.payload.admin != true) && <MenuItem onClick={() => {navigate('/admin/products')}}>EDIT PRODUCTS</MenuItem>}
-          <MenuItem onClick={() => {navigate('/register')}}>REGISTER</MenuItem>
-          <MenuItem onClick={() => {navigate('/login')}}>SIGN IN</MenuItem>
-          <MenuItem onClick={() => {navigate('/orders')}}>ORDERS</MenuItem>
-          <MenuItem onClick={() => {navigate('/cart')}}>
+          <Toggler theme={theme} toggleTheme={themeToggler} />
+          {!(user === undefined || user.payload.admin != true) && <MenuItem onClick={() => { navigate('/admin/products') }}>EDIT PRODUCTS</MenuItem>}
+          {(user !== undefined) ?
+            (<>
+              <MenuItem onClick={() => { navigate('/userProfile') }}>PROFILE</MenuItem>
+              <MenuItem onClick={() => { navigate('/orders') }}>ORDERS</MenuItem>
+              <Logout></Logout>
+            </>) :
+            (<><MenuItem onClick={() => { navigate('/register') }}>REGISTER</MenuItem>
+              <MenuItem onClick={() => { navigate('/login') }}>SIGN IN</MenuItem></>)}
+          <MenuItem onClick={() => { navigate('/cart') }}>
             <Badge badgeContent={cartTotal()} color="primary">
               <ShoppingCartOutlined />
             </Badge>

@@ -6,7 +6,8 @@ import { apiGetAllProducts } from "../../remote/e-commerce-api/productService"
 import Navbar from "../navbar/Navbar"
 import { EditProductCard } from "./EditProductCard"
 import styled from "styled-components";
-import { Box, Button, Grid, Paper, Typography } from "@material-ui/core"
+import { Box, Grid, Paper, Typography } from "@material-ui/core"
+import Button from '@mui/material/Button';
 import { apiGetCurrentUser } from "../../remote/e-commerce-api/authService"
 import { eCommerceApiResponse } from "../../remote/e-commerce-api/eCommerceClient"
 

@@ -1,6 +1,5 @@
 import { Box, CardContent, CardMedia, Container, Grid, Typography } from "@material-ui/core";
 import Card from '@mui/material/Card';
-import grey from "@mui/material/colors/grey";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom"
 import OrderDetail from "../../models/OrderDetail";
@@ -32,7 +31,7 @@ export const OrderDetails = () => {
     <Grid container spacing={2} direction="column" alignItems="center" justifyContent="center">
     {orderDetailsInfo.map((item) => {
         return <>
-            <Card sx={{ width: 345, backgroundColor: grey[200]}}>
+            <Card sx={{ width: 345}}>
             <CardContent>
                 <Typography>OrderDetail ID: {item.id}</Typography>
                 <Typography>Order ID: {item.ordersId}</Typography>
