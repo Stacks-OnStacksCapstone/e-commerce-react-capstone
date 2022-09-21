@@ -1,14 +1,10 @@
 import { useEffect, useState } from "react";
-import eCommerceClient from "../../remote/e-commerce-api/eCommerceClient";
 import { apiDeactivateUser, apiGetProfile, apiUpdateUser } from "../../remote/e-commerce-api/UserService";
 import User from "../../models/User";
 import { apiLogout } from "../../remote/e-commerce-api/authService";
 import { useNavigate } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Typography from '@mui/material/Typography';
-import styled from "styled-components";
-import { Input } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -21,7 +17,6 @@ const theme = createTheme();
 
 export default function UserProfile() {
 
-
     const [user, setUser] = useState<User>()
     const [persisted, setPersisted] = useState<String>();
     const [formData, setFormData] = useState({
@@ -30,8 +25,6 @@ export default function UserProfile() {
         password: ""
     });
     const navigate = useNavigate();
-
-
 
     useEffect(() => {
         console.log("effect invoked");
@@ -43,7 +36,7 @@ export default function UserProfile() {
         try {
             await apiUpdateUser(formData.firstName, formData.lastName, formData.password);
 
-            setPersisted("You successfully updated your profile!");
+            setPersisted("You've successfully updated your profile!");
             getProfile();
 
         } catch (error: any) {
@@ -58,7 +51,7 @@ export default function UserProfile() {
             await apiLogout();
             navigate('/login');
             console.log(user);
-            setPersisted(`You successfully deactivated your profile!`);
+            setPersisted(`You've successfully deactivated your profile!`);
 
         } catch (error) {
             console.log(error);
@@ -80,13 +73,18 @@ export default function UserProfile() {
     }
 
     return (
-        <ThemeProvider theme={theme}>
-            <Typography variant="h2">Welcome to your Dashboard, dear {user?.firstName}!</Typography>
-            <Typography variant="body1">
-                Here you can update your profile:
-            </Typography>
-            <Container component="main" maxWidth="xs">
-                <Box component="form" noValidate sx={{ mt: 3 }}>
+            <>
+            <Box color="inherit" sx={{ m: 4}}>
+                    <Typography variant="h2">Welcome to Your Dashboard, {user?.firstName}!</Typography>
+            </Box>
+             
+            <Container color="inherit" component="main" maxWidth="xs">
+
+                <Box color="inherit" sx={{ m: 3, mx: "auto"}}>
+                    <Typography variant="h4"> Update Your Profile</Typography>
+                </Box>
+
+                <Box color="inherit" component="form" noValidate sx={{ mt: 3 }}>
 
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
@@ -127,15 +125,26 @@ export default function UserProfile() {
                                 autoComplete="new-password"
                                 onChange={(event) => setFormData({ ...formData, password: event.target.value })}
                             />
+                            <Box sx={{ mt: 3, mb: 2, backgroundColor: "#90CAF9"}}>
+                                <Button fullWidth onClick={update}>Update</Button>
+                            </Box>
                         </Grid>
-
-                        <Button variant="contained" onClick={update}>Update</Button>
-                        {persisted === undefined ? <p>Please make selections</p> : <p>{persisted}</p>}
-    
                     </Grid>
+                    {persisted === undefined ? <p></p> : <p>{persisted}</p>}
                 </Box>
             </Container>
-            <Button variant="contained" onClick={() => deactivateUser()}>Deactivate</Button>
-        </ThemeProvider>
+
+            <Container color="inherit" maxWidth="xs" >
+
+                <Box color="inherit" sx={{ m: 3, mx: "auto"}}>
+                    <Typography variant="h4"> Deactivate Your Account</Typography>
+                    <Typography> Please proceed with caution! You will be logged out after deactivating your account.</Typography>
+                </Box>
+
+                <Box sx={{ mt: 3, mb: 2, backgroundColor: "#90CAF9"}}>
+                        <Button fullWidth onClick={() => deactivateUser()}>Deactivate</Button>
+                </Box>
+            </Container>
+        </>
     );
 }
