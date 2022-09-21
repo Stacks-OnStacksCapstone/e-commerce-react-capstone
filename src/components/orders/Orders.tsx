@@ -1,5 +1,6 @@
-import { Box, Container, Link, Typography } from "@material-ui/core";
+import { Box, Container, Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Order from "../../models/Order";
 import { apiGetAllUserOrders } from "../../remote/e-commerce-api/orderService";
 import { OrderCard } from "./OrderCard";
@@ -28,7 +29,7 @@ export const Orders = () => {
         <Container>
             {orders.map((item) => {
                 console.log(item["paymentId"])
-                return <Link href={`orderDetails/${item["orderId"]}`}><OrderCard order={item} key={item["orderId"]} /></Link>
+                return <Link to={`/orderDetails/${item["orderId"]}`}><OrderCard order={item} key={item["orderId"]} /></Link>
             })}
         </Container>
         </>
