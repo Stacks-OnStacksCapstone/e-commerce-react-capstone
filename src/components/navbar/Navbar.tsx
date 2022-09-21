@@ -9,6 +9,7 @@ import { useDarkMode } from "../dark-mode/useDarkMode";
 import Toggler from "../dark-mode/Toggler";
 import { apiGetCurrentUser } from "../../remote/e-commerce-api/authService";
 import { eCommerceApiResponse } from "../../remote/e-commerce-api/eCommerceClient";
+import Logout from "../logout/logout";
 
 const Container = styled.div`
   height: 60px;
@@ -45,10 +46,10 @@ const MenuItem = styled.div`
 
 
 const Navbar = () => {
-  const {cart,setCart} = useContext(CartContext);
+  const { cart, setCart } = useContext(CartContext);
   const navigate = useNavigate();
   const [user, setUser] = useState<eCommerceApiResponse>();
-  
+
   async function getUser() {
     let usr = await apiGetCurrentUser();
     setUser(usr);
@@ -56,7 +57,8 @@ const Navbar = () => {
 
   useEffect(() => {
     getUser();
-  }, []);
+  }, [user]);
+
 
   // const [theme, setTheme] = useState('light');
   // const themeToggler = () => {
@@ -77,16 +79,20 @@ const Navbar = () => {
     <Container>
       <Wrapper>
         <Left>
-        <Logo onClick={() => {navigate('/')}}>Revature Swag Shop</Logo>
+          <Logo onClick={() => { navigate('/') }}>Revature Swag Shop</Logo>
         </Left>
         <Right>
           <Toggler theme={theme} toggleTheme={themeToggler} />
-          {!(user === undefined || user.payload.admin != true) && <MenuItem onClick={() => {navigate('/admin/products')}}>EDIT PRODUCTS</MenuItem>}
-          <MenuItem onClick={() => {navigate('/register')}}>REGISTER</MenuItem>
-          <MenuItem onClick={() => {navigate('/login')}}>SIGN IN</MenuItem>
-          <MenuItem onClick={() => {navigate('/userProfile')}}>PROFILE</MenuItem>
-          <MenuItem onClick={() => {navigate('/orders')}}>ORDERS</MenuItem>
-          <MenuItem onClick={() => {navigate('/cart')}}>
+          {!(user === undefined || user.payload.admin != true) && <MenuItem onClick={() => { navigate('/admin/products') }}>EDIT PRODUCTS</MenuItem>}
+          {(user !== undefined) ?
+            (<>
+              <MenuItem onClick={() => { navigate('/userProfile') }}>PROFILE</MenuItem>
+              <MenuItem onClick={() => { navigate('/orders') }}>ORDERS</MenuItem>
+              <Logout></Logout>
+            </>) :
+            (<><MenuItem onClick={() => { navigate('/register') }}>REGISTER</MenuItem>
+              <MenuItem onClick={() => { navigate('/login') }}>SIGN IN</MenuItem></>)}
+          <MenuItem onClick={() => { navigate('/cart') }}>
             <Badge badgeContent={cartTotal()} color="primary">
               <ShoppingCartOutlined />
             </Badge>

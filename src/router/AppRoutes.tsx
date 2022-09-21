@@ -11,6 +11,8 @@ import Register from '../components/register/Register';
 import UserProfile from '../components/user/UserProfile';
 import { Orders } from '../components/orders/Orders';
 import { OrderDetails } from '../components/orders/OrderDetails';
+import Logout from '../components/logout/logout';
+
 
 export const AppRoutes: React.FC<unknown> = () => (
   <Routes>
