@@ -93,7 +93,7 @@ export default function ResetPassword() {
                 <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-                Reset your Password
+                Reset Password
             </Typography>
             {message === undefined ? <p></p> : <p>{message}</p>}
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -104,6 +104,7 @@ export default function ResetPassword() {
                     id="password"
                     label="New Password"
                     name="password"
+                    type="password"
                     autoComplete="password"
                     autoFocus
                 />

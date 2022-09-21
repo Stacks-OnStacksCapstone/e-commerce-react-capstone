@@ -77,7 +77,7 @@ export default function Login() {
             >
               Sign In
             </Button>
-            <Grid container>
+            <Grid container direction='column'>
               <Grid item>
                 <Link href="register" variant="body2">
                   {"Don't have an account? Sign Up"}
@@ -85,7 +85,7 @@ export default function Login() {
               </Grid>
               <Grid item>
                 <Link href="forgot-password" variant="body2">
-                  {"Forgot your password? Reset your password here"}
+                  {"Reset your password"}
                 </Link>
               </Grid>
             </Grid>
