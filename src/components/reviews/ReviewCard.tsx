@@ -1,12 +1,14 @@
-import { Box, CardContent, Typography, CardActions, Button, Grid } from '@material-ui/core';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import { grey } from '@material-ui/core/colors';
-import { Rating } from '@mui/material';
 import Card from '@mui/material/Card';
-import React, { useEffect, useState } from 'react';
-import Product from '../../models/Product';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import { useEffect, useState } from 'react';
 import ProductReview from '../../models/ProductReview';
 import { apiGetCurrentUser } from '../../remote/e-commerce-api/authService';
 import { apiDeleteProductReview, apiGetAllReviewsForProduct } from '../../remote/e-commerce-api/productReviewService';
+import Rating from '@mui/material/Rating';
 
 
 interface reviewProps {
@@ -37,7 +39,7 @@ export const ReviewCard = (props: reviewProps) => {
   }
 
   return (
-    <Card sx={{ width: 345, margin: 2, backgroundColor: grey[200] }}>
+    <Card sx={{ width: 345, margin: 2 }}>
       <CardContent>
         <Typography gutterBottom>
           {props.review.user.firstName}
