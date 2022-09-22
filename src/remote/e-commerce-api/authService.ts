@@ -11,11 +11,15 @@ export const apiLogin = async (email: string, password: string): Promise<eCommer
 }
 
 export const apiGetCurrentUser = async (): Promise<eCommerceApiResponse> => {
-    const response = await eCommerceClient.get<any>(
-        `${baseURL}`
-    );
-    
-    return { status: response.status, payload: response.data };
+    try {
+        const response = await eCommerceClient.get<any>(
+            `${baseURL}`
+        );
+        
+        return { status: response.status, payload: response.data };
+    } catch (error: any) {
+        return { status: error.response.status, payload: null };
+    }
 }
 
 export const apiLogout = async (): Promise<eCommerceApiResponse> => {
