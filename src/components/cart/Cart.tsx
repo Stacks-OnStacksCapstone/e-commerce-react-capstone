@@ -1,12 +1,13 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { CartContext } from "../../context/cart.context";
-import Navbar from "../navbar/Navbar";
 import Product from "../../models/Product";
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
+
+
 
 const Container = styled.div``;
 
@@ -132,8 +133,14 @@ const CheckoutButton = styled.div`
   justify-content: center;
 `;
 
+
 export const Cart = () => {
   const { cart, setCart } = useContext(CartContext);
+  const [showSummary, setShow] = useState(false);
+
+
+
+ 
 
   // Create our number formatter.
   var formatter = new Intl.NumberFormat('en-US', {
@@ -159,7 +166,6 @@ export const Cart = () => {
   }
 
   const removeProduct = (product: Product) => {
-
     const newCart = [...cart]
     const index = newCart.findIndex((searchProduct) => {
       return searchProduct.id === product.id
@@ -173,6 +179,17 @@ export const Cart = () => {
   }
 
   const navigate = useNavigate();
+
+  useEffect(() => 
+  {
+    if(cart.length > 0){
+      setShow(true);
+    } else {
+      setShow(false);
+    }
+  }, [cart]
+  )  
+
 
   return (
     <Container>
@@ -218,6 +235,7 @@ export const Cart = () => {
               ))
             }
           </Info>
+          {!showSummary || 
           <Summary>
             <SummaryTitle>ORDER SUMMARY</SummaryTitle>
             <SummaryItem>
@@ -242,6 +260,7 @@ export const Cart = () => {
             </SummaryItem>
             <Button fullWidth={true} variant="contained" onClick={() => {navigate('/checkout')}}>CHECKOUT NOW</Button>
           </Summary>
+          }
         </Bottom>
       </Wrapper>
     </Container>

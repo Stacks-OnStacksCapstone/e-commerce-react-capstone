@@ -11,7 +11,7 @@ const Toggler = ({theme, toggleTheme}) => {
     const isLight = theme === 'light';
     return (
         <>
-        <DarkModeRounded/><Switch checked={isLight} onChange={toggleTheme}></Switch><LightModeRounded/>
+        <DarkModeRounded/><Switch color="primary" checked={isLight} onChange={toggleTheme}></Switch><LightModeRounded/>
         </>
     );       
 };
