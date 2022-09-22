@@ -14,6 +14,7 @@ import { OrderDetails } from '../components/orders/OrderDetails';
 import ForgotPassword from '../components/login/forgotPassword';
 import UserProfile from '../components/user/UserProfile';
 import Logout from '../components/logout/logout';
+import ReviewPage from '../components/reviews/ReviewPage';
 
 
 export const AppRoutes: React.FC<unknown> = () => (
@@ -33,5 +34,6 @@ export const AppRoutes: React.FC<unknown> = () => (
     <Route path="/forgot-password" element={<ForgotPassword />} />
     <Route path="/reset-password/:token" element={<ResetPassword />} />
     <Route path="/userProfile" element={<UserProfile/>} />
+    <Route path="/reviewpage/:id" element={<ReviewPage/>} />
   </Routes>
 )

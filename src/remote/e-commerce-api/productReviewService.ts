@@ -25,6 +25,32 @@ export const apiGetAllReviewsForProduct = async (productId: number): Promise<eCo
     return { status: 0, payload: null };
 }
 
+export const apigetProductByScore = async (productId: number, rating: number): Promise<eCommerceApiResponse> =>{
+    try{
+        const response = await eCommerceClient.get<ProductReview>(
+            `${baseURL}/rate/${productId}/${rating}`
+        )
+        return {status: response.status, payload: response.data}
+    }
+    catch (error){
+        console.log(error);
+    }
+    return { status: 0, payload: null };
+}
+
+export const apigetProductAverageScore = async (productId: number): Promise<eCommerceApiResponse> =>{
+    try {
+        const response = await eCommerceClient.get<Number>(
+            `${baseURL}/avr/${productId}`
+        )
+        return {status: response.status, payload: response.data}
+    } catch (error) {
+        console.log(error);
+    }
+    return { status: 0, payload: null };
+}
+
+
 export const apiUpsertProductReview = async (productRequest: any): Promise<eCommerceApiResponse> => {
     const response = await eCommerceClient.put<any>(
         `${baseURL}`, productRequest
