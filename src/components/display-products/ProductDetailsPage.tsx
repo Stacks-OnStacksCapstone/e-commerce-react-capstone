@@ -68,7 +68,7 @@ export const ProductDetailsPage = () => {
       } catch (error) {
         console.log(error)
       }
-      let reviews = await apiGetAllReviewsForProduct(product.id);
+      let reviews = await apiGetAllReviewsForProduct(parseInt(id));
       setReviews(reviews);
     }
 
@@ -159,83 +159,90 @@ export const ProductDetailsPage = () => {
 
   return (
     <>
-    <br/>
-    {/* <Top> */}
-    <Button style = {{margin: "20px"}} variant="contained" onClick={() => { navigate("/"); }}> Back to Products </Button>
-    {/* </Top> */}
-    <br/>
-    <br/>
-    <br/>
-    <Grid container spacing={2} >
-      <Grid item xs></Grid>
-      <Grid item xs={4} justifyContent = "center" alignItems = "center">
-        <Container>
-          <img src= {product.image} width = "95%" height = "95%"/>
-        </Container>
-      </Grid>
-      <Grid item xs={4}>
-        <Typography component="h1" variant="h4" align="center">
-          {product.name}
-        </Typography>
-        <br/>
-        <Typography gutterBottom>
-          {product.description}
-        </Typography>
-        <br/>
-        <Grid container alignItems = "center" >
-          <Grid item> 
-            <IconButton onClick={() => { changeQuantity({ ...product, quantity: -1 }) }}>
-              <RemoveIcon />
-            </IconButton>
-          </Grid>
-          <Grid item> 
-          <Typography>
-            {showProductQuantity(product)}
-          </Typography>
-          </Grid>
-          <Grid item> 
-          <IconButton onClick={() => { changeQuantity({ ...product, quantity: 1 }) }}>
-            <AddIcon />
-          </IconButton>
-          </Grid>
-          <Grid item> 
-          <IconButton onClick={() => { removeProduct(product) }}>
-            <DeleteIcon />
-          </IconButton>
-          </Grid>
-        
-          
-          
+      <br />
+      {/* <Top> */}
+      <Button style={{ margin: "20px" }} variant="contained" onClick={() => { navigate("/"); }}> Back to Products </Button>
+      {/* </Top> */}
+      <br />
+      <br />
+      <br />
+      <Grid container spacing={2} >
+        <Grid item xs></Grid>
+        <Grid item xs={4} justifyContent="center" alignItems="center">
+          <Container>
+            <img src={product.image} width="95%" height="95%" />
+          </Container>
         </Grid>
-        <br/>
-        <DialogContent dividers>
-          <Typography variant="h4" align="center">Leave a Review</Typography>
-          <Rating name="rating" value={newReview.rating} onChange={((event: React.SyntheticEvent<Element, Event>, value: number | null) => { if (value !== null) setNewReview({ ...newReview, rating: value }) })} />
-          <TextField
-            id="outlined-multiline-flexible"
-            label="Product Review"
-            multiline
-            fullWidth
-            minRows={8}
-            maxRows={8}
-            value={newReview.comment}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => { setNewReview({ ...newReview, comment: event.target.value }) }}
-          />
-          <br /><br />
-          <Grid container spacing={2} direction="column" alignItems="center" justifyContent="center"><Button variant="contained" onClick={onSubmitReview}>Submit Review</Button></Grid>
-          <br/>
-        </DialogContent>
-        <DialogContent dividers>
-          <Typography variant="h4" align="center">Product Reviews</Typography>
-          <Grid container spacing={2} direction="column" alignItems="center" justify="center">
-            <Grid item xs={8}>
-              {reviewsMap}
+        <Grid item xs={4}>
+          <Typography component="h1" variant="h4" align="center">
+            {product.name}
+          </Typography>
+          <br />
+          <Typography gutterBottom>
+            {product.description}
+          </Typography>
+          <br />
+          <Grid container alignItems="center" wrap="nowrap" >
+            <Grid item>
+              <IconButton onClick={() => { changeQuantity({ ...product, quantity: -1 }) }}>
+                <RemoveIcon />
+              </IconButton>
             </Grid>
+            <Grid item>
+              <Typography>
+                {showProductQuantity(product)}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <IconButton onClick={() => { changeQuantity({ ...product, quantity: 1 }) }}>
+                <AddIcon />
+              </IconButton>
+            </Grid>
+            <Grid item>
+              <IconButton onClick={() => { removeProduct(product) }}>
+                <DeleteIcon />
+              </IconButton>
+
+            </Grid>
+
+            <Grid container justifyContent="flex-end">
+              <Typography variant="h5" gutterBottom>
+                Price: {formatter.format(product.price)}
+              </Typography>
+            </Grid>
+
+
+
           </Grid>
-        </DialogContent>
+          <br />
+          <DialogContent dividers>
+            <Typography variant="h4" align="center">Leave a Review</Typography>
+            <Rating name="rating" value={newReview.rating} onChange={((event: React.SyntheticEvent<Element, Event>, value: number | null) => { if (value !== null) setNewReview({ ...newReview, rating: value }) })} />
+            <TextField
+              id="outlined-multiline-flexible"
+              label="Product Review"
+              multiline
+              fullWidth
+              minRows={8}
+              maxRows={8}
+              value={newReview.comment}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => { setNewReview({ ...newReview, comment: event.target.value }) }}
+            />
+            <br /><br />
+            <Grid container spacing={2} direction="column" alignItems="center" justifyContent="center"><Button variant="contained" onClick={onSubmitReview}>Submit Review</Button></Grid>
+            <br />
+          </DialogContent>
+          <DialogContent dividers>
+            <Typography variant="h4" align="center">Product Reviews</Typography>
+            <Grid container spacing={2} direction="column" alignItems="center" justify="center">
+              <Grid item xs={8}>
+                {reviewsMap}
+              </Grid>
+            </Grid>
+          </DialogContent>
+        </Grid>
+        <Grid item xs></Grid>
       </Grid>
-      <Grid item xs></Grid>
-    </Grid>
     </>
   )
 
