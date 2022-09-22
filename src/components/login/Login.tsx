@@ -13,15 +13,28 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { apiLogin } from '../../remote/e-commerce-api/authService';
 import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import { Snackbar } from '@mui/material';
 
 export default function Login() {
   const navigate = useNavigate();
 
+  const [open, setOpen] = React.useState(false);
   const [persisted, setPersisted] = useState<String>();
+
+  const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+    props,
+    ref,
+  ) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     
     event.preventDefault();
+
+    setOpen(true);
+
     const data = new FormData(event.currentTarget);
     try{
     const response = await apiLogin(`${data.get('email')}`, `${data.get('password')}`);
@@ -34,7 +47,13 @@ export default function Login() {
       if (error.response.status >= 400)
       setPersisted("Login was unsuccessful because your account has been deactivated!");
   }};
-  
+
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
 
   return (
       <Container color="inherit" component="main" maxWidth="xs">
@@ -82,12 +101,18 @@ export default function Login() {
             >
               Sign In
             </Button>
+
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+                    {persisted}
+                </Alert>
+            </Snackbar>
+
             <Grid container>
               <Grid item>
                 <Link href="register" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
-                {persisted === undefined ? <p></p> : <p>{persisted}</p>}
               </Grid>
             </Grid>
           </Box>
