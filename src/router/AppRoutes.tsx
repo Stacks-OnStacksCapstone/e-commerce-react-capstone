@@ -14,8 +14,8 @@ import { OrderDetails } from '../components/orders/OrderDetails';
 import ForgotPassword from '../components/login/forgotPassword';
 import UserProfile from '../components/user/UserProfile';
 import Logout from '../components/logout/logout';
-import ReviewPage from '../components/reviews/ReviewPage';
 import { ProductDetailsPage } from '../components/display-products/ProductDetailsPage';
+import ReviewPage from '../components/reviews/ReviewPage';
 
 
 
@@ -24,11 +24,11 @@ export const AppRoutes: React.FC<unknown> = () => (
     <Route path="/" element={<DisplayProducts />} />
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />
-    <Route path = "/products/:id" element={<ProductDetailsPage/>} />
+    <Route path="/products/:id" element={<ProductDetailsPage/>} />
     <Route path="/checkout" element={<Checkout />} />
     <Route path="/cart" element={<Cart />} />
     <Route path="/orders" element={<Orders />}></Route>
-    <Route path="/orderdetails/:id" element={<OrderDetails />}></Route>
+    <Route path="/orderdetails/:id" element={<OrderDetails />} />
     <Route path="/admin/products/" element={<EditProducts />} />
     <Route path="/admin/products/:page" element={<EditProducts />} />
     <Route path="/admin/product/:id" element={<EditProductPage />} />
