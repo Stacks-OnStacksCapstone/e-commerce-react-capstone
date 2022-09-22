@@ -5,6 +5,8 @@ import TextField from '@mui/material/TextField';
 import Address from '../../models/Address';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import * as yup from "yup";
+import { useFormik } from "formik";
 
 interface addressFormProps {
   updateAddress: (addresses: Address) => void
@@ -31,20 +33,69 @@ export default function AddressForm(props: addressFormProps) {
     props.handleNext()
   }
 
+  const formik = useFormik ({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      address1: "",
+      city: "",
+      state: "",
+      zip: "",
+      country: "" 
+    },
+    onSubmit: function (values){
+      console.log(values)
+    },
+    validationSchema: yup.object().shape({
+      firstName: yup
+          .string()
+          .required("First Name is required")
+          .matches(/^[aA-zZ]+$/, "Use only allowed characters")
+          .max(50, 'First Name is too long'),
+      lastName: yup
+          .string()
+          .matches(/^[aA-zZ]+$/, "Use only allowed characters")
+          .required("Last Name is required")
+          .max(50, 'Last Name is too long'),
+      address1: yup
+          .string()
+          .required("Address is required"),
+      city: yup
+          .string()
+          .matches(/^[aA-zZ\s]+$/, "Use only allowed characters")
+          .required("City is required"),
+      zip: yup
+          .string()
+          .required("Zipcode is required")
+          .matches(/^[0-9]+$/, "Must be only digits")
+          .min(5, 'Must be exactly 5 digits')
+          .max(5, 'Must be exactly 5 digits'),
+      country: yup
+          .string()
+          .matches(/^[aA-zZ]+$/, "Use only allowed characters")
+          .required("Country is required"),
+    })
+  })
+
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
         Shipping address
       </Typography>
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+      <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>
             <TextField
               required
               id="firstName"
               name="firstName"
+              helperText={formik.touched.firstName ? formik.errors.firstName: ""}
+              error= {formik.touched.firstName && Boolean(formik.errors.firstName)}
               label="First name"
               fullWidth
+              onChange={formik.handleChange}
+              onBlur = {formik.handleBlur}
               autoComplete="given-name"
               variant="standard"
             />
@@ -54,8 +105,12 @@ export default function AddressForm(props: addressFormProps) {
               required
               id="lastName"
               name="lastName"
+              helperText={formik.touched.lastName ? formik.errors.lastName: ""}
+              error= {formik.touched.lastName && Boolean(formik.errors.lastName)}
               label="Last name"
               fullWidth
+              onChange={formik.handleChange}
+              onBlur = {formik.handleBlur}
               autoComplete="family-name"
               variant="standard"
             />
@@ -65,8 +120,12 @@ export default function AddressForm(props: addressFormProps) {
               required
               id="address1"
               name="address1"
+              helperText={formik.touched.address1 ? formik.errors.address1: ""}
+              error= {formik.touched.address1 && Boolean(formik.errors.address1)}
               label="Address line 1"
               fullWidth
+              onChange={formik.handleChange}
+              onBlur = {formik.handleBlur}
               autoComplete="shipping address-line1"
               variant="standard"
             />
@@ -86,8 +145,12 @@ export default function AddressForm(props: addressFormProps) {
               required
               id="city"
               name="city"
+              helperText={formik.touched.city ? formik.errors.city: ""}
+              error= {formik.touched.city && Boolean(formik.errors.city)}
               label="City"
               fullWidth
+              onChange={formik.handleChange}
+              onBlur = {formik.handleBlur}
               autoComplete="shipping address-level2"
               variant="standard"
             />
@@ -106,8 +169,12 @@ export default function AddressForm(props: addressFormProps) {
               required
               id="zip"
               name="zip"
+              helperText={formik.touched.zip ? formik.errors.zip: ""}
+              error= {formik.touched.zip && Boolean(formik.errors.zip)}
               label="Zip / Postal code"
               fullWidth
+              onChange={formik.handleChange}
+              onBlur = {formik.handleBlur}
               autoComplete="shipping postal-code"
               variant="standard"
             />
@@ -117,8 +184,12 @@ export default function AddressForm(props: addressFormProps) {
               required
               id="country"
               name="country"
+              helperText={formik.touched.country ? formik.errors.country: ""}
+              error= {formik.touched.country && Boolean(formik.errors.country)}
               label="Country"
               fullWidth
+              onChange={formik.handleChange}
+              onBlur = {formik.handleBlur}
               autoComplete="shipping country"
               variant="standard"
             />

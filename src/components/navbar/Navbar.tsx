@@ -11,6 +11,7 @@ import { apiGetCurrentUser } from "../../remote/e-commerce-api/authService";
 import { eCommerceApiResponse } from "../../remote/e-commerce-api/eCommerceClient";
 import { RefreshContext } from "../../context/refresh.context";
 import Logout from "../logout/logout";
+import { UserContext } from "../../context/user.context";
 
 const Container = styled.div`
   height: 60px;
@@ -48,19 +49,29 @@ const MenuItem = styled.div`
 
 const Navbar = () => {
   const { cart, setCart } = useContext(CartContext);
+  const { user, setUser } = useContext(UserContext);  //userContext added
   const navigate = useNavigate();
+
+  // async function getUser() {                   //We dont need the getUser and useEffect methods, since we are using userContext to get the current user
+  //   let user = await apiGetCurrentUser();
+  //   setUser(user);
+  // }
+
+  // useEffect(() => {
+  //   getUser();
+  // }, [user]);
   const {toggle, setToggle} = useContext(RefreshContext)
-  const [user, setUser] = useState<eCommerceApiResponse>();
 
   async function getUser() {
     let usr = await apiGetCurrentUser();
     console.log("user:", usr);
-    setUser(usr);
+    setUser(usr.payload);
   }
 
   useEffect(() => {
     getUser();
   }, [toggle]);
+
 
 
   // const [theme, setTheme] = useState('light');
@@ -86,8 +97,8 @@ const Navbar = () => {
         </Left>
         <Right>
           <Toggler theme={theme} toggleTheme={themeToggler} />
-          {!(user === undefined || user.payload === null || user.payload.admin != true) && <MenuItem onClick={() => { navigate('/admin/products') }}>EDIT PRODUCTS</MenuItem>}
-          {(user !== undefined && user.payload !== null) ?
+          {!(user === undefined || user === null || user.admin != true) && <MenuItem onClick={() => { navigate('/admin/products') }}>EDIT PRODUCTS</MenuItem>}
+          {(user !== undefined && user !== null) ?
             (<>
               <MenuItem onClick={() => { navigate('/userProfile') }}>PROFILE</MenuItem>
               <MenuItem onClick={() => { navigate('/orders') }}>ORDERS</MenuItem>

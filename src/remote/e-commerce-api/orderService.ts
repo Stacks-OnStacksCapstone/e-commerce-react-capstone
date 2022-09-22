@@ -1,3 +1,4 @@
+import Address from "../../models/Address";
 import eCommerceClient, { eCommerceApiResponse } from "./eCommerceClient"
 
 const baseURL = "/api/order/history"
@@ -14,4 +15,17 @@ export const apiGetOrderDetails = async (id: any) : Promise<eCommerceApiResponse
         `/api/orderdetail/order/${id}`
     );
     return{ status: response.status, payload: response.data };
+}
+
+export const apiCreateOrder = async (paymentId : string, addressInfo : Address) : Promise<eCommerceApiResponse> => {
+    const shipmentAddress : string = `${addressInfo.address1}, ${addressInfo.city}, ${addressInfo.state}, ${addressInfo.zip}, ${addressInfo.country}`;
+    const requestBody : any = {
+        "paymentId" : paymentId,
+        "shipmentAddress" : shipmentAddress
+    }
+    const response = await eCommerceClient.post<any>(
+        `/api/order`,
+        requestBody
+    );
+    return{ status: response.status, payload: response.data};
 }

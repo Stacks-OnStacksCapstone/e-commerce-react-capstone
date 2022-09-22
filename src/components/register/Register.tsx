@@ -12,6 +12,9 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { apiRegister } from '../../remote/e-commerce-api/authService';
 import { useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
+import * as yup from "yup";
+import YupPassword from 'yup-password';
 
 const theme = createTheme();
 
@@ -25,6 +28,39 @@ export default function Register() {
     const response = await apiRegister(`${data.get('firstName')}`, `${data.get('lastName')}`, `${data.get('email')}`, `${data.get('password')}`)
     if (response.status >= 200 && response.status < 300) navigate('/login')
   };
+  YupPassword(yup);
+  const formik = useFormik ({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: ""
+    },
+    onSubmit: function (values){
+      console.log(values)
+    },
+    validationSchema: yup.object().shape({
+      firstName: yup
+          .string()
+          .required("First Name is required")
+          .matches(/^[aA-zZ]+$/, "Use only allowed characters"),
+      lastName: yup
+          .string()
+          .required("Last Name is required")
+          .matches(/^[aA-zZ]+$/, "Use only allowed characters"),
+      email: yup
+          .string()
+          .required("Email Address is required"),
+      password: yup
+          .string()
+          .required("Password is required")
+          .min(8, "Password must contain 8 or more characters with at least one of each: uppercas, lowercas, number, and special")
+          .minLowercase(1, 'password must contain at least 1 lower case letter')
+          .minUppercase(1, 'password must contain at least 1 upper case letter')
+          .minNumbers(1, 'password must contain at least 1 number')
+          .minSymbols(1, 'password must contain at least 1 special character'),
+    })
+  })
 
   return (
       <Container component="main" maxWidth="xs">
@@ -42,14 +78,18 @@ export default function Register() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
                   name="firstName"
+                  helperText={formik.touched.firstName ? formik.errors.firstName: ""}
+                  error= {formik.touched.firstName && Boolean(formik.errors.firstName)}
                   required
                   fullWidth
+                  onChange={formik.handleChange}
+                  onBlur = {formik.handleBlur}
                   id="firstName"
                   label="First Name"
                   autoFocus
@@ -59,6 +99,10 @@ export default function Register() {
                 <TextField
                   required
                   fullWidth
+                  helperText={formik.touched.lastName ? formik.errors.lastName: ""}
+                  error= {formik.touched.lastName && Boolean(formik.errors.lastName)}
+                  onChange={formik.handleChange}
+                  onBlur = {formik.handleBlur}
                   id="lastName"
                   label="Last Name"
                   name="lastName"
@@ -69,6 +113,10 @@ export default function Register() {
                 <TextField
                   required
                   fullWidth
+                  helperText={formik.touched.email ? formik.errors.email: ""}
+                  error= {formik.touched.email && Boolean(formik.errors.email)}
+                  onChange={formik.handleChange}
+                  onBlur = {formik.handleBlur}
                   id="email"
                   label="Email Address"
                   name="email"
@@ -79,6 +127,10 @@ export default function Register() {
                 <TextField
                   required
                   fullWidth
+                  helperText={formik.touched.password ? formik.errors.password: ""}
+                  error= {formik.touched.password && Boolean(formik.errors.password)}
+                  onChange={formik.handleChange}
+                  onBlur = {formik.handleBlur}
                   name="password"
                   label="Password"
                   type="password"
