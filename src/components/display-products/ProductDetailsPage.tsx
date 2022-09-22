@@ -8,11 +8,17 @@ import { ReviewCard } from "../reviews/ReviewCard";
 import RemoveIcon from '@mui/icons-material/Remove';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { apiGetProductById } from "../../remote/e-commerce-api/productService";
 import { Grid } from "@material-ui/core";
+import styled from "styled-components";
 
-
+const Top = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+`;
 
 interface productProps {
   product: Product,
@@ -42,6 +48,7 @@ export const ProductDetailsPage = () => {
   const [reviews, setReviews] = React.useState<eCommerceApiResponse>();
   const [newReview, setNewReview] = React.useState<ProductRequest>(new ProductRequest(0, "", product.id));
   const { cart, setCart } = useContext(CartContext);
+  const navigate = useNavigate();
 
   var formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -152,6 +159,12 @@ export const ProductDetailsPage = () => {
 
   return (
     <>
+    <br/>
+    {/* <Top> */}
+    <Button style = {{margin: "20px"}} variant="contained" onClick={() => { navigate("/"); }}> Back to Products </Button>
+    {/* </Top> */}
+    <br/>
+    <br/>
     <br/>
     <Grid container spacing={2} >
       <Grid item xs></Grid>
