@@ -12,6 +12,7 @@ import UserProfile from '../components/user/UserProfile';
 import { Orders } from '../components/orders/Orders';
 import { OrderDetails } from '../components/orders/OrderDetails';
 import Logout from '../components/logout/logout';
+import { ProductDetailsPage } from '../components/display-products/ProductDetailsPage';
 
 
 export const AppRoutes: React.FC<unknown> = () => (
@@ -19,6 +20,7 @@ export const AppRoutes: React.FC<unknown> = () => (
     <Route path="/" element={<DisplayProducts />} />
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />
+    <Route path = "/products/:id" element={<ProductDetailsPage/>} />
     <Route path="/checkout" element={<Checkout />} />
     <Route path="/cart" element={<Cart />} />
     <Route path="/orders" element={<Orders />}></Route>
