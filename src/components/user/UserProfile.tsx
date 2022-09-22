@@ -21,9 +21,8 @@ export default function UserProfile() {
     
     const [open, setOpen] = React.useState(false);
     const [user, setUser] = useState<User>()
-    const [persisted, setPersisted] = useState<String>();
-    const [warningMessage, setWarningMessage] = useState<String>();
-    const [errorMessage, setErrorMessage] = useState<String>();
+    const [persisted, setPersisted] = useState<String>("");
+    const [errorMessage, setErrorMessage] = useState<String>("");
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -49,8 +48,9 @@ export default function UserProfile() {
 
         setOpen(true);
 
-        if(formData.firstName === undefined && formData.lastName === undefined && formData.password === undefined){
-            setWarningMessage(`Please update a field`)
+        if(!formData.firstName && !formData.lastName && !formData.password){
+            setErrorMessage(`Please update a field`)
+            return;
         }
 
         try {
@@ -68,6 +68,8 @@ export default function UserProfile() {
           return;
         }
         setOpen(false);
+        setErrorMessage("");
+        setPersisted("");
       };
 
     async function deactivateUser() {
@@ -160,8 +162,8 @@ export default function UserProfile() {
                                     <Button fullWidth variant="contained" onClick={update}>Update</Button>
                                     
                                     <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                                        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                                            {persisted}
+                                        <Alert onClose={handleClose} severity= {persisted ? "success" : "error" }  sx={{ width: '100%' }}>
+                                            {persisted ? persisted : errorMessage}
                                         </Alert>
                                     </Snackbar>
 
@@ -192,11 +194,7 @@ export default function UserProfile() {
 
                     <Box sx={{ mt: 3, mb: 2 }}>
                         <Button fullWidth variant="contained" onClick={() => deactivateUser()}>Deactivate</Button>
-                        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                            <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                                {persisted}
-                            </Alert>
-                        </Snackbar>
+                        
                     </Box>
                 </Paper>
         

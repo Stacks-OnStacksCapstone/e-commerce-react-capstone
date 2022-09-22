@@ -36,8 +36,6 @@ export default function Login() {
     
     event.preventDefault();
 
-    setOpen(true);
-
     const data = new FormData(event.currentTarget);
     try{
     const response = await apiLogin(`${data.get('email')}`, `${data.get('password')}`);
@@ -47,10 +45,12 @@ export default function Login() {
     }
       
     } catch(error :any) {
-      
+      setOpen(true);
       console.log(error);
-      if (error.response.status >= 400)
+      if (error.response.status === 401)
       setPersisted("Login was unsuccessful because your account has been deactivated!");
+      else 
+      setPersisted("Invalid credentials");
   }};
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
