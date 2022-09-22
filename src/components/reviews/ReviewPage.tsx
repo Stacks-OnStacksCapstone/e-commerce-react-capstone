@@ -106,6 +106,10 @@ export default function ReviewPage(){
             }            
         }
     }
+    
+    function getAvr(){
+        return avrRating;
+    }
 
 
 
@@ -125,7 +129,7 @@ export default function ReviewPage(){
                         <Typography variant="h5">
                         {product.name}
                         </Typography>
-                        <Rating name="disabled" value={avrRating} disabled />
+                        <Rating name="disabled" value={getAvr()} disabled />
                     </Grid>
                     <Grid item xs>
                         <Grid container direction="row-reverse">
