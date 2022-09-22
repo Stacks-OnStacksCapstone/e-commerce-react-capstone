@@ -11,11 +11,15 @@ export const apiLogin = async (email: string, password: string): Promise<eCommer
 }
 
 export const apiGetCurrentUser = async (): Promise<eCommerceApiResponse> => {
-    const response = await eCommerceClient.get<any>(
-        `${baseURL}`
-    );
-    
-    return { status: response.status, payload: response.data };
+    try {
+        const response = await eCommerceClient.get<any>(
+            `${baseURL}`
+        );
+        
+        return { status: response.status, payload: response.data };
+    } catch (error: any) {
+        return { status: error.response.status, payload: null };
+    }
 }
 
 export const apiLogout = async (): Promise<eCommerceApiResponse> => {
@@ -30,6 +34,29 @@ export const apiRegister = async (firstName: string, lastName: string, email: st
     const response = await eCommerceClient.post<any>(
         `/user`,
         {email: email, password: password, firstName: firstName, lastName: lastName}
+    );
+    return { status: response.status, payload: response.data };
+}
+
+export const apiForgotPassword = async (email: string): Promise<eCommerceApiResponse> => {
+    const response = await eCommerceClient.put<any>(
+        `${baseURL}/forgot-password`,
+        { email: email }
+    );
+    return { status: response.status, payload: response.data };
+}
+
+export const apiVerifyToken = async (token: string): Promise<eCommerceApiResponse> => {
+    const response = await eCommerceClient.get<any>(
+        `${baseURL}/reset-password/${token}`
+    );
+    return { status: response.status, payload: response.data };
+}
+
+export const apiResetPassword = async (token: string, password: string): Promise<eCommerceApiResponse> => {
+    const response = await eCommerceClient.put<any>(
+        `${baseURL}/reset-password/${token}`,
+        { password: password }
     );
     return { status: response.status, payload: response.data };
 }
