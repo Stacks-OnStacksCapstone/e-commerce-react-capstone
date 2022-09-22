@@ -61,11 +61,12 @@ const Circle = styled.div`
     background-color: white;
     position: absolute;
   `;
-
+  
 const Image = styled.img`
     max-height: 75%;
     max-width: 95%;
     z-index: 2;
+    
   `;
 
 const DialogImage = styled.img`

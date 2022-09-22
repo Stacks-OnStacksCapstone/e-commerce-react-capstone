@@ -16,7 +16,8 @@ import { useNavigate } from 'react-router-dom';
 const theme = createTheme();
 
 export default function Register() {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+  const [message,setMessage] = React.useState(String); 
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
