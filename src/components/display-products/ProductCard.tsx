@@ -1,6 +1,7 @@
 import {
   SearchOutlined,
   ShoppingCartOutlined,
+  ZoomIn,
 } from "@material-ui/icons";
 import { useContext } from "react";
 import styled from "styled-components";
@@ -25,6 +26,8 @@ import { eCommerceApiResponse } from "../../remote/e-commerce-api/eCommerceClien
 import { ReviewCard } from "../reviews/ReviewCard";
 import ProductReview from "../../models/ProductReview";
 import { Card, CardContent, CardMedia, Rating, TextField } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { OpenInFull } from "@mui/icons-material";
 
 
 const Info = styled.div`
@@ -61,7 +64,7 @@ const Circle = styled.div`
     background-color: white;
     position: absolute;
   `;
-  
+
 const Image = styled.img`
     max-height: 75%;
     max-width: 95%;
@@ -116,6 +119,7 @@ const BootstrapDialog = muiStyled(Dialog)(({ theme }) => ({
 
 export interface DialogTitleProps {
   id: string;
+  productId: number;
   children?: React.ReactNode;
   onClose: () => void;
 }
@@ -136,10 +140,23 @@ class ProductRequest {
 
 const BootstrapDialogTitle = (props: DialogTitleProps) => {
   const { children, onClose, ...other } = props;
+  const navigate = useNavigate();
 
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
       {children}
+      <IconButton
+        aria-label="expand-detail-page"
+        onClick={() => navigate(`/products/${props.productId}`)}
+        sx={{
+          position: 'absolute',
+          right: 60,
+          top: 8,
+          color: (theme) => theme.palette.grey[500],
+        }}
+      >
+        <OpenInFull />
+      </IconButton>
       {onClose ? (
         <IconButton
           aria-label="close"
@@ -273,7 +290,7 @@ export default function ProductDetailDialogs(props: productProps) {
   return (
     <div>
       <Icon aria-label="view-product-details" onClick={handleClickOpen}>
-        <SearchOutlined />
+        <ZoomIn />
       </Icon>
       <BootstrapDialog
         onClose={handleClose}
@@ -281,7 +298,7 @@ export default function ProductDetailDialogs(props: productProps) {
         open={open}
         scroll="body"
       >
-        <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
+        <BootstrapDialogTitle productId={props.product.id} id="customized-dialog-title" onClose={handleClose}>
           {props.product.name}
         </BootstrapDialogTitle>
         <DialogContent dividers>
@@ -382,43 +399,43 @@ export const ProductCard = (props: productProps) => {
 
   return (
     <>
-    <Container>
-    <Card sx={{ width: 345, height: 260}}>
-      <CardMedia
-        component="img"
-        height="140"
-        image={props.product.image}
-        alt="product image"
-      />
-      <Info>
-        <Icon>
-          <Badge badgeContent={showProductQuantity(props.product)} color="primary">
-            <ShoppingCartOutlined onClick={() => { addItemToCart({ ...props.product, quantity: 1 }) }} />
-          </Badge>
-        </Icon>
-        <ProductDetailDialogs product={props.product} key={props.product.id}></ProductDetailDialogs>
-      </Info>
-      <CardContent>
-        <Grid container spacing={0}>
-          <Grid item>
-            <Typography variant="h5">
-              {props.product.name}
-            </Typography>
-          </Grid>
-          <Grid item xs>
-            <Grid container direction="row-reverse">
-              <Typography variant="subtitle1" align="right">
-                ${props.product.price.toFixed(2)}
-              </Typography>
+      <Container>
+        <Card sx={{ width: 345, height: 260 }}>
+          <CardMedia
+            component="img"
+            height="140"
+            image={props.product.image}
+            alt="product image"
+          />
+          <Info>
+            <Icon>
+              <Badge badgeContent={showProductQuantity(props.product)} color="primary">
+                <ShoppingCartOutlined onClick={() => { addItemToCart({ ...props.product, quantity: 1 }) }} />
+              </Badge>
+            </Icon>
+            <ProductDetailDialogs product={props.product} key={props.product.id}></ProductDetailDialogs>
+          </Info>
+          <CardContent>
+            <Grid container spacing={0}>
+              <Grid item>
+                <Typography variant="h5">
+                  {props.product.name}
+                </Typography>
+              </Grid>
+              <Grid item xs>
+                <Grid container direction="row-reverse">
+                  <Typography variant="subtitle1" align="right">
+                    ${props.product.price.toFixed(2)}
+                  </Typography>
+                </Grid>
+              </Grid>
             </Grid>
-          </Grid>
-        </Grid>
-        <Typography variant="body2">
-          {props.product.description}
-        </Typography>
-      </CardContent>
-    </Card>
-    </Container>
+            <Typography variant="body2">
+              {props.product.description}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Container>
     </>
   );
 

@@ -8,17 +8,21 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import { Button, Container } from "@mui/material";
+import { Button, Container, Snackbar, Stack } from "@mui/material";
 import Paper from '@mui/material/Paper';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import React from "react";
 
 
 const theme = createTheme();
 
 
 export default function UserProfile() {
-
+    
+    const [open, setOpen] = React.useState(false);
     const [user, setUser] = useState<User>()
-    const [persisted, setPersisted] = useState<String>();
+    const [persisted, setPersisted] = useState<String>("");
+    const [errorMessage, setErrorMessage] = useState<String>("");
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -31,22 +35,42 @@ export default function UserProfile() {
         getProfile();
     }, []);
 
+    const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+        props,
+        ref,
+      ) {
+        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+      });
+      
     async function update(event: { preventDefault: () => void; }) {
+        
         event.preventDefault();
+
+        setOpen(true);
+
+        if(!formData.firstName && !formData.lastName && !formData.password){
+            setErrorMessage(`Please update a field`)
+            return;
+        }
+
         try {
             await apiUpdateUser(formData.firstName, formData.lastName, formData.password);
-
-            //const resp = await apiGetCurrentUser();
-            
-            
-
             setPersisted("You've successfully updated your profile!");
             getProfile();
 
         } catch (error: any) {
-            setPersisted(`Update was unsuccessful because ${error.payload}`);
+            setErrorMessage(`Update was unsuccessful because ${error.payload}`);
         }
     }
+
+    const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        setOpen(false);
+        setErrorMessage("");
+        setPersisted("");
+      };
 
     async function deactivateUser() {
         try {
@@ -134,11 +158,18 @@ export default function UserProfile() {
                                     onChange={(event) => setFormData({ ...formData, password: event.target.value })}
                                 />
                                 <Box sx={{ mt: 3, mb: 2}}>
+                                  
                                     <Button fullWidth variant="contained" onClick={update}>Update</Button>
+                                    
+                                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                                        <Alert onClose={handleClose} severity= {persisted ? "success" : "error" }  sx={{ width: '100%' }}>
+                                            {persisted ? persisted : errorMessage}
+                                        </Alert>
+                                    </Snackbar>
+
                                 </Box>
                             </Grid>
                         </Grid>
-                        {persisted === undefined ? <p></p> : <p>{persisted}</p>}
                     </Box>
                 </Paper>
             </Container>

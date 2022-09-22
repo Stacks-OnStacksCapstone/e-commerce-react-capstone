@@ -4,8 +4,8 @@ export default class User{
     email: string;
     firstName: string;
     lastName: string;
-    isAdmin: boolean;
-    isActive: boolean;
+    admin: boolean;
+    active: boolean;
 
     constructor(userId: number, email: string, firstName:string, lastName:string, 
                 isAdmin: boolean, isActive: boolean){
@@ -13,8 +13,8 @@ export default class User{
                     this.email = email;
                     this.firstName = firstName;
                     this.lastName = lastName;
-                    this.isAdmin = isAdmin;
-                    this.isActive = isActive;
+                    this.admin = isAdmin;
+                    this.active = isActive;
         
     }
 }
