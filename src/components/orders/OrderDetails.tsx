@@ -1,4 +1,5 @@
-import { Box, CardContent, CardMedia, Container, Grid, Typography } from "@material-ui/core";
+import { Box, Container, Grid, Typography } from "@material-ui/core";
+import { CardContent } from "@mui/material";
 import Card from '@mui/material/Card';
 import { grey } from "@mui/material/colors";
 import { useEffect, useState } from "react";
@@ -12,17 +13,14 @@ import OrderProduct from "./OrderProduct";
 const styles = {
     outerCardStyling: {
         padding: "30px",
-        
     },
     innerCardStyling: {
         width: "800", 
-        backgroundColor: grey[200],
         display: "flex",
         marginBottom: "15px",
     },
     innerCardStylingNoMargin: {
         width: "800", 
-        backgroundColor: grey[200],
         display: "flex",
         marginBottom: "0px", 
     }
@@ -57,7 +55,7 @@ export const OrderDetails = (props : orderDetailsProps) => {
     <Container style={{alignItems:"center", justifyContent:"center", marginTop:60}}>
     <Grid container spacing={0} direction="column">
         <Grid style={{display:"flex", flexDirection:"column"}}>
-            <Card style={styles.outerCardStyling}>
+            <Card style={styles.outerCardStyling} elevation={3}>
         {orderDetailsInfo.map((item, i) => {
             {console.log(i)}
             return (<>
