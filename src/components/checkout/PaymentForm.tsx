@@ -18,7 +18,7 @@ export default function PaymentForm(props: paymentFormProps) {
     const data = new FormData(event.currentTarget);
     props.updatePayment(
       [
-        {name: "Card Type", detail: `Visa`},
+        {name: "Card Type", detail: `${data.get('cvv')}`},
         {name: "Card Holder", detail: `${data.get('cardName')}`},
         {name: "Card Number", detail: formatCardNumber(`${data.get('cardNumber')}`)},
         {name: "Expiry Date", detail: `${data.get('expDate')}`}
