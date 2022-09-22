@@ -194,7 +194,6 @@ export default function UserProfile() {
 
                     <Box sx={{ mt: 3, mb: 2 }}>
                         <Button fullWidth variant="contained" onClick={() => deactivateUser()}>Deactivate</Button>
-                        
                     </Box>
                 </Paper>
         

@@ -51,7 +51,6 @@ const Navbar = () => {
   const { cart, setCart } = useContext(CartContext);
   const { user, setUser } = useContext(UserContext);  //userContext added
   const navigate = useNavigate();
-<<<<<<< HEAD
 
   // async function getUser() {                   //We dont need the getUser and useEffect methods, since we are using userContext to get the current user
   //   let user = await apiGetCurrentUser();
@@ -61,20 +60,17 @@ const Navbar = () => {
   // useEffect(() => {
   //   getUser();
   // }, [user]);
-=======
   const {toggle, setToggle} = useContext(RefreshContext)
-  const [user, setUser] = useState<eCommerceApiResponse>();
 
   async function getUser() {
     let usr = await apiGetCurrentUser();
     console.log("user:", usr);
-    setUser(usr);
+    setUser(usr.payload);
   }
 
   useEffect(() => {
     getUser();
   }, [toggle]);
->>>>>>> dev_branch
 
 
   // const [theme, setTheme] = useState('light');
@@ -99,15 +95,9 @@ const Navbar = () => {
           <Logo onClick={() => { navigate('/') }}>Revature Swag Shop</Logo>
         </Left>
         <Right>
-<<<<<<< HEAD
-          <Toggler theme={theme} toggleTheme={themeToggler} /> 
-          {!(user === undefined || user.admin != true) && <MenuItem onClick={() => { navigate('/admin/products') }}>EDIT PRODUCTS</MenuItem>}    
-          {(user !== undefined) ?
-=======
           <Toggler theme={theme} toggleTheme={themeToggler} />
-          {!(user === undefined || user.payload === null || user.payload.admin != true) && <MenuItem onClick={() => { navigate('/admin/products') }}>EDIT PRODUCTS</MenuItem>}
-          {(user !== undefined && user.payload !== null) ?
->>>>>>> dev_branch
+          {!(user === undefined || user === null || user.admin != true) && <MenuItem onClick={() => { navigate('/admin/products') }}>EDIT PRODUCTS</MenuItem>}
+          {(user !== undefined && user !== null) ?
             (<>
               <MenuItem onClick={() => { navigate('/userProfile') }}>PROFILE</MenuItem>
               <MenuItem onClick={() => { navigate('/orders') }}>ORDERS</MenuItem>

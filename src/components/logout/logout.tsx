@@ -1,6 +1,5 @@
 import { createTheme, ThemeProvider } from "@material-ui/core";
 import { MenuItem, Typography } from "@mui/material";
-import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { RefreshContext } from "../../context/refresh.context";
 import { apiLogin, apiLogout } from "../../remote/e-commerce-api/authService";
@@ -18,11 +17,8 @@ export default function Logout() {
   async function logout() {
     try{
     await apiLogout();
-<<<<<<< HEAD
     setUser(undefined);  // Unsetting user globally in userContext after user logs out.
-=======
     setToggle(!toggle);
->>>>>>> dev_branch
     navigate('/login');
   } catch (error) {
     console.log(error);
