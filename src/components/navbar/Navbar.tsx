@@ -10,6 +10,7 @@ import Toggler from "../dark-mode/Toggler";
 import { apiGetCurrentUser } from "../../remote/e-commerce-api/authService";
 import { eCommerceApiResponse } from "../../remote/e-commerce-api/eCommerceClient";
 import Logout from "../logout/logout";
+import { UserContext } from "../../context/user.context";
 
 const Container = styled.div`
   height: 60px;
@@ -47,17 +48,17 @@ const MenuItem = styled.div`
 
 const Navbar = () => {
   const { cart, setCart } = useContext(CartContext);
+  const { user, setUser } = useContext(UserContext);  //userContext added
   const navigate = useNavigate();
-  const [user, setUser] = useState<eCommerceApiResponse>();
 
-  async function getUser() {
-    let usr = await apiGetCurrentUser();
-    setUser(usr);
-  }
+  // async function getUser() {                   //We dont need the getUser and useEffect methods, since we are using userContext to get the current user
+  //   let user = await apiGetCurrentUser();
+  //   setUser(user);
+  // }
 
-  useEffect(() => {
-    getUser();
-  }, [user]);
+  // useEffect(() => {
+  //   getUser();
+  // }, [user]);
 
 
   // const [theme, setTheme] = useState('light');
@@ -82,8 +83,8 @@ const Navbar = () => {
           <Logo onClick={() => { navigate('/') }}>Revature Swag Shop</Logo>
         </Left>
         <Right>
-          <Toggler theme={theme} toggleTheme={themeToggler} />
-          {!(user === undefined || user.payload.admin != true) && <MenuItem onClick={() => { navigate('/admin/products') }}>EDIT PRODUCTS</MenuItem>}
+          <Toggler theme={theme} toggleTheme={themeToggler} /> 
+          {!(user === undefined || user.admin != true) && <MenuItem onClick={() => { navigate('/admin/products') }}>EDIT PRODUCTS</MenuItem>}    
           {(user !== undefined) ?
             (<>
               <MenuItem onClick={() => { navigate('/userProfile') }}>PROFILE</MenuItem>
