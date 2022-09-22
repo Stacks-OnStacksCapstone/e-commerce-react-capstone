@@ -55,9 +55,8 @@ export default function UserProfile() {
 
         try {
             await apiUpdateUser(formData.firstName, formData.lastName, formData.password);
-      
-                setPersisted("You've successfully updated your profile!");
-                getProfile();  
+            setPersisted("You've successfully updated your profile!");
+            getProfile();
 
         } catch (error: any) {
             setErrorMessage(`Update was unsuccessful because ${error.payload}`);

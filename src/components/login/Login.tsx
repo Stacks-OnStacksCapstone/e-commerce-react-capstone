@@ -12,15 +12,18 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { apiLogin } from '../../remote/e-commerce-api/authService';
 import { useNavigate } from 'react-router-dom';
-import { useState } from "react";
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { Snackbar } from '@mui/material';
+import { UserContext } from '../../context/user.context';
+import { useState, useContext, useEffect } from "react";
 
 export default function Login() {
   const navigate = useNavigate();
+  const [message, setMessage] = React.useState(String);
 
   const [open, setOpen] = React.useState(false);
   const [persisted, setPersisted] = useState<String>();
+  const { user, setUser } = useContext(UserContext);
 
   const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props,
@@ -38,8 +41,10 @@ export default function Login() {
     const data = new FormData(event.currentTarget);
     try{
     const response = await apiLogin(`${data.get('email')}`, `${data.get('password')}`);
-    if (response.status >= 200 && response.status < 300) navigate('/');
-  
+    if (response.status >= 200 && response.status < 300) {
+      setUser(response.payload);  // Setting user globally in userContext after user logs in.
+      navigate('/');
+    }
       
     } catch(error :any) {
       
@@ -72,6 +77,7 @@ export default function Login() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
+          {message === undefined ? <p></p> : <p>{message}</p>}
           <Box color="inherit" component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
@@ -108,10 +114,16 @@ export default function Login() {
                 </Alert>
             </Snackbar>
 
-            <Grid container>
+
+            <Grid container direction='column'>
               <Grid item>
                 <Link href="register" variant="body2">
                   {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="forgot-password" variant="body2">
+                  {"Reset your password"}
                 </Link>
               </Grid>
             </Grid>

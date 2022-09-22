@@ -33,3 +33,26 @@ export const apiRegister = async (firstName: string, lastName: string, email: st
     );
     return { status: response.status, payload: response.data };
 }
+
+export const apiForgotPassword = async (email: string): Promise<eCommerceApiResponse> => {
+    const response = await eCommerceClient.put<any>(
+        `${baseURL}/forgot-password`,
+        { email: email }
+    );
+    return { status: response.status, payload: response.data };
+}
+
+export const apiVerifyToken = async (token: string): Promise<eCommerceApiResponse> => {
+    const response = await eCommerceClient.get<any>(
+        `${baseURL}/reset-password/${token}`
+    );
+    return { status: response.status, payload: response.data };
+}
+
+export const apiResetPassword = async (token: string, password: string): Promise<eCommerceApiResponse> => {
+    const response = await eCommerceClient.put<any>(
+        `${baseURL}/reset-password/${token}`,
+        { password: password }
+    );
+    return { status: response.status, payload: response.data };
+}
