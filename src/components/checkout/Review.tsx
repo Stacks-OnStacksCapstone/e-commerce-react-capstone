@@ -10,6 +10,9 @@ import Address from '../../models/Address';
 import { Box, Button } from '@mui/material';
 import { apiPurchase } from '../../remote/e-commerce-api/productService';
 import { CartContext } from '../../context/cart.context';
+import { apiCreateOrder } from '../../remote/e-commerce-api/orderService';
+import { apiCreatePayment } from '../../remote/e-commerce-api/paymentService';
+import { apiCreateOrderDetail } from '../../remote/e-commerce-api/orderDetailService';
 
 
 
@@ -32,6 +35,23 @@ export default function Review(props: reviewProps) {
     }))
     apiPurchase(productPurchaseDtos)
     setCart([])
+    const response : any = apiCreatePayment(props.payments);
+    const orderResponse = response.then((e: any) => {return apiCreateOrder(e.payload.id, props.address)});
+    const orderPromise = orderResponse.then((e : any) => {return e.payload.orderId})
+    async function createOrderDetails() {
+      let data = await orderPromise.then((e : any) => {return e})
+      productPurchaseDtos.map((product) => {
+        const requestBody = {
+          "productId": product.id,
+          "orderId": data,
+          "quantity" : product.quantity
+        }
+        console.log(requestBody);
+        console.log(requestBody);
+        apiCreateOrderDetail(requestBody);
+      })
+    }
+    createOrderDetails();
     props.handleNext()
   }
 

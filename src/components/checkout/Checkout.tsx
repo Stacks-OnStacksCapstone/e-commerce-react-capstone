@@ -34,7 +34,7 @@ let address = {
   country: ""
 };
 let paymentDetail = [
-  { name: 'Card type', detail: '' },
+  { name: 'Card ccv', detail: '' },
   { name: 'Card holder', detail: '' },
   { name: 'Card number', detail: '' },
   { name: 'Expiry date', detail: '' },

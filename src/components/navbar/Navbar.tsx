@@ -57,7 +57,7 @@ const Navbar = () => {
 
   useEffect(() => {
     getUser();
-  }, [user]);
+  }, []);
 
 
   // const [theme, setTheme] = useState('light');

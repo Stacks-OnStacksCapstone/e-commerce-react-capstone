@@ -16,13 +16,13 @@ const styles = {
     },
     innerCardStyling: {
         width: "800", 
-        backgroundColor: grey[200], 
+        backgroundColor: grey[200],
         display: "flex",
         marginBottom: "15px",
     },
     innerCardStylingNoMargin: {
         width: "800", 
-        backgroundColor: grey[200], 
+        backgroundColor: grey[200],
         display: "flex",
         marginBottom: "0px", 
     }
