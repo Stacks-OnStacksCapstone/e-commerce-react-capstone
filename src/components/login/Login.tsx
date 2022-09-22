@@ -36,8 +36,10 @@ export default function Login() {
     } catch(error :any) {
       
       console.log(error);
-      if (error.response.status >= 400)
-      setPersisted("Login was unsuccessful because your account has been deactivated!");
+      if (error.response.status === 401)
+        setPersisted("Login was unsuccessful because your account has been deactivated!");
+      else
+       setPersisted("Invalid credentials");
   }};
   
 
@@ -88,12 +90,12 @@ export default function Login() {
             >
               Sign In
             </Button>
+            <p>{persisted}</p>
             <Grid container direction='column'>
               <Grid item>
                 <Link href="register" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
-                {persisted === undefined ? <p></p> : <p>{persisted}</p>}
               </Grid>
               <Grid item>
                 <Link href="forgot-password" variant="body2">

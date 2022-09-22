@@ -3,6 +3,7 @@ import axios from 'axios';
 // This is the configuration for sending HTTP Requests with Axios
 // Very simple, but it also doesn't give us much abstraction
 const eCommerceClient = axios.create({
+  withCredentials: true,
   baseURL: 'http://localhost:8080',
   headers: {
     Accept: "application/json",

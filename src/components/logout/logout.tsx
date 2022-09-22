@@ -16,7 +16,6 @@ export default function Logout() {
     await apiLogout();
     setToggle(!toggle);
     navigate('/login');
-    
   } catch (error) {
     console.log(error);
   }

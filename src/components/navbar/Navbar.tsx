@@ -54,6 +54,7 @@ const Navbar = () => {
 
   async function getUser() {
     let usr = await apiGetCurrentUser();
+    console.log("user:", usr);
     setUser(usr);
   }
 
@@ -85,8 +86,8 @@ const Navbar = () => {
         </Left>
         <Right>
           <Toggler theme={theme} toggleTheme={themeToggler} />
-          {!(user === undefined || user.payload.admin != true) && <MenuItem onClick={() => { navigate('/admin/products') }}>EDIT PRODUCTS</MenuItem>}
-          {(user !== undefined) ?
+          {!(user === undefined || user.payload === null || user.payload.admin != true) && <MenuItem onClick={() => { navigate('/admin/products') }}>EDIT PRODUCTS</MenuItem>}
+          {(user !== undefined && user.payload !== null) ?
             (<>
               <MenuItem onClick={() => { navigate('/userProfile') }}>PROFILE</MenuItem>
               <MenuItem onClick={() => { navigate('/orders') }}>ORDERS</MenuItem>
