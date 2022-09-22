@@ -63,7 +63,7 @@ export const OrderDetails = (props : orderDetailsProps) => {
                 <Container style={{ display: 'flex', flexDirection: 'row' , justifyContent:"space-between"}}>
                     <Box>
                         <CardContent style={{ display: 'flex', flexDirection: 'row', alignItems:"center"}}>
-                            <OrderProduct product = {item.productId} />
+                            <Link style={{color: "black",display: "flex",flexDirection: "row",alignItems: "center", textDecoration:"none"}} to={`/products/${item.productId}`}><OrderProduct product = {item.productId} /></Link>
                         </CardContent>
                     </Box>
                     <Box style={{display:"flex", alignItems:"center"}}>
