@@ -12,14 +12,20 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { apiLogin } from '../../remote/e-commerce-api/authService';
 import { useNavigate } from 'react-router-dom';
+<<<<<<< HEAD
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { Snackbar } from '@mui/material';
 import { UserContext } from '../../context/user.context';
 import { useState, useContext, useEffect } from "react";
+=======
+import { useState } from "react";
+import { RefreshContext } from '../../context/refresh.context';
+>>>>>>> dev_branch
 
 export default function Login() {
   const navigate = useNavigate();
   const [message, setMessage] = React.useState(String);
+  const {toggle, setToggle} = React.useContext(RefreshContext)
 
   const [open, setOpen] = React.useState(false);
   const [persisted, setPersisted] = useState<String>();
@@ -40,7 +46,11 @@ export default function Login() {
     try{
     const response = await apiLogin(`${data.get('email')}`, `${data.get('password')}`);
     if (response.status >= 200 && response.status < 300) {
+<<<<<<< HEAD
       setUser(response.payload);  // Setting user globally in userContext after user logs in.
+=======
+      setToggle(!toggle);
+>>>>>>> dev_branch
       navigate('/');
     }
       
@@ -48,9 +58,15 @@ export default function Login() {
       setOpen(true);
       console.log(error);
       if (error.response.status === 401)
+<<<<<<< HEAD
       setPersisted("Login was unsuccessful because your account has been deactivated!");
       else 
       setPersisted("Invalid credentials");
+=======
+        setPersisted("Login was unsuccessful because your account has been deactivated!");
+      else
+       setPersisted("Invalid credentials");
+>>>>>>> dev_branch
   }};
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
@@ -107,6 +123,7 @@ export default function Login() {
             >
               Sign In
             </Button>
+<<<<<<< HEAD
 
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
@@ -115,6 +132,9 @@ export default function Login() {
             </Snackbar>
 
 
+=======
+            <p>{persisted}</p>
+>>>>>>> dev_branch
             <Grid container direction='column'>
               <Grid item>
                 <Link href="register" variant="body2">

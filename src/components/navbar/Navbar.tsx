@@ -9,6 +9,7 @@ import { useDarkMode } from "../dark-mode/useDarkMode";
 import Toggler from "../dark-mode/Toggler";
 import { apiGetCurrentUser } from "../../remote/e-commerce-api/authService";
 import { eCommerceApiResponse } from "../../remote/e-commerce-api/eCommerceClient";
+import { RefreshContext } from "../../context/refresh.context";
 import Logout from "../logout/logout";
 import { UserContext } from "../../context/user.context";
 
@@ -50,6 +51,7 @@ const Navbar = () => {
   const { cart, setCart } = useContext(CartContext);
   const { user, setUser } = useContext(UserContext);  //userContext added
   const navigate = useNavigate();
+<<<<<<< HEAD
 
   // async function getUser() {                   //We dont need the getUser and useEffect methods, since we are using userContext to get the current user
   //   let user = await apiGetCurrentUser();
@@ -59,6 +61,20 @@ const Navbar = () => {
   // useEffect(() => {
   //   getUser();
   // }, [user]);
+=======
+  const {toggle, setToggle} = useContext(RefreshContext)
+  const [user, setUser] = useState<eCommerceApiResponse>();
+
+  async function getUser() {
+    let usr = await apiGetCurrentUser();
+    console.log("user:", usr);
+    setUser(usr);
+  }
+
+  useEffect(() => {
+    getUser();
+  }, [toggle]);
+>>>>>>> dev_branch
 
 
   // const [theme, setTheme] = useState('light');
@@ -83,9 +99,15 @@ const Navbar = () => {
           <Logo onClick={() => { navigate('/') }}>Revature Swag Shop</Logo>
         </Left>
         <Right>
+<<<<<<< HEAD
           <Toggler theme={theme} toggleTheme={themeToggler} /> 
           {!(user === undefined || user.admin != true) && <MenuItem onClick={() => { navigate('/admin/products') }}>EDIT PRODUCTS</MenuItem>}    
           {(user !== undefined) ?
+=======
+          <Toggler theme={theme} toggleTheme={themeToggler} />
+          {!(user === undefined || user.payload === null || user.payload.admin != true) && <MenuItem onClick={() => { navigate('/admin/products') }}>EDIT PRODUCTS</MenuItem>}
+          {(user !== undefined && user.payload !== null) ?
+>>>>>>> dev_branch
             (<>
               <MenuItem onClick={() => { navigate('/userProfile') }}>PROFILE</MenuItem>
               <MenuItem onClick={() => { navigate('/orders') }}>ORDERS</MenuItem>
