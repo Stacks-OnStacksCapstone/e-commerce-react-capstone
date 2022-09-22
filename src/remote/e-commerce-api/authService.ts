@@ -11,6 +11,7 @@ export const apiLogin = async (email: string, password: string): Promise<eCommer
 }
 
 export const apiGetCurrentUser = async (): Promise<eCommerceApiResponse> => {
+    console.log("Test")
     const response = await eCommerceClient.get<any>(
         `${baseURL}`
     );

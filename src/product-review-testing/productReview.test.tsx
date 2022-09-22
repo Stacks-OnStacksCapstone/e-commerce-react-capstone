@@ -10,11 +10,11 @@ interface reviewProps {
 }
 
 
-test('renders learn react link', async() => {
+test('Test successfull database pull and display', async() => {
     const reviews = await apiGetAllReviews()
    console.log (reviews.payload[0]);
   render(<ReviewCard key={0} review={ reviews.payload[0]} refreshReviews= {(refresh: boolean) => {}}></ReviewCard>);
 
-  const linkElement = screen.getByText(/revature/i);
+  const linkElement = screen.getByText(/ /i + reviews.payload.comment);
   expect(linkElement).toBeInTheDocument();
 });

@@ -13,10 +13,12 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { apiLogin } from '../../remote/e-commerce-api/authService';
 import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
+import { RefreshContext } from '../../context/refresh.context';
 
 export default function Login() {
   const navigate = useNavigate();
   const [message, setMessage] = React.useState(String);
+  const {toggle, setToggle} = React.useContext(RefreshContext)
 
   const [persisted, setPersisted] = useState<String>();
 
@@ -26,7 +28,10 @@ export default function Login() {
     const data = new FormData(event.currentTarget);
     try{
     const response = await apiLogin(`${data.get('email')}`, `${data.get('password')}`);
-    if (response.status >= 200 && response.status < 300) navigate('/');
+    if (response.status >= 200 && response.status < 300) {
+      setToggle(!toggle);
+      navigate('/');
+    }
       
     } catch(error :any) {
       

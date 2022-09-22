@@ -9,6 +9,7 @@ import { useDarkMode } from "../dark-mode/useDarkMode";
 import Toggler from "../dark-mode/Toggler";
 import { apiGetCurrentUser } from "../../remote/e-commerce-api/authService";
 import { eCommerceApiResponse } from "../../remote/e-commerce-api/eCommerceClient";
+import { RefreshContext } from "../../context/refresh.context";
 import Logout from "../logout/logout";
 
 const Container = styled.div`
@@ -48,6 +49,7 @@ const MenuItem = styled.div`
 const Navbar = () => {
   const { cart, setCart } = useContext(CartContext);
   const navigate = useNavigate();
+  const {toggle, setToggle} = useContext(RefreshContext)
   const [user, setUser] = useState<eCommerceApiResponse>();
 
   async function getUser() {
@@ -57,7 +59,7 @@ const Navbar = () => {
 
   useEffect(() => {
     getUser();
-  }, [user]);
+  }, [toggle]);
 
 
   // const [theme, setTheme] = useState('light');
