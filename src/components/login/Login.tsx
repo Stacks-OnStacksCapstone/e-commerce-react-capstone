@@ -13,10 +13,12 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { apiLogin } from '../../remote/e-commerce-api/authService';
 import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
+import { RefreshContext } from '../../context/refresh.context';
 
 export default function Login() {
   const navigate = useNavigate();
   const [message, setMessage] = React.useState(String);
+  const {toggle, setToggle} = React.useContext(RefreshContext)
 
   const [persisted, setPersisted] = useState<String>();
 
@@ -26,13 +28,18 @@ export default function Login() {
     const data = new FormData(event.currentTarget);
     try{
     const response = await apiLogin(`${data.get('email')}`, `${data.get('password')}`);
-    if (response.status >= 200 && response.status < 300) navigate('/');
+    if (response.status >= 200 && response.status < 300) {
+      setToggle(!toggle);
+      navigate('/');
+    }
       
     } catch(error :any) {
       
       console.log(error);
-      if (error.response.status >= 400)
-      setPersisted("Login was unsuccessful because your account has been deactivated!");
+      if (error.response.status === 401)
+        setPersisted("Login was unsuccessful because your account has been deactivated!");
+      else
+       setPersisted("Invalid credentials");
   }};
   
 
@@ -83,12 +90,12 @@ export default function Login() {
             >
               Sign In
             </Button>
+            <p>{persisted}</p>
             <Grid container direction='column'>
               <Grid item>
                 <Link href="register" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
-                {persisted === undefined ? <p></p> : <p>{persisted}</p>}
               </Grid>
               <Grid item>
                 <Link href="forgot-password" variant="body2">
