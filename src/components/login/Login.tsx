@@ -12,13 +12,15 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { apiLogin } from '../../remote/e-commerce-api/authService';
 import { useNavigate } from 'react-router-dom';
-import { useState } from "react";
+import { UserContext } from '../../context/user.context';
+import { useState, useContext, useEffect } from "react";
 
 export default function Login() {
   const navigate = useNavigate();
   const [message, setMessage] = React.useState(String);
 
   const [persisted, setPersisted] = useState<String>();
+  const { user, setUser } = useContext(UserContext);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     
@@ -26,7 +28,10 @@ export default function Login() {
     const data = new FormData(event.currentTarget);
     try{
     const response = await apiLogin(`${data.get('email')}`, `${data.get('password')}`);
-    if (response.status >= 200 && response.status < 300) navigate('/');
+    if (response.status >= 200 && response.status < 300) {
+      setUser(response.payload);  // Setting user globally in userContext after user logs in.
+      navigate('/');
+    }
       
     } catch(error :any) {
       

@@ -35,11 +35,6 @@ export default function UserProfile() {
         event.preventDefault();
         try {
             await apiUpdateUser(formData.firstName, formData.lastName, formData.password);
-
-            //const resp = await apiGetCurrentUser();
-            
-            
-
             setPersisted("You've successfully updated your profile!");
             getProfile();
 
