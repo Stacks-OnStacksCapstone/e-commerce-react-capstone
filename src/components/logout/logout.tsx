@@ -23,3 +23,4 @@ export default function Logout() {
         <MenuItem style={{fontSize: "14px", cursor: "pointer", marginLeft: "25px"}} onClick={logout}>LOGOUT</MenuItem>
   );
 }
+
