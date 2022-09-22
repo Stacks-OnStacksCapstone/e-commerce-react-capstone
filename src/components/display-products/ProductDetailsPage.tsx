@@ -1,5 +1,4 @@
-import { Button, DialogContent, IconButton, Rating, TextField, Typography } from "@mui/material";
-import { Badge, Grid, Paper, } from "@material-ui/core";
+import { Button, Container, DialogContent, IconButton, Paper, Rating, TextField, Typography } from "@mui/material";
 import React, { useContext, useState } from "react";
 import Product from "../../models/Product"
 import { eCommerceApiResponse } from "../../remote/e-commerce-api/eCommerceClient";
@@ -11,73 +10,74 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { useParams } from "react-router-dom";
 import { apiGetProductById } from "../../remote/e-commerce-api/productService";
+import { Grid } from "@material-ui/core";
 
 
 
 interface productProps {
-    product: Product,
-    key: number
+  product: Product,
+  key: number
 }
 class ProductRequest {
-    id: number;
-    rating: number;
-    comment: string;
-    postId: number;
-  
-    constructor(rating: number, comment: string, postId: number) {
-      this.id = 0;
-      this.rating = rating;
-      this.comment = comment;
-      this.postId = postId;
-    }
+  id: number;
+  rating: number;
+  comment: string;
+  postId: number;
+
+  constructor(rating: number, comment: string, postId: number) {
+    this.id = 0;
+    this.rating = rating;
+    this.comment = comment;
+    this.postId = postId;
   }
+}
 
 
 export const ProductDetailsPage = () => {
 
-    const [product, setProduct] = useState<Product>(new Product(0, "", 0, "", 0, ""));
-    const [defaultValue, setDefaultValue] = useState<Product>(new Product(0, "", 0, "", 0, ""));
-    const { id } = useParams();
-    const [open, setOpen] = React.useState(false);
-    const [reviews, setReviews] = React.useState<eCommerceApiResponse>();
-    const [newReview, setNewReview] = React.useState<ProductRequest>(new ProductRequest(0, "", product.id));
-    const { cart, setCart } = useContext(CartContext);
-   
-    var formatter = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-    });
+  const [product, setProduct] = useState<Product>(new Product(0, "", 0, "", 0, ""));
+  const [defaultValue, setDefaultValue] = useState<Product>(new Product(0, "", 0, "", 0, ""));
+  const { id } = useParams();
+  const [open, setOpen] = React.useState(false);
+  const [reviews, setReviews] = React.useState<eCommerceApiResponse>();
+  const [newReview, setNewReview] = React.useState<ProductRequest>(new ProductRequest(0, "", product.id));
+  const { cart, setCart } = useContext(CartContext);
 
-    React.useEffect(() => {
+  var formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  });
+
+  React.useEffect(() => {
     async function runEffect() {
-        if (id === undefined) {
-            console.log("no id pulled by use params");
-            return;
-        }
-        try {
-            const result = await apiGetProductById(parseInt(id))
-            setProduct(result.payload)
-            setDefaultValue({ ...result.payload })
-        } catch (error) {
-            console.log(error)
-        }
-        let reviews = await apiGetAllReviewsForProduct(product.id);
-        setReviews(reviews);
+      if (id === undefined) {
+        console.log("no id pulled by use params");
+        return;
+      }
+      try {
+        const result = await apiGetProductById(parseInt(id))
+        setProduct(result.payload)
+        setDefaultValue({ ...result.payload })
+      } catch (error) {
+        console.log(error)
+      }
+      let reviews = await apiGetAllReviewsForProduct(product.id);
+      setReviews(reviews);
     }
-    
-    runEffect();
-    }, []);
 
-    const changeQuantity = (product: Product) => {
+    runEffect();
+  }, []);
+
+  const changeQuantity = (product: Product) => {
 
     const newCart = [...cart]
     const index = newCart.findIndex((searchProduct) => {
-        return searchProduct.id === product.id
+      return searchProduct.id === product.id
     })
 
     if (index === -1 && product.quantity === 1) {
 
-        newCart.push(product)
+      newCart.push(product)
 
     }
 
@@ -86,7 +86,7 @@ export const ProductDetailsPage = () => {
     setCart(newCart)
 
     if (newCart[index].quantity <= 0) removeProduct(product)
-    }
+  }
 
   const removeProduct = (product: Product) => {
 
@@ -150,58 +150,80 @@ export const ProductDetailsPage = () => {
     }
   }
 
-    return(
-        <Grid container spacing = {2} >
-            <Grid item xs></Grid>
-            <Grid item xs = {4}>
-                <img src={product.image}/>
-            </Grid>
-            <Grid item xs = {4}>
-                <Typography component="h1" variant="h4" align="center">
-                    {product.name}
-                </Typography>
-                <Typography gutterBottom>
-                    {product.description}
-                </Typography>
-                <div><IconButton onClick={() => { changeQuantity({ ...product, quantity: -1 }) }}>
-                    <RemoveIcon />
-                </IconButton>
-                <Typography>
-                    {showProductQuantity(product)}
-                </Typography>
-                <IconButton onClick={() => { changeQuantity({ ...product, quantity: 1 }) }}>
-                    <AddIcon />
-                </IconButton>
-                <IconButton onClick={() => { removeProduct(product) }}>
-                    <DeleteIcon />
-                </IconButton></div>
-                <DialogContent dividers>
-                <Typography variant="h4" align="center">Leave a Review</Typography>
-                <Rating name="rating" value={newReview.rating} onChange={((event: React.SyntheticEvent<Element, Event>, value: number | null) => { if (value !== null) setNewReview({ ...newReview, rating: value }) })} />
-                <TextField
-                    id="outlined-multiline-flexible"
-                    label="Product Review"
-                    multiline
-                    fullWidth
-                    minRows={8}
-                    maxRows={8}
-                    value={newReview.comment}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => { setNewReview({ ...newReview, comment: event.target.value }) }}
-                />
-                <br /><br />
-                <Grid container spacing={2} direction="column" alignItems="center" justifyContent="center"><Button variant="contained" onClick={onSubmitReview}>Submit Review</Button></Grid>
-                </DialogContent>
-                <DialogContent dividers>
-                <Typography variant="h4" align="center">Product Reviews</Typography>
-                <Grid container spacing={2} direction="column" alignItems="center" justify="center">
-                    <Grid item xs={8}>
-                    {reviewsMap}
-                    </Grid>
-                </Grid>
-                </DialogContent>    
-            </Grid>                
-            <Grid item xs></Grid>
+  return (
+    <>
+    <br/>
+    <Grid container spacing={2} >
+      <Grid item xs></Grid>
+      <Grid item xs={4} justifyContent = "center" alignItems = "center">
+        <Container>
+          <img src= {product.image} width = "95%" height = "95%"/>
+        </Container>
+      </Grid>
+      <Grid item xs={4}>
+        <Typography component="h1" variant="h4" align="center">
+          {product.name}
+        </Typography>
+        <br/>
+        <Typography gutterBottom>
+          {product.description}
+        </Typography>
+        <br/>
+        <Grid container alignItems = "center" >
+          <Grid item> 
+            <IconButton onClick={() => { changeQuantity({ ...product, quantity: -1 }) }}>
+              <RemoveIcon />
+            </IconButton>
+          </Grid>
+          <Grid item> 
+          <Typography>
+            {showProductQuantity(product)}
+          </Typography>
+          </Grid>
+          <Grid item> 
+          <IconButton onClick={() => { changeQuantity({ ...product, quantity: 1 }) }}>
+            <AddIcon />
+          </IconButton>
+          </Grid>
+          <Grid item> 
+          <IconButton onClick={() => { removeProduct(product) }}>
+            <DeleteIcon />
+          </IconButton>
+          </Grid>
+        
+          
+          
         </Grid>
-    )
+        <br/>
+        <DialogContent dividers>
+          <Typography variant="h4" align="center">Leave a Review</Typography>
+          <Rating name="rating" value={newReview.rating} onChange={((event: React.SyntheticEvent<Element, Event>, value: number | null) => { if (value !== null) setNewReview({ ...newReview, rating: value }) })} />
+          <TextField
+            id="outlined-multiline-flexible"
+            label="Product Review"
+            multiline
+            fullWidth
+            minRows={8}
+            maxRows={8}
+            value={newReview.comment}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => { setNewReview({ ...newReview, comment: event.target.value }) }}
+          />
+          <br /><br />
+          <Grid container spacing={2} direction="column" alignItems="center" justifyContent="center"><Button variant="contained" onClick={onSubmitReview}>Submit Review</Button></Grid>
+          <br/>
+        </DialogContent>
+        <DialogContent dividers>
+          <Typography variant="h4" align="center">Product Reviews</Typography>
+          <Grid container spacing={2} direction="column" alignItems="center" justify="center">
+            <Grid item xs={8}>
+              {reviewsMap}
+            </Grid>
+          </Grid>
+        </DialogContent>
+      </Grid>
+      <Grid item xs></Grid>
+    </Grid>
+    </>
+  )
 
 }
