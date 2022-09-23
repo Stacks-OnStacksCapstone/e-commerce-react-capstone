@@ -50,6 +50,18 @@ export const apigetProductAverageScore = async (productId: number): Promise<eCom
     return { status: 0, payload: null };
 }
 
+export const apicanPost = async (productId: number,userId: number): Promise<eCommerceApiResponse> =>{
+    try {
+        const response = await eCommerceClient.get<Boolean>(
+            `${baseURL}/post/${productId}/${userId}`
+        )
+        return {status: response.status, payload: response.data}
+    } catch (error) {
+        console.log(error);
+    }
+    return { status: 0, payload: null };
+}
+
 
 export const apiUpsertProductReview = async (productRequest: any): Promise<eCommerceApiResponse> => {
     const response = await eCommerceClient.put<any>(
