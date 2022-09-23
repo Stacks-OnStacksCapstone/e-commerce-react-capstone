@@ -12,13 +12,14 @@ import { Button, Container, Snackbar, Stack } from "@mui/material";
 import Paper from '@mui/material/Paper';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import React from "react";
+import { apiCreatePayment, apiCreatePaymentMethod, apiDeletePayment } from "../../remote/e-commerce-api/paymentService";
 
 
 const theme = createTheme();
 
 
 export default function UserProfile() {
-    
+
     const [open, setOpen] = React.useState(false);
     const [user, setUser] = useState<User>()
     const [persisted, setPersisted] = useState<String>("");
@@ -27,6 +28,12 @@ export default function UserProfile() {
         firstName: "",
         lastName: "",
         password: ""
+    });
+
+    const [paymentformData, setPaymentFormData] = useState({
+        expDate: "2022-09-16",
+        ccv: "",
+        cardNumber: ""
     });
     const navigate = useNavigate();
 
@@ -38,17 +45,17 @@ export default function UserProfile() {
     const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
         props,
         ref,
-      ) {
+    ) {
         return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-      });
-      
+    });
+
     async function update(event: { preventDefault: () => void; }) {
-        
+
         event.preventDefault();
 
         setOpen(true);
 
-        if(!formData.firstName && !formData.lastName && !formData.password){
+        if (!formData.firstName && !formData.lastName && !formData.password) {
             setErrorMessage(`Please update a field`)
             return;
         }
@@ -65,12 +72,12 @@ export default function UserProfile() {
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
-          return;
+            return;
         }
         setOpen(false);
         setErrorMessage("");
         setPersisted("");
-      };
+    };
 
     async function deactivateUser() {
         try {
@@ -80,6 +87,43 @@ export default function UserProfile() {
             navigate('/login');
             console.log(user);
             setPersisted(`You've successfully deactivated your profile!`);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
+
+    async function createPayment(event: { preventDefault: () => void; }) {
+
+        event.preventDefault();
+
+        setOpen(true);
+
+        if (!formData.firstName && !formData.lastName && !formData.password) {
+            setErrorMessage(`Please update a field`)
+            return;
+        }
+
+        try {
+
+            await apiCreatePaymentMethod(paymentformData.ccv, new Date(paymentformData.expDate), paymentformData.cardNumber);
+            setPersisted("You've successfully added your payment method!");
+
+        } catch (error: any) {
+            setErrorMessage(`Adding payment was unsuccessful because ${error.payload}`);
+        }
+    }
+
+
+
+
+    async function deletePayment() {
+        try {
+
+            await apiDeletePayment();
+            setPersisted(`You've successfully removed your payment method!`);
 
         } catch (error) {
             console.log(error);
@@ -157,12 +201,12 @@ export default function UserProfile() {
                                     autoComplete="new-password"
                                     onChange={(event) => setFormData({ ...formData, password: event.target.value })}
                                 />
-                                <Box sx={{ mt: 3, mb: 2}}>
-                                  
+                                <Box sx={{ mt: 3, mb: 2 }}>
+
                                     <Button fullWidth variant="contained" onClick={update}>Update</Button>
-                                    
+
                                     <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                                        <Alert onClose={handleClose} severity= {persisted ? "success" : "error" }  sx={{ width: '100%' }}>
+                                        <Alert onClose={handleClose} severity={persisted ? "success" : "error"} sx={{ width: '100%' }}>
                                             {persisted ? persisted : errorMessage}
                                         </Alert>
                                     </Snackbar>
@@ -174,19 +218,19 @@ export default function UserProfile() {
                 </Paper>
             </Container>
 
-           
 
 
-            <Container style={{width:"468px"}}color="inherit" component="main" maxWidth="sm" >
 
-            
-                <Paper style={{margin:"12px", padding: "12px 35px 10px" }} elevation={3}>
+            <Container style={{ width: "468px" }} color="inherit" component="main" maxWidth="sm" >
 
-                
+
+                <Paper style={{ margin: "12px", padding: "12px 35px 10px" }} elevation={3}>
+
+
 
                     <Box color="inherit" sx={{ m: 3, mx: "auto" }}>
                         <Typography variant="h5"> Deactivate Your Account</Typography>
-                        
+
                         <br />
 
                         <Typography variant="body2">Please proceed with caution! You will be logged out after deactivating your account.</Typography>
@@ -196,7 +240,72 @@ export default function UserProfile() {
                         <Button fullWidth variant="contained" onClick={() => deactivateUser()}>Deactivate</Button>
                     </Box>
                 </Paper>
-        
+
+            </Container>
+
+            <Container color="inherit" component="main" maxWidth="xs">
+
+                <Paper style={{ padding: "12px 35px 10px" }} elevation={3}>
+
+                    <Box color="inherit" sx={{ m: 3, mx: "auto" }}>
+                        <Typography variant="h5"> Manage Your Payment Method</Typography>
+                    </Box>
+
+                    <Box color="inherit" component="form" noValidate sx={{ mt: 3 }}>
+
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    id="expDate"
+                                    label="Expiration Date"
+                                    name="expDate"
+                                    autoComplete="family-name"
+                                    value={paymentformData.expDate}
+                                    onChange={(event) => setPaymentFormData({ ...paymentformData, expDate: event.target.value})}
+                                />
+                            </Grid>
+                            <br />
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    id="ccv"
+                                    label="CCV"
+                                    name="ccv"
+                                    autoComplete="family-name"
+                                    value={paymentformData.ccv}
+                                    onChange={(event) => setPaymentFormData({ ...paymentformData, ccv: event.target.value})}
+                                />
+                            </Grid>
+                            <br />
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    id="cardNumber"
+                                    label="Card Number"
+                                    name="cardNumber"
+                                    autoComplete="family-name"
+                                    value={paymentformData.cardNumber}
+                                    onChange={(event) => setPaymentFormData({ ...paymentformData, cardNumber: event.target.value})}
+                                />
+
+                                <Box sx={{ mt: 3, mb: 2 }}>
+
+                                    <Button fullWidth variant="contained" onClick={createPayment}>Add Payment</Button>
+
+                                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                                        <Alert onClose={handleClose} severity={persisted ? "success" : "error"} sx={{ width: '100%' }}>
+                                            {persisted ? persisted : errorMessage}
+                                        </Alert>
+                                    </Snackbar>
+                                </Box>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Paper>
             </Container>
 
         </>
