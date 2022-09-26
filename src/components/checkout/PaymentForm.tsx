@@ -20,8 +20,12 @@ export default function PaymentForm(props: paymentFormProps) {
     const data = new FormData(event.currentTarget);
     props.updatePayment(
       [
+<<<<<<< HEAD
         {name: "Card Type", detail: `${data.get('ccv')}`},
         {name: "Card Holder", detail: `${data.get('cardName')}`},
+=======
+        {name: "Card Type", detail: `${data.get('cvv')}`},
+>>>>>>> user_branch
         {name: "Card Number", detail: formatCardNumber(`${data.get('cardNumber')}`)},
         {name: "Expiry Date", detail: `${data.get('expDate')}`}
       ]
@@ -79,6 +83,7 @@ export default function PaymentForm(props: paymentFormProps) {
           <Grid item xs={12} md={6}>
             <TextField
               required
+<<<<<<< HEAD
               id="cardName"
               name="cardName"
               label="Name on card"
@@ -94,6 +99,8 @@ export default function PaymentForm(props: paymentFormProps) {
           <Grid item xs={12} md={6}>
             <TextField
               required
+=======
+>>>>>>> user_branch
               id="cardNumber"
               name="cardNumber"
               label="Card number"

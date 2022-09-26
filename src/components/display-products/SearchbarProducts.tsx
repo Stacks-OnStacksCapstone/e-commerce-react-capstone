@@ -31,9 +31,9 @@ export default function SearchbarProducts() {
 
   return (
     <Paper
-      sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
+      sx={{ p: '10px', display: 'flex', height:"40px", width: 400, borderRadius:"20px" }}
     > 
-      <IconButton onClick={() => {searchProduct(keyword)}} type="button" sx={{ p: '10px' }} aria-label="search">
+      <IconButton onClick={() => {searchProduct(keyword)}} type="button" sx={{ p: '10px'}} aria-label="search">
         <SearchIcon />
       </IconButton>
 
