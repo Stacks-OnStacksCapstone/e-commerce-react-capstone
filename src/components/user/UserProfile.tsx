@@ -119,6 +119,7 @@ export default function UserProfile() {
 
             await apiCreatePaymentMethod(paymentFormData.ccv, new Date(paymentFormData.expDate), paymentFormData.cardNumber);
             setPersisted("You've successfully added your payment method!");
+            findAllUserPaymentMethods();
 
         } catch (error: any) {
             setErrorMessage(`Adding payment was unsuccessful because ${error.payload}`);
@@ -132,6 +133,7 @@ export default function UserProfile() {
 
             await apiDeletePayment(paymentId);
             setPersisted(`You've successfully removed your payment method!`);
+            findAllUserPaymentMethods();
 
         } catch (error) {
             console.log(error);
@@ -306,7 +308,7 @@ export default function UserProfile() {
                                     fullWidth
                                     id="expDate"
                                     type="date"
-                                    
+                                    inputProps={{min: "2022-01-01"}}
                                     name="expDate"
                                     value={paymentFormData.expDate}
                                     onChange={(event) => setPaymentFormData({ ...paymentFormData, expDate: event.target.value })}
