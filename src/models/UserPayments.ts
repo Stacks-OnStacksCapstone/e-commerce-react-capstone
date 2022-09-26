@@ -1,11 +1,11 @@
 export default class UserPayments{
 
-    id: String;
+    id: string;
     expDate: Date;
     ccv: string;
     cardNumber: string;
 
-    constructor(paymentId: String, expDate: Date, ccv:string, cardNumber:string){
+    constructor(paymentId: string, expDate: Date, ccv:string, cardNumber:string){
                     this.id = paymentId;
                     this.expDate = expDate;
                     this.ccv = ccv;

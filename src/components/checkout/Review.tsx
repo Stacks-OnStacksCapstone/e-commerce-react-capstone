@@ -36,18 +36,19 @@ export default function Review(props: reviewProps) {
     }))
     apiPurchase(productPurchaseDtos)
     setCart([])
-    const response : any = apiCreatePayment(props.payments);
-    const orderResponse = response.then((e: any) => {return apiCreateOrder(e.payload.id, props.address)});
-    const orderPromise = orderResponse.then((e : any) => {return e.payload.orderId})
+    //const response : any = apiCreatePayment(props.payments);
     async function createOrderDetails() {
-      let data = await orderPromise.then((e : any) => {return e})
+      const orderResponse = await apiCreateOrder(props.payments[0].detail, props.address)
+      let data = orderResponse.payload
+      console.log(data);
       productPurchaseDtos.map((product) => {
         const requestBody = {
           "productId": product.id,
-          "orderId": data,
+          "orderId": data.orderId,
           "quantity" : product.quantity
         }
-        props.updateOrderId(data);
+        console.log(data);
+        props.updateOrderId(data.orderId);
         console.log(requestBody);
         console.log(requestBody);
         apiCreateOrderDetail(requestBody);
