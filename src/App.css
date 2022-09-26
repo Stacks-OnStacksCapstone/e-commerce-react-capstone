@@ -1,0 +1,18 @@
+.congoLogo{
+    height:120px;
+    width:150px;
+    object-fit: cover;
+    margin-top: 10px;
+}
+
+body{
+    background-color: #90caf9;
+}
+
+.navbarSpan{
+    display: flex;
+    justify-content: space-between;
+    margin-left: -50px;
+    padding-right: 120px;
+
+}

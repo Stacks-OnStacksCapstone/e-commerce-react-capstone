@@ -24,6 +24,7 @@ export default function UserProfile() {
     const [user, setUser] = useState<User>()
     const [persisted, setPersisted] = useState<String>("");
     const [errorMessage, setErrorMessage] = useState<String>("");
+    const [value, setValue] = useState<String>("");
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -101,8 +102,8 @@ export default function UserProfile() {
 
         setOpen(true);
 
-        if (!formData.firstName && !formData.lastName && !formData.password) {
-            setErrorMessage(`Please update a field`)
+        if (!paymentformData.ccv || !paymentformData.expDate || !paymentformData.cardNumber) {
+            setErrorMessage(`Please fill out all fields`)
             return;
         }
 
@@ -149,8 +150,6 @@ export default function UserProfile() {
             <Box color="inherit" sx={{ m: 4 }}>
                 <Typography variant="h2">Welcome to Your Dashboard, {user?.firstName}!</Typography>
             </Box>
-
-
 
             <Container color="inherit" component="main" maxWidth="xs">
 
@@ -219,41 +218,61 @@ export default function UserProfile() {
             </Container>
 
 
-
-
             <Container style={{ width: "468px" }} color="inherit" component="main" maxWidth="sm" >
-
 
                 <Paper style={{ margin: "12px", padding: "12px 35px 10px" }} elevation={3}>
 
-
-
                     <Box color="inherit" sx={{ m: 3, mx: "auto" }}>
+
                         <Typography variant="h5"> Deactivate Your Account</Typography>
 
                         <br />
 
-                        <Typography variant="body2">Please proceed with caution! You will be logged out after deactivating your account.</Typography>
+                        <Typography variant="body2">Caution! You will be logged out after deactivating your account. Enter 'Deactivate' to proceed.</Typography>
                     </Box>
+
+                    <Grid item xs={12}>
+                        <TextField
+                            required
+                            fullWidth
+                            name="deactivate"
+                            label="Deactivate"
+                            type="text"
+                            id="deactivate"
+                            onChange={(event) => setValue(event.target.value)}
+                        />
 
                     <Box sx={{ mt: 3, mb: 2 }}>
-                        <Button fullWidth variant="contained" onClick={() => deactivateUser()}>Deactivate</Button>
+                        <Button fullWidth variant="contained" disabled = {!value} onClick={() => deactivateUser()}>Deactivate</Button>
                     </Box>
+                   </Grid> 
                 </Paper>
-
             </Container>
+
 
             <Container color="inherit" component="main" maxWidth="xs">
 
                 <Paper style={{ padding: "12px 35px 10px" }} elevation={3}>
 
                     <Box color="inherit" sx={{ m: 3, mx: "auto" }}>
-                        <Typography variant="h5"> Manage Your Payment Method</Typography>
+                        <Typography variant="h5"> Manage Your Payment</Typography>
                     </Box>
 
                     <Box color="inherit" component="form" noValidate sx={{ mt: 3 }}>
-
-                        <Grid container spacing={2}>
+                        <Grid container spacing={2}>        
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    id="cardNumber"
+                                    label="Card Number"
+                                    name="cardNumber"
+                                    autoComplete="family-name"
+                                    value={paymentformData.cardNumber}
+                                    onChange={(event) => setPaymentFormData({ ...paymentformData, cardNumber: event.target.value})}
+                                />
+                            </Grid>    
+                            <br />
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     required
@@ -278,20 +297,8 @@ export default function UserProfile() {
                                     value={paymentformData.ccv}
                                     onChange={(event) => setPaymentFormData({ ...paymentformData, ccv: event.target.value})}
                                 />
-                            </Grid>
-                            <br />
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="cardNumber"
-                                    label="Card Number"
-                                    name="cardNumber"
-                                    autoComplete="family-name"
-                                    value={paymentformData.cardNumber}
-                                    onChange={(event) => setPaymentFormData({ ...paymentformData, cardNumber: event.target.value})}
-                                />
-
+                            </Grid>   
+                            <Grid item xs={12}>
                                 <Box sx={{ mt: 3, mb: 2 }}>
 
                                     <Button fullWidth variant="contained" onClick={createPayment}>Add Payment</Button>
