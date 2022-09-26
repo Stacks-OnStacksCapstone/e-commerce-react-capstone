@@ -8,12 +8,14 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import { Button, Container, Snackbar, Stack } from "@mui/material";
+import { Button, Container, Snackbar, Stack, Table, TableHead, TableRow } from "@mui/material";
 import Paper from '@mui/material/Paper';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import React from "react";
 import { apiCreatePayment, apiCreatePaymentMethod, apiDeletePayment, apiGetAllUserPaymentMethods } from "../../remote/e-commerce-api/paymentService";
 import UserPayments from "../../models/UserPayments";
+import { positions } from '@mui/system';
+
 
 
 const theme = createTheme();
@@ -160,23 +162,23 @@ export default function UserProfile() {
 
     return (
         <>
-            <Box color="inherit" sx={{ m: 4 }}>
+            <Box style={{ position: "relative", top: "13px", left: "275px" }} color="inherit" sx={{ m: 8 }}>
                 <Typography variant="h2">Welcome to Your Dashboard, {user?.firstName}!</Typography>
             </Box>
 
 
 
-            <Container color="inherit" component="main" maxWidth="xs">
+            <Container style={{ position: "relative", top: "15px", left: "-300px" }} color="inherit" component="main" maxWidth="xs" >
 
-                <Paper style={{ padding: "12px 35px 10px" }} elevation={3}>
+                <Paper style={{ padding: "12px 35px 10px" }} elevation={2}>
 
-                    <Box color="inherit" sx={{ m: 3, mx: "auto" }}>
+                    <Box color="inherit" sx={{ m: 4, mx: "auto" }}>
                         <Typography variant="h5"> Update Your Profile</Typography>
                     </Box>
 
                     <Box color="inherit" component="form" noValidate sx={{ mt: 3 }}>
 
-                        <Grid container spacing={2}>
+                        <Grid container spacing={3}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     autoComplete="given-name"
@@ -233,7 +235,7 @@ export default function UserProfile() {
             </Container>
 
 
-            <Container style={{ width: "468px" }} color="inherit" component="main" maxWidth="sm" >
+            <Container style={{ position: "relative", top: "45px", left: "-300px" }} color="inherit" component="main" maxWidth="xs" >
 
 
                 <Paper style={{ margin: "12px", padding: "12px 35px 10px" }} elevation={3}>
@@ -255,7 +257,7 @@ export default function UserProfile() {
 
             </Container>
 
-            <Container color="inherit" component="main" maxWidth="xs">
+            <Container style={{ position: "relative", top: "-561px", right: "-300px" }} color="inherit" component="main" maxWidth="sm">
 
                 <Paper style={{ padding: "12px 35px 10px" }} elevation={3}>
 
@@ -314,51 +316,50 @@ export default function UserProfile() {
                                         </Alert>
                                     </Snackbar>
                                 </Box>
+
+                        <Box color="inherit" component="form" noValidate sx={{ mt: 3 }}>
+                        <Grid container spacing={2}>
+                            {
+                                userPaymentMethods === undefined ?
+                                    (<p>No payment method currently found</p>)
+                                    :
+                                    <Table>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableHead>Card Number</TableHead>
+                                                <TableHead>Expiration Date</TableHead>
+                                                <TableHead>CCV</TableHead>
+                                                <TableHead>Action</TableHead>
+                                            </TableRow>
+                                        </TableHead>
+                                        <tbody>
+                                            {
+                                                userPaymentMethods.map((o) => {
+                                                    return (
+                                                        <tr>
+                                                            <td>{o.cardNumber}</td>
+                                                            <td>{o.expDate.toString()}</td>
+                                                            <td>{o.ccv}</td>
+                                                            <td>
+                                                                {
+                                                                    (<Button fullWidth variant="contained" onClick={() => deletePayment(o.id)}>DELETE</Button>)
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                })
+                                            }
+                                        </tbody>
+                                    </Table>
+                            }
+                        </Grid>
+                    </Box>
+
                             </Grid>
                         </Grid>
                     </Box>
                 </Paper>
             </Container>
-
-            <Paper style={{ padding: "12px 35px 10px" }} elevation={3}>
-                <Box color="inherit" component="form" noValidate sx={{ mt: 3 }}>
-                    <Grid container spacing={2}>
-                        {
-                            userPaymentMethods === undefined ?
-                                (<p>No payment method currently found</p>)
-                                :
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Card Number</th>
-                                            <th>Expiration Date</th>
-                                            <th>CCV</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {
-                                            userPaymentMethods.map((o) => {
-                                                return (
-                                                    <tr>
-                                                        <td>{o.cardNumber}</td>
-                                                        <td>{o.expDate.toString()}</td>
-                                                        <td>{o.ccv}</td>
-                                                        <td>
-                                                            {
-                                                                (<button onClick={() => deletePayment(o.id)}>DELETE</button>)
-                                                            }
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            })
-                                        }
-                                    </tbody>
-                                </table>
-                        }
-                    </Grid>
-                </Box>
-            </Paper>
 
 
         </>
