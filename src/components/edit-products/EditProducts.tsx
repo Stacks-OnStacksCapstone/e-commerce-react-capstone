@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import { apiGetCurrentUser } from "../../remote/e-commerce-api/authService"
 import { eCommerceApiResponse } from "../../remote/e-commerce-api/eCommerceClient"
 import SearchbarEditProducts from './SearchbarEditProducts';
-import SearchbarProducts from "../display-products/SearchbarProducts"
+import { ProductContext } from "../../context/product.context"
 
 const Container = styled.div`
     padding: 40px;
@@ -23,14 +23,14 @@ const Container = styled.div`
 
 export const EditProducts = () => {
 
-    const [products, setProducts] = useState<Product[]>([])
+    const [productList, setProductList] = React.useState<Product[]> ([]);
     const [user, setUser] = useState<eCommerceApiResponse>();
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
             const result = await apiGetAllProducts()
-            setProducts(result.payload)
+            setProductList(result.payload)
             getUser();
         }
         fetchData()
@@ -44,13 +44,18 @@ export const EditProducts = () => {
     if (user === undefined || user.payload.admin != true) {
         return <h1>Unauthorized</h1>
     }
+    if (!productList) {
+        return <h1>  Loading  </h1>
+    }
 
     return (
         <React.Fragment>
             <br />
             <Box>
             <Container style={{alignItems: 'center', justifyContent: 'center'}}>
-                <SearchbarProducts/>
+              <ProductContext.Provider value={{productList, setProductList}}> 
+              <SearchbarEditProducts/>
+              </ProductContext.Provider>
                     </Container>
                 <Container>
                     <Typography variant="h4">Edit Products: </Typography>
@@ -60,7 +65,7 @@ export const EditProducts = () => {
                 </Container>
             </Box>
             <Container>
-                {products.map((item) => (
+                {productList.map((item) => (
                     <EditProductCard product={item} key={item.id} />
                 ))}
             </Container>

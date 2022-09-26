@@ -125,9 +125,16 @@ export const EditProductPage = () => {
                 <br />
                 <Box>
                     <Container maxWidth="md">
-                        <Paper elevation={3}>
-                            <Grid container spacing={0} justify="flex-end">
+                        <Paper elevation={3} sx = {{padding: 3}}>
+                            <Grid container spacing={0} justify="flex-end" direction = "row">                        
+                            <Grid item>
+                             <br>
+                             </br>
+                            </Grid>
+                                <Grid item>
                                 <Button variant="contained" onClick={() => { navigate("/admin/products"); }}> Back to Products </Button>
+                            </Grid>
+
                             </Grid>
                             <Grid container spacing={0} direction="column" alignItems="center" justify="center">
 
@@ -174,6 +181,8 @@ export const EditProductPage = () => {
                                 <span>&nbsp;&nbsp;</span>
                                 <Button variant="contained" onClick={deleteProduct}> Delete </Button>
                             </Grid>
+                            <br>
+                            </br>
                         </Paper>
                     </Container>
                 </Box>
