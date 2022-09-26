@@ -23,7 +23,7 @@ body{
 
 /* ------------------TABLE------------------- */
 
-table{
+Table{
     border-collapse: collapse;
     width: 1200px;
   }
@@ -31,17 +31,18 @@ table{
   th, td {
     text-align: left;
     padding: 8px;
+    width: -100px;
   }
   
-  /* tr:nth-child(even){
+   tr:nth-child(even){
     background-color: #f2f2f2;
     color: #221f1f;
-  } */
+  } 
   
-  /* th {
+   th {
     background-color: #04AA6D;
     color: white;
-  } */
+  } 
   
   /* .tableButton{
     padding: 14px 15px;

@@ -8,7 +8,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import { Button, Container, Snackbar, Stack, Table, TableHead, TableRow } from "@mui/material";
+import { Button, Container, Snackbar, Stack, Table, TableCell, TableHead, TableRow } from "@mui/material";
 import Paper from '@mui/material/Paper';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import React from "react";
@@ -236,9 +236,9 @@ export default function UserProfile() {
             </Container>
 
 
-            <Container style={{ position: "relative", top: "45px", left: "-300px" }} color="inherit" component="main" maxWidth="xs" >
+            <Container style={{ position: "relative", top: "-325px", right: "-400px" }} color="inherit" component="main" maxWidth="xs" >
 
-                <Paper style={{ margin: "12px", padding: "12px 35px 10px" }} elevation={3}>
+                <Paper style={{ padding: "12px 35px 10px" }} elevation={3}>
 
                     <Box color="inherit" sx={{ m: 3, mx: "auto" }}>
 
@@ -253,21 +253,21 @@ export default function UserProfile() {
                         <TextField
                             required
                             fullWidth
-                            name="deactivate"
-                            label="deactivate"
+                            name="Deactivate"
+                            placeholder="deactivate"
                             type="text"
                             id="deactivate"
                             onChange={(event) => setValue(event.target.value)}
                         />
 
-                    <Box sx={{ mt: 3, mb: 2 }}>
-                        <Button fullWidth variant="contained" disabled = {!(value==='deactivate')} onClick={() => deactivateUser()}>Deactivate</Button>
-                    </Box>
-                   </Grid> 
+                        <Box sx={{ mt: 3, mb: 2 }}>
+                            <Button fullWidth variant="contained" disabled={!(value === 'deactivate')} onClick={() => deactivateUser()}>Deactivate</Button>
+                        </Box>
+                    </Grid>
                 </Paper>
             </Container>
 
-            <Container style={{ position: "relative", top: "-561px", right: "-300px" }} color="inherit" component="main" maxWidth="sm">
+            <Container style={{ position: "relative", bottom: "auto" }} color="inherit" component="main" maxWidth="md">
 
                 <Paper style={{ padding: "12px 35px 10px" }} elevation={3}>
 
@@ -275,8 +275,9 @@ export default function UserProfile() {
                         <Typography variant="h5"> Manage Your Payment</Typography>
                     </Box>
 
+
                     <Box color="inherit" component="form" noValidate sx={{ mt: 3 }}>
-                        <Grid container spacing={2}>        
+                        <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField
                                     required
@@ -286,9 +287,9 @@ export default function UserProfile() {
                                     name="cardNumber"
                                     autoComplete="family-name"
                                     value={paymentFormData.cardNumber}
-                                    onChange={(event) => setPaymentFormData({ ...paymentFormData, cardNumber: event.target.value})}
+                                    onChange={(event) => setPaymentFormData({ ...paymentFormData, cardNumber: event.target.value })}
                                 />
-                            </Grid>    
+                            </Grid>
                             <br />
                             <Grid item xs={12} sm={6}>
                                 <TextField
@@ -314,7 +315,7 @@ export default function UserProfile() {
                                     value={paymentFormData.ccv}
                                     onChange={(event) => setPaymentFormData({ ...paymentFormData, ccv: event.target.value })}
                                 />
-                            </Grid>   
+                            </Grid>
                             <Grid item xs={12}>
                                 <Box sx={{ mt: 3, mb: 2 }}>
 
@@ -327,51 +328,49 @@ export default function UserProfile() {
                                     </Snackbar>
                                 </Box>
 
-                        <Box color="inherit" component="form" noValidate sx={{ mt: 3 }}>
-                        <Grid container spacing={2}>
-                            {
-                                userPaymentMethods === undefined ?
-                                    (<p>No payment method currently found</p>)
-                                    :
-                                    <Table>
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableHead>Card Number</TableHead>
-                                                <TableHead>Expiration Date</TableHead>
-                                                <TableHead>CCV</TableHead>
-                                                <TableHead>Action</TableHead>
-                                            </TableRow>
-                                        </TableHead>
-                                        <tbody>
-                                            {
-                                                userPaymentMethods.map((o) => {
-                                                    return (
-                                                        <tr>
-                                                            <td>{o.cardNumber}</td>
-                                                            <td>{o.expDate.toString()}</td>
-                                                            <td>{o.ccv}</td>
-                                                            <td>
-                                                                {
-                                                                    (<Button fullWidth variant="contained" onClick={() => deletePayment(o.id)}>DELETE</Button>)
-                                                                }
-                                                            </td>
-                                                        </tr>
-                                                    )
-                                                })
-                                            }
-                                        </tbody>
-                                    </Table>
-                            }
-                        </Grid>
-                    </Box>
+                                <Paper style={{ padding: "12px 35px 10px" }} elevation={-1}>
 
+                                    <Box color="inherit" component="form" noValidate sx={{ mt: 3 }}>
+                                        <Grid container spacing={3}>
+                                            {
+                                                userPaymentMethods === undefined ?
+                                                    (<p>No payment method currently found</p>)
+                                                    :
+                                                    <Table>
+                                                        <TableHead>
+                                                                <td>Card Number</td>
+                                                                <td>Expiration Date</td>
+                                                                <td>CCV</td>
+                                                                <td>Action</td>
+                                                        </TableHead>
+                                                        <tbody>
+                                                            {
+                                                                userPaymentMethods.map((o) => {
+                                                                    return (
+                                                                        <TableRow>
+                                                                            <TableCell>{o.cardNumber}</TableCell>
+                                                                            <TableCell>{o.expDate.toString()}</TableCell>
+                                                                            <TableCell>{o.ccv}</TableCell>
+                                                                            <TableCell>
+                                                                                {
+                                                                                    (<Button fullWidth variant="contained" onClick={() => deletePayment(o.id)}>DELETE</Button>)
+                                                                                }
+                                                                            </TableCell>
+                                                                        </TableRow>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </tbody>
+                                                    </Table>
+                                            }
+                                        </Grid>
+                                    </Box>
+                                </Paper>
                             </Grid>
                         </Grid>
                     </Box>
                 </Paper>
             </Container>
-
-
         </>
     );
 }

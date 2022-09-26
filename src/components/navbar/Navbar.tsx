@@ -104,9 +104,7 @@ const Navbar = () => {
           </Logo>
         </Left>
         <Right>
-          <Toggler theme={theme} toggleTheme={themeToggler} />
-        </Right>
-        <Right>
+        <Toggler theme={theme} toggleTheme={themeToggler} />
           {!(user === undefined || user === null || user.admin != true) && <MenuItem onClick={() => { navigate('/admin/products') }}><strong>EDIT PRODUCTS</strong></MenuItem>}
           {(user !== undefined && user !== null) ?
             (<>
