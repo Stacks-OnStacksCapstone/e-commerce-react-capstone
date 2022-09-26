@@ -33,7 +33,7 @@ export default function UserProfile() {
     });
 
     const [paymentFormData, setPaymentFormData] = useState({
-        expDate: "2022-09-16",
+        expDate: "",
         ccv: "",
         cardNumber: ""
     });
@@ -125,7 +125,7 @@ export default function UserProfile() {
 
 
 
-    async function deletePayment(paymentId : String) {
+    async function deletePayment(paymentId: String) {
         try {
 
             await apiDeletePayment(paymentId);
