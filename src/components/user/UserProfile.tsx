@@ -307,6 +307,7 @@ export default function UserProfile() {
                                     required
                                     fullWidth
                                     id="expDate"
+                                    //label="Expiration Date"
                                     type="date"
                                     inputProps={{min: "2022-01-01"}}
                                     name="expDate"
