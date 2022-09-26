@@ -23,7 +23,6 @@ export const ReviewCard = (props: reviewProps) => {
   useEffect(()=> {
     async function runEffect() {
       const resp = await apiGetCurrentUser();
-      console.log(resp);
       setUser(resp.payload);
     }
     runEffect();
@@ -34,10 +33,9 @@ export const ReviewCard = (props: reviewProps) => {
       const resp = await apiDeleteProductReview(props.review.id);
       props.refreshReviews();
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   }
-
   return (
     <Card sx={{ width: 345, margin: 2 }}>
       <CardContent>
@@ -45,13 +43,13 @@ export const ReviewCard = (props: reviewProps) => {
           {props.review.user.firstName}
         </Typography>
         <Typography variant="body2">
-        <Rating name="disabled" value={props.review.rating} disabled />
+        <Rating name="read-only" value={props.review.rating} readOnly />
         </Typography>
         <Typography variant="body2">
           {props.review.comment}
         </Typography>
         <CardActions>
-          {user !== undefined && props.review.user.userId === user.id && <Button variant="contained" size="small" onClick={onDelete}>Delete</Button>}
+          {user !== undefined && props.review.user.userId === user.userId && <Button variant="contained" size="small" onClick={onDelete}>Delete</Button>}
         </CardActions>
       </CardContent>
     </Card>

@@ -156,7 +156,7 @@ export const EditProductPage = () => {
                                 <TextField
                                     defaultValue={defaultValue.description}
                                     required
-                                    label="Product Discription"
+                                    label="Product Description"
                                     onChange={(event) => { setProduct({ ...product, "description": event.target.value }) }}
                                 />
                                 <br /><br />
