@@ -1,10 +1,11 @@
-import { Button, Card, CardActionArea, CardContent, CardMedia, Container, DialogContent, Grid, Rating, TextField, Typography } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { ConstructionOutlined } from "@mui/icons-material";
+import { Alert, Button, Grid, Rating, Snackbar, TextField, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Product from "../../models/Product";
 import { apiGetCurrentUser } from "../../remote/e-commerce-api/authService";
 import { eCommerceApiResponse } from "../../remote/e-commerce-api/eCommerceClient";
-import { apiGetAllReviewsForProduct, apigetProductAverageScore, apigetProductByScore, apiUpsertProductReview } from "../../remote/e-commerce-api/productReviewService";
+import { apicanPost, apiGetAllReviewsForProduct, apigetProductAverageScore, apigetProductByScore, apiUpsertProductReview } from "../../remote/e-commerce-api/productReviewService";
 import { apiGetProductById } from "../../remote/e-commerce-api/productService";
 import { ReviewCard } from "./ReviewCard";
 
@@ -28,14 +29,17 @@ class ProductRequest {
 export default function ReviewPage(){
     const [reviews, setReviews] = useState<eCommerceApiResponse>()
     const [product, setProduct] = useState<Product>(new Product(0,"",0,"",0,""))
-    const [newReview, setNewReview] = useState<ProductRequest>(new ProductRequest(0, "", product.id));
-    
+    const [newReview, setNewReview] = useState<ProductRequest>(new ProductRequest(0, "", product.id));    
+
+    const [open, setOpen] = useState(false);
+    const [persisted, setPersisted] = useState<String>();
     
     const {id} = useParams();
     const [user, setUser] = useState<any>();
     const [avrRating, setAvrRating] = useState<number>();
     const [rate, setRate] = useState<number | null>();
     const navigate = useNavigate();
+
     
 
     useEffect(() =>{
@@ -117,18 +121,29 @@ export default function ReviewPage(){
 
     async function onSubmitReview() {
         try {
+            if(await (await apicanPost(product.id,user.userId)).payload){
+                await apiUpsertProductReview(newReview);
+                let reviews = await apiGetAllReviewsForProduct(product.id);
+                setReviews(reviews);
+                setNewReview(new ProductRequest(0, "", product.id));
+                setRate(-2)
+            }else{
+                setOpen(true);
+                setPersisted("You may only post one review")
+            }
             
-          const resp = await apiUpsertProductReview(newReview);
-          let reviews = await apiGetAllReviewsForProduct(product.id);
-          setReviews(reviews);
-          setNewReview(new ProductRequest(0, "", product.id));
-          setRate(-2)
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
-      }
+    }
 
-
+    const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
+    
     let reviewsMap = <Typography>Loading reviews...</Typography>;
 
     if (reviews !== undefined) {
@@ -150,7 +165,7 @@ export default function ReviewPage(){
             <Grid container justifyContent="center" alignItems="center">
                 <Grid item xs={6}>
                     <Grid container justifyContent="center" alignItems="center">
-                        <img src={product.image} height={"50%"} width={"50%"}/>
+                        <img src={product.image} height={"50%"} width={"50%"} alt="product.name"/>
                     </Grid>
                 </Grid>
 
@@ -173,6 +188,13 @@ export default function ReviewPage(){
                             Submit Review
                         </Button>
                     </Grid>
+                    
+                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+                            {persisted}
+                        </Alert>
+                    </Snackbar>
+
                     <br />
                 </Grid>
 
