@@ -278,7 +278,7 @@ export default function UserProfile() {
 
             <Container style={{ position: "relative", bottom: "150px" }} color="inherit" component="main" maxWidth="md">
 
-                <Paper style={{ padding: "12px 35px 10px" }} elevation={3}>
+                <Paper style={{ padding: "12px 35px 45px" }} elevation={3}>
 
                     <Box color="inherit" sx={{ m: 3, mx: "auto" }}>
                         <Typography variant="h5"> Manage Your Payment</Typography>
@@ -305,9 +305,9 @@ export default function UserProfile() {
                                     required
                                     fullWidth
                                     id="expDate"
-                                    label="Expiration Date"
+                                    type="date"
+                                    
                                     name="expDate"
-                                    autoComplete="family-name"
                                     value={paymentFormData.expDate}
                                     onChange={(event) => setPaymentFormData({ ...paymentFormData, expDate: event.target.value })}
                                 />
@@ -325,10 +325,16 @@ export default function UserProfile() {
                                     onChange={(event) => setPaymentFormData({ ...paymentFormData, ccv: event.target.value })}
                                 />
                             </Grid>
+
                             <Grid item xs={12}>
                                 <Box sx={{ mt: 3, mb: 2 }}>
 
                                     <Button fullWidth variant="contained" onClick={createPayment}>Add Payment</Button>
+
+                                    <br />
+                                    <br />
+                                    <br />
+
 
                                     <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                                         <Alert onClose={handleClose} severity={persisted ? "success" : "error"} sx={{ width: '100%' }}>
