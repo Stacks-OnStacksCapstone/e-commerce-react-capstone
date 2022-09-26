@@ -7,7 +7,7 @@ import { OrderCard } from '../components/orders/OrderCard';
 
 test('grabs all orders for user', async () => {
     //expect.assertions(1);
-    const user = await apiLogin("jj@mail.com", "12345");
+    const user = await apiLogin("rc@mail.com", "12345");
     const orders = JSON.parse(`[
       {
           "orderId": 1,
