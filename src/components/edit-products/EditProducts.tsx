@@ -10,6 +10,8 @@ import { Box, Grid, Paper, Typography } from "@material-ui/core"
 import Button from '@mui/material/Button';
 import { apiGetCurrentUser } from "../../remote/e-commerce-api/authService"
 import { eCommerceApiResponse } from "../../remote/e-commerce-api/eCommerceClient"
+import SearchbarEditProducts from './SearchbarEditProducts';
+import SearchbarProducts from "../display-products/SearchbarProducts"
 
 const Container = styled.div`
     padding: 40px;
@@ -47,6 +49,9 @@ export const EditProducts = () => {
         <React.Fragment>
             <br />
             <Box>
+            <Container style={{alignItems: 'center', justifyContent: 'center'}}>
+                <SearchbarProducts/>
+                    </Container>
                 <Container>
                     <Typography variant="h4">Edit Products: </Typography>
                     <Grid container spacing={0} justify="flex-end">

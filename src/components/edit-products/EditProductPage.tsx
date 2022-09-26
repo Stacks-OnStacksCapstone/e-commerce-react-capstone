@@ -11,7 +11,7 @@ import Product from "../../models/Product"
 import { apiGetCurrentUser } from "../../remote/e-commerce-api/authService"
 import { eCommerceApiResponse } from "../../remote/e-commerce-api/eCommerceClient"
 import { apiDeleteProduct, apiGetProductById, apiUpsertProduct } from "../../remote/e-commerce-api/productService"
-
+import SearchbarEditProducts from './SearchbarEditProducts';
 
 
 export const EditProductPage = () => {
@@ -112,8 +112,11 @@ export const EditProductPage = () => {
                     </Paper>
                 </Box>
             </>
-        );
+        );   
     }
+
+
+
 
     else {
         console.log(defaultValue)

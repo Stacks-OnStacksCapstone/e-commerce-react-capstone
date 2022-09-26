@@ -1,11 +1,9 @@
 import Grid from '@material-ui/core/Grid';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from "@mui/material/Container";
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { getSuggestedQuery } from "@testing-library/react";
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Product from "../../models/Product";
