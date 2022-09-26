@@ -1,3 +1,4 @@
+import { DarkMode } from "@mui/icons-material";
 import { useContext, useEffect, useState } from "react"
 import { RefreshContext } from "../../context/refresh.context";
 
@@ -22,3 +23,5 @@ export const useDarkMode = () => {
 
     return [theme, themeToggler]
 };
+
+module.exports = useDarkMode;
