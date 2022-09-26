@@ -194,7 +194,6 @@ export const Cart = () => {
 
   return (
     <Container>
-      <Button variant="contained">Submit payment</Button>
       <Wrapper>
         <Title>YOUR BAG</Title>
         <Top>
