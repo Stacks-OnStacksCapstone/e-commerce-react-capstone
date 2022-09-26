@@ -29,3 +29,10 @@ export const apiCreateOrder = async (paymentId : string, addressInfo : Address) 
     );
     return{ status: response.status, payload: response.data};
 }
+
+export const apiGetOrderById = async (orderId : number) : Promise<eCommerceApiResponse> => {
+    const response = await eCommerceClient.get<any>(
+        `/api/order/${orderId}`
+    );
+    return{ status: response.status, payload: response.data};
+}
