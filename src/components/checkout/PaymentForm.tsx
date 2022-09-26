@@ -19,7 +19,6 @@ export default function PaymentForm(props: paymentFormProps) {
     props.updatePayment(
       [
         {name: "Card Type", detail: `${data.get('cvv')}`},
-        {name: "Card Holder", detail: `${data.get('cardName')}`},
         {name: "Card Number", detail: formatCardNumber(`${data.get('cardNumber')}`)},
         {name: "Expiry Date", detail: `${data.get('expDate')}`}
       ]
@@ -38,17 +37,6 @@ export default function PaymentForm(props: paymentFormProps) {
       </Typography>
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
-            <TextField
-              required
-              id="cardName"
-              name="cardName"
-              label="Name on card"
-              fullWidth
-              autoComplete="cc-name"
-              variant="standard"
-            />
-          </Grid>
           <Grid item xs={12} md={6}>
             <TextField
               required

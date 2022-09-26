@@ -30,11 +30,18 @@ export const apiCreatePaymentMethod = async (ccv: String, expDate: Date, cardNum
     return { status : response.status, payload : response.data}
 }
 
-export const apiDeletePayment = async () : Promise<eCommerceApiResponse> => {
+export const apiDeletePayment = async (paymentId: String) : Promise<eCommerceApiResponse> => {
 
-    const response = await eCommerceClient.delete<any>(
-        `${baseURL}/api/payment`
+    const response = await eCommerceClient.delete(
+        `${baseURL}?paymentId=${paymentId}`
     );
     return { status: response.status, payload: response.data };
 
+}
+
+export const apiGetAllUserPaymentMethods = async (): Promise<eCommerceApiResponse> => {
+    const response = await eCommerceClient.get<any>(
+        `${baseURL}`
+    );
+    return{ status: response.status, payload: response.data };
 }
