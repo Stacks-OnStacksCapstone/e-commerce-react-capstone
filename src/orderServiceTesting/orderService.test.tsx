@@ -35,7 +35,7 @@ test(`grabs no orders when not logged in`, async () =>{
     }
   ]`)
   render(<DisplayProducts></DisplayProducts>);
-  const linkElement = screen.getByText("ORDERS")
+  const linkElement = screen.queryByText("ORDERS")
   expect(linkElement).toBeNull();
 })
 
