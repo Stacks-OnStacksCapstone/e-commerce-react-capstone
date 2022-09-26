@@ -163,13 +163,13 @@ export default function UserProfile() {
 
     return (
         <>
-            <Box style={{ position: "relative", top: "13px", left: "275px" }} color="inherit" sx={{ m: 8 }}>
+            <Box style={{ position: "relative",  top: "42px", right: "-400px" }} color="inherit" sx={{ m: 8 }}>
                 <Typography variant="h2">Welcome to Your Dashboard, {user?.firstName}!</Typography>
             </Box>
 
 
 
-            <Container style={{ position: "relative", top: "15px", left: "-300px" }} color="inherit" component="main" maxWidth="xs" >
+            <Container style={{ position: "relative", top: "108px", left: "-235px" }} color="inherit" component="main" maxWidth="xs" >
 
                 <Paper style={{ padding: "12px 35px 10px" }} elevation={2}>
 
@@ -236,17 +236,24 @@ export default function UserProfile() {
             </Container>
 
 
-            <Container style={{ position: "relative", top: "-325px", right: "-400px" }} color="inherit" component="main" maxWidth="xs" >
+            <Container style={{ position: "relative", top: "-225px", right: "-227px" }} color="inherit" maxWidth="xs" > 
 
-                <Paper style={{ padding: "12px 35px 10px" }} elevation={3}>
+                <Paper style={{ padding: "12px 35px 21px" }} elevation={2}>
 
-                    <Box color="inherit" sx={{ m: 3, mx: "auto" }}>
+                    <Box color="inherit" component="form" noValidate sx={{ mt: 3 }}>
 
                         <Typography variant="h5"> Deactivate Your Account</Typography>
 
                         <br />
+                        <br />
+
 
                         <Typography variant="body2">Caution! You will be logged out after deactivating your account. Enter 'deactivate' to proceed.</Typography>
+
+                        <br/>
+                        
+                        
+                        
                     </Box>
 
                     <Grid item xs={12}>
@@ -260,6 +267,8 @@ export default function UserProfile() {
                             onChange={(event) => setValue(event.target.value)}
                         />
 
+                            <br/>
+
                         <Box sx={{ mt: 3, mb: 2 }}>
                             <Button fullWidth variant="contained" disabled={!(value === 'deactivate')} onClick={() => deactivateUser()}>Deactivate</Button>
                         </Box>
@@ -267,7 +276,7 @@ export default function UserProfile() {
                 </Paper>
             </Container>
 
-            <Container style={{ position: "relative", bottom: "auto" }} color="inherit" component="main" maxWidth="md">
+            <Container style={{ position: "relative", bottom: "150px" }} color="inherit" component="main" maxWidth="md">
 
                 <Paper style={{ padding: "12px 35px 10px" }} elevation={3}>
 
@@ -338,10 +347,10 @@ export default function UserProfile() {
                                                     :
                                                     <Table>
                                                         <TableHead>
-                                                                <td>Card Number</td>
-                                                                <td>Expiration Date</td>
-                                                                <td>CCV</td>
-                                                                <td>Action</td>
+                                                                <TableCell><h3><strong>Card Number</strong></h3></TableCell>
+                                                                <TableCell><h3><strong>Expiration Date</strong></h3></TableCell>
+                                                                <TableCell><h3><strong>CCV</strong></h3></TableCell>
+                                                                <TableCell><h3><strong>Action</strong></h3></TableCell>
                                                         </TableHead>
                                                         <tbody>
                                                             {
