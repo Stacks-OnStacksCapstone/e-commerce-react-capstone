@@ -135,7 +135,7 @@ export const OrderDetails = (props : orderDetailsProps) => {
                         { item !== undefined &&
                     <CardContent>
                         <Typography>OrderDetail ID: {item.id}</Typography>
-                        <Typography>Order ID: {item.ordersId}</Typography>
+                        <Typography>Order ID: {id}</Typography>
                         <Typography>Quantity: {item.quantity}</Typography>
                         <Typography>Product ID: {item.productId}</Typography>
                     </CardContent>
