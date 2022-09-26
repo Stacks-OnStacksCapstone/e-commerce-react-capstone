@@ -44,3 +44,10 @@ describe('Checking themeToggler logic', () => {
 //   })
 // });
 
+// describe('testing parts of darkMode', () => {
+//     const setMode = require('./useDarkMode')
+
+//     test('Mode should be set', () => {
+//         expect(setMode()).toBe('dark');
+//     })
+// })
