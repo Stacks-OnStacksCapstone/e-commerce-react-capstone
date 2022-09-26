@@ -49,7 +49,7 @@ export const ReviewCard = (props: reviewProps) => {
           {props.review.comment}
         </Typography>
         <CardActions>
-          {user !== undefined && props.review.user.userId === user.userId && <Button variant="contained" size="small" onClick={onDelete}>Delete</Button>}
+          {user && props.review.user.userId === user.userId && <Button variant="contained" size="small" onClick={onDelete}>Delete</Button>}
         </CardActions>
       </CardContent>
     </Card>
