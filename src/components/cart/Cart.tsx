@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { CartContext } from "../../context/cart.context";
@@ -7,6 +7,9 @@ import Product from "../../models/Product";
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
+import { Box, Typography, Radio, FormGroup, RadioGroup, FormControlLabel, FormControl, FormLabel, Table, TableRow } from "@mui/material";
+import { apiGetAllUserPaymentMethods } from "../../remote/e-commerce-api/paymentService";
+import UserPayments from "../../models/UserPayments";
 
 const Container = styled.div``;
 
@@ -133,6 +136,21 @@ const CheckoutButton = styled.div`
 `;
 
 export const Cart = () => {
+  const [paymentInfo, setPaymentInfo] = useState<UserPayments[]>([]);
+  
+  useEffect(() => {
+    setPaymentInfo(() => {return []});
+    const getUserPayments = async () => {
+      const response = await apiGetAllUserPaymentMethods();
+      const paymentArr : UserPayments[] = [];
+      for (let i = 0; i < response.payload.length; i++) {
+        paymentArr.push(response.payload[i]);
+      }
+      setPaymentInfo(() => {return paymentArr});
+    }
+    getUserPayments()
+  }, [])
+
   const { cart, setCart } = useContext(CartContext);
 
   // Create our number formatter.
@@ -176,6 +194,7 @@ export const Cart = () => {
 
   return (
     <Container>
+      <Button variant="contained">Submit payment</Button>
       <Wrapper>
         <Title>YOUR BAG</Title>
         <Top>

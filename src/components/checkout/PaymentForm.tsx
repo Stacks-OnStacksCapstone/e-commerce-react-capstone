@@ -3,9 +3,12 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import PaymentDetail from '../../models/PaymentDetail';
-import { Box, Button } from '@mui/material';
+import { Box, Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Table, TableRow } from '@mui/material';
 import * as yup from "yup";
 import { useFormik } from "formik";
+import UserPayments from '../../models/UserPayments';
+import { apiGetAllUserPaymentMethods } from "../../remote/e-commerce-api/paymentService";
+import { useEffect, useState } from 'react';
 
 interface paymentFormProps {
   handleBack: () => void
@@ -14,16 +17,33 @@ interface paymentFormProps {
 }
 
 export default function PaymentForm(props: paymentFormProps) {
+  const [paymentInfo, setPaymentInfo] = useState<UserPayments[]>([]);
+  const [selectedPayment, setSelectedPayment] = useState<number>(0);
+  
+  useEffect(() => {
+    setPaymentInfo(() => {return []});
+    const getUserPayments = async () => {
+      const response = await apiGetAllUserPaymentMethods();
+      const paymentArr : UserPayments[] = [];
+      for (let i = 0; i < response.payload.length; i++) {
+        paymentArr.push(response.payload[i]);
+      }
+      setPaymentInfo(() => {return paymentArr});
+    }
+    getUserPayments()
+  }, [])
+
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const data = paymentInfo[selectedPayment];
+    console.log(data);
     props.updatePayment(
       [
-        {name: "Card Type", detail: `${data.get('ccv')}`},
-        {name: "Card Holder", detail: `${data.get('cardName')}`},
-        {name: "Card Number", detail: formatCardNumber(`${data.get('cardNumber')}`)},
-        {name: "Expiry Date", detail: `${data.get('expDate')}`}
+        {name: "Payment Id", detail: `${data["id"]}`},
+        {name: "Card Type", detail: `${data["ccv"]}`},
+        {name: "Card Number", detail: formatCardNumber(`${data["cardNumber"]}`)},
+        {name: "Expiry Date", detail: `${data["expDate"]}`}
       ]
     )
     props.handleNext()
@@ -69,23 +89,8 @@ export default function PaymentForm(props: paymentFormProps) {
       <Typography variant="h6" gutterBottom>
         Payment method
       </Typography>
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+      {/*<Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
-            <TextField
-              required
-              id="cardName"
-              name="cardName"
-              label="Name on card"
-              helperText={formik.touched.cardName ? formik.errors.cardName: ""}
-              error= {formik.touched.cardName && Boolean(formik.errors.cardName)}
-              onChange={formik.handleChange}
-              onBlur = {formik.handleBlur}
-              fullWidth
-              autoComplete="cc-name"
-              variant="standard"
-            />
-          </Grid>
           <Grid item xs={12} md={6}>
             <TextField
               required
@@ -144,8 +149,32 @@ export default function PaymentForm(props: paymentFormProps) {
             Next
           </Button>
         </Box>
-      </Box>
+    </Box>*/}
+      <Box component="form" onSubmit={handleSubmit}>
+      <FormControl>
+        <FormLabel id="payment-options-group-label">Payment Options</FormLabel>
+        <RadioGroup
+          aria-labelledby="payment-options-radio-group"
+
+          >
+            <Table>
+              {paymentInfo.map((e, i) => { return (
+                <TableRow>
+                    <FormControlLabel value={i} control={<Radio onChange={()=>{setSelectedPayment(i)}}/>} label={`Card Number: ${e.cardNumber}`}/>
+                    <Typography>{`Card number: ${e.cardNumber}`}</Typography>
+                    <Typography>{`Expiration date: ${e.expDate}`}</Typography>
+                </TableRow>)})
+              
+              }
+            </Table>
+        </RadioGroup>
+        <Button variant="contained" type="submit" sx={{ mt: 3, ml: 1 }}>Submit payment</Button>
+        <Button onClick={props.handleBack} sx={{ mt: 3, ml: 1 }}>
+            Back
+          </Button>
+      </FormControl>
       
+      </Box>
     </React.Fragment>
   );
 }
