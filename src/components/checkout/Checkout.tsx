@@ -17,7 +17,7 @@ import PaymentDetail from '../../models/PaymentDetail';
 import { useContext } from 'react';
 import { CartContext } from '../../context/cart.context';
 import Product from '../../models/Product';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 const steps = ['Shipping address', 'Payment details', 'Review your order'];
 
@@ -39,6 +39,7 @@ let paymentDetail = [
   { name: 'Card number', detail: '' },
   { name: 'Expiry date', detail: '' },
 ];
+let orderId = 0;
 
 const theme = createTheme();
 
@@ -46,6 +47,7 @@ export default function Checkout() {
   const [activeStep, setActiveStep] = React.useState(0);
   const { cart, setCart } = useContext(CartContext);
   const navigate = useNavigate();
+  const [orderId, setOrderId] = React.useState<number>();
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -63,6 +65,13 @@ export default function Checkout() {
     paymentDetail = newPaymentDetail
   }
 
+  const updateOrderId = (orderNumber : number) => {
+    console.log(orderNumber);
+    console.log("hellO!");
+    setOrderId(orderNumber);
+    console.log(orderId);
+  }
+
   function getStepContent(step: number) {
     switch (step) {
       case 0:
@@ -70,7 +79,7 @@ export default function Checkout() {
       case 1:
         return <PaymentForm handleNext={handleNext} handleBack={handleBack} updatePayment={updatePayment} />;
       case 2:
-        return <Review handleNext={handleNext} handleBack={handleBack} payments={paymentDetail} address={address} />;
+        return <Review handleNext={handleNext} handleBack={handleBack} payments={paymentDetail} address={address} updateOrderId={updateOrderId} />;
       default:
         throw new Error('Unknown step');
     }
@@ -113,7 +122,7 @@ export default function Checkout() {
                   Thank you for your order.
                 </Typography>
                 <Typography variant="subtitle1">
-                  Your order number is #2001539. We have emailed your order
+                  Your order number is {`${orderId}`}. We have emailed your order
                   confirmation, and will send you an update when your order has
                   shipped.
                 </Typography>

@@ -21,6 +21,7 @@ interface reviewProps {
   handleNext: () => void
   address: Address
   payments: PaymentDetail[]
+  updateOrderId : (orderNumber : number) => void
 }
 
 export default function Review(props: reviewProps) {
@@ -46,6 +47,7 @@ export default function Review(props: reviewProps) {
           "orderId": data,
           "quantity" : product.quantity
         }
+        props.updateOrderId(data);
         console.log(requestBody);
         console.log(requestBody);
         apiCreateOrderDetail(requestBody);

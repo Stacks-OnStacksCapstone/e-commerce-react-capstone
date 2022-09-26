@@ -4,10 +4,15 @@ import eCommerceClient, { eCommerceApiResponse } from "./eCommerceClient"
 const baseURL = "/api/order/history"
 
 export const apiGetAllUserOrders = async (): Promise<eCommerceApiResponse> => {
+    try{
     const response = await eCommerceClient.get<any>(
         `${baseURL}`
+    
     );
     return{ status: response.status, payload: response.data };
+    }catch(error){ console.log(error); 
+        return{ status: 401, payload: [] };
+    }
 }
 
 export const apiGetOrderDetails = async (id: any) : Promise<eCommerceApiResponse> => {
@@ -26,6 +31,13 @@ export const apiCreateOrder = async (paymentId : string, addressInfo : Address) 
     const response = await eCommerceClient.post<any>(
         `/api/order`,
         requestBody
+    );
+    return{ status: response.status, payload: response.data};
+}
+
+export const apiGetOrderById = async (orderId : number) : Promise<eCommerceApiResponse> => {
+    const response = await eCommerceClient.get<any>(
+        `/api/order/${orderId}`
     );
     return{ status: response.status, payload: response.data};
 }
