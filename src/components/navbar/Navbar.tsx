@@ -64,7 +64,7 @@ const Navbar = () => {
 
   async function getUser() {
     let usr = await apiGetCurrentUser();
-    console.log("user:", usr);
+    //console.log("user:", usr);
     setUser(usr.payload);
   }
 
