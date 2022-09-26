@@ -32,7 +32,7 @@ export default function UserProfile() {
     });
 
     const [paymentFormData, setPaymentFormData] = useState({
-        expDate: "2022-09-16",
+        expDate: "",
         ccv: "",
         cardNumber: ""
     });
@@ -124,7 +124,7 @@ export default function UserProfile() {
 
 
 
-    async function deletePayment(paymentId : String) {
+    async function deletePayment(paymentId: String) {
         try {
 
             await apiDeletePayment(paymentId);
@@ -255,7 +255,7 @@ export default function UserProfile() {
 
             </Container>
 
-            <Container color="inherit" component="main" maxWidth="sm">
+            <Container color="inherit" component="main" maxWidth="xs">
 
                 <Paper style={{ padding: "12px 35px 10px" }} elevation={3}>
 
@@ -320,45 +320,45 @@ export default function UserProfile() {
                 </Paper>
             </Container>
 
-                <Paper style={{ padding: "12px 35px 10px" }} elevation={3}>
-                    <Box color="inherit" component="form" noValidate sx={{ mt: 3 }}>
-                        <Grid container spacing={2}>
-                            {
-                                userPaymentMethods === undefined ?
-                                    (<p>No payment method currently found</p>)
-                                    :
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Card Number</th>
-                                                <th>Expiration Date</th>
-                                                <th>CCV</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {
-                                                userPaymentMethods.map((o) => {
-                                                    return (
-                                                        <tr>
-                                                            <td>{o.cardNumber}</td>
-                                                            <td>{o.expDate.toString()}</td>
-                                                            <td>{o.ccv}</td>
-                                                            <td>
-                                                                {
+            <Paper style={{ padding: "12px 35px 10px" }} elevation={3}>
+                <Box color="inherit" component="form" noValidate sx={{ mt: 3 }}>
+                    <Grid container spacing={2}>
+                        {
+                            userPaymentMethods === undefined ?
+                                (<p>No payment method currently found</p>)
+                                :
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Card Number</th>
+                                            <th>Expiration Date</th>
+                                            <th>CCV</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            userPaymentMethods.map((o) => {
+                                                return (
+                                                    <tr>
+                                                        <td>{o.cardNumber}</td>
+                                                        <td>{o.expDate.toString()}</td>
+                                                        <td>{o.ccv}</td>
+                                                        <td>
+                                                            {
                                                                 (<button onClick={() => deletePayment(o.id)}>DELETE</button>)
-                                                                }
-                                                            </td>
-                                                        </tr>
-                                                    )
-                                                })
-                                            }
-                                        </tbody>
-                                    </table>
-                            }
-                        </Grid>
-                    </Box>
-                </Paper>
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })
+                                        }
+                                    </tbody>
+                                </table>
+                        }
+                    </Grid>
+                </Box>
+            </Paper>
 
 
         </>
