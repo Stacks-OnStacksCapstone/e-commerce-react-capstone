@@ -103,8 +103,9 @@ const Navbar = () => {
             <img className="congoLogo" src="/congo-logo.png" alt="The Congo logo" />
           </Logo>
         </Left>
-        <span className="navbarSpan" ><Toggler theme={theme} toggleTheme={themeToggler} /></span>
-        <span className="navbarSpan"><SearchbarProducts/></span>
+        <Right>
+          <Toggler theme={theme} toggleTheme={themeToggler} />
+        </Right>
         <Right>
           {!(user === undefined || user === null || user.admin != true) && <MenuItem onClick={() => { navigate('/admin/products') }}><strong>EDIT PRODUCTS</strong></MenuItem>}
           {(user !== undefined && user !== null) ?

@@ -12,7 +12,8 @@ import { Button, Container, Snackbar, Stack } from "@mui/material";
 import Paper from '@mui/material/Paper';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import React from "react";
-import { apiCreatePayment, apiCreatePaymentMethod, apiDeletePayment } from "../../remote/e-commerce-api/paymentService";
+import { apiCreatePayment, apiCreatePaymentMethod, apiDeletePayment, apiGetAllUserPaymentMethods } from "../../remote/e-commerce-api/paymentService";
+import UserPayments from "../../models/UserPayments";
 
 
 const theme = createTheme();
@@ -31,11 +32,12 @@ export default function UserProfile() {
         password: ""
     });
 
-    const [paymentformData, setPaymentFormData] = useState({
+    const [paymentFormData, setPaymentFormData] = useState({
         expDate: "2022-09-16",
         ccv: "",
         cardNumber: ""
     });
+    const [userPaymentMethods, setUserPaymentMethods] = useState<UserPayments[]>([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -49,6 +51,10 @@ export default function UserProfile() {
     ) {
         return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
     });
+
+    React.useEffect(() => {
+        findAllUserPaymentMethods();
+    }, []);
 
     async function update(event: { preventDefault: () => void; }) {
 
@@ -102,14 +108,14 @@ export default function UserProfile() {
 
         setOpen(true);
 
-        if (!paymentformData.ccv || !paymentformData.expDate || !paymentformData.cardNumber) {
+        if (!paymentFormData.ccv || !paymentFormData.expDate || !paymentFormData.cardNumber) {
             setErrorMessage(`Please fill out all fields`)
             return;
         }
 
         try {
 
-            await apiCreatePaymentMethod(paymentformData.ccv, new Date(paymentformData.expDate), paymentformData.cardNumber);
+            await apiCreatePaymentMethod(paymentFormData.ccv, new Date(paymentFormData.expDate), paymentFormData.cardNumber);
             setPersisted("You've successfully added your payment method!");
 
         } catch (error: any) {
@@ -119,11 +125,10 @@ export default function UserProfile() {
 
 
 
-
-    async function deletePayment() {
+    async function deletePayment(paymentId : String) {
         try {
 
-            await apiDeletePayment();
+            await apiDeletePayment(paymentId);
             setPersisted(`You've successfully removed your payment method!`);
 
         } catch (error) {
@@ -133,13 +138,22 @@ export default function UserProfile() {
 
     async function getProfile() {
         try {
-            const result = await apiGetProfile()
+            const result = await apiGetProfile();
             setUser(result.payload);
             setFormData({
                 firstName: result.payload.firstName,
                 lastName: result.payload.lastName,
                 password: result.payload.password,
             });
+        } catch (error) {
+            console.error(error)
+        }
+    }
+    async function findAllUserPaymentMethods() {
+        try {
+            const result = await apiGetAllUserPaymentMethods();
+            setUserPaymentMethods(result.payload);
+
         } catch (error) {
             console.error(error)
         }
@@ -228,7 +242,7 @@ export default function UserProfile() {
 
                         <br />
 
-                        <Typography variant="body2">Caution! You will be logged out after deactivating your account. Enter 'Deactivate' to proceed.</Typography>
+                        <Typography variant="body2">Caution! You will be logged out after deactivating your account. Enter 'deactivate' to proceed.</Typography>
                     </Box>
 
                     <Grid item xs={12}>
@@ -236,19 +250,18 @@ export default function UserProfile() {
                             required
                             fullWidth
                             name="deactivate"
-                            label="Deactivate"
+                            label="deactivate"
                             type="text"
                             id="deactivate"
                             onChange={(event) => setValue(event.target.value)}
                         />
 
                     <Box sx={{ mt: 3, mb: 2 }}>
-                        <Button fullWidth variant="contained" disabled = {!value} onClick={() => deactivateUser()}>Deactivate</Button>
+                        <Button fullWidth variant="contained" disabled = {!(value==='deactivate')} onClick={() => deactivateUser()}>Deactivate</Button>
                     </Box>
                    </Grid> 
                 </Paper>
             </Container>
-
 
             <Container color="inherit" component="main" maxWidth="xs">
 
@@ -268,8 +281,8 @@ export default function UserProfile() {
                                     label="Card Number"
                                     name="cardNumber"
                                     autoComplete="family-name"
-                                    value={paymentformData.cardNumber}
-                                    onChange={(event) => setPaymentFormData({ ...paymentformData, cardNumber: event.target.value})}
+                                    value={paymentFormData.cardNumber}
+                                    onChange={(event) => setPaymentFormData({ ...paymentFormData, cardNumber: event.target.value})}
                                 />
                             </Grid>    
                             <br />
@@ -281,8 +294,8 @@ export default function UserProfile() {
                                     label="Expiration Date"
                                     name="expDate"
                                     autoComplete="family-name"
-                                    value={paymentformData.expDate}
-                                    onChange={(event) => setPaymentFormData({ ...paymentformData, expDate: event.target.value})}
+                                    value={paymentFormData.expDate}
+                                    onChange={(event) => setPaymentFormData({ ...paymentFormData, expDate: event.target.value })}
                                 />
                             </Grid>
                             <br />
@@ -294,8 +307,8 @@ export default function UserProfile() {
                                     label="CCV"
                                     name="ccv"
                                     autoComplete="family-name"
-                                    value={paymentformData.ccv}
-                                    onChange={(event) => setPaymentFormData({ ...paymentformData, ccv: event.target.value})}
+                                    value={paymentFormData.ccv}
+                                    onChange={(event) => setPaymentFormData({ ...paymentFormData, ccv: event.target.value })}
                                 />
                             </Grid>   
                             <Grid item xs={12}>
@@ -314,6 +327,47 @@ export default function UserProfile() {
                     </Box>
                 </Paper>
             </Container>
+
+                <Paper style={{ padding: "12px 35px 10px" }} elevation={3}>
+                    <Box color="inherit" component="form" noValidate sx={{ mt: 3 }}>
+                        <Grid container spacing={2}>
+                            {
+                                userPaymentMethods === undefined ?
+                                    (<p>No payment method currently found</p>)
+                                    :
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Card Number</th>
+                                                <th>Expiration Date</th>
+                                                <th>CCV</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {
+                                                userPaymentMethods.map((o) => {
+                                                    return (
+                                                        <tr>
+                                                            <td>{o.cardNumber}</td>
+                                                            <td>{o.expDate.toString()}</td>
+                                                            <td>{o.ccv}</td>
+                                                            <td>
+                                                                {
+                                                                (<Button onClick={() => deletePayment(o.id)}>DELETE</Button>)
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                })
+                                            }
+                                        </tbody>
+                                    </table>
+                            }
+                        </Grid>
+                    </Box>
+                </Paper>
+
 
         </>
     );
