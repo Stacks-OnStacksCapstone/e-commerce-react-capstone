@@ -39,6 +39,7 @@ export const OrderDetails = (props : orderDetailsProps) => {
    const [orderInfo, setOrderInfo] = useState<Order>(new Order(0, 0, "", ""))
    const [sum, setSum] = useState<number>(0);
    useEffect(() => {
+
         const products : Product[] = [];
         const fetchOrderDetailResponse = async () => {
             const orderResponse = await apiGetOrderById(id);
@@ -48,20 +49,23 @@ export const OrderDetails = (props : orderDetailsProps) => {
             for (let i = 0; i < response.payload.length; i++) {
                 const productResponse = await apiGetProductById(response.payload[i].productId);
                 products.push(productResponse.payload);
-                console.log(products);
+                //setProductInfo((productInfo) => [...productInfo, productResponse.payload])
             }
             setProductInfo(products);
         }
-        const calculateTotal = () => {
-            for (let i = 0; i < orderDetailsInfo.length; i++) {
-                setSum((sum) => {
-                    return sum += orderDetailsInfo[i].quantity * productInfo[i].price;
-                })
-            }
-        }
         fetchOrderDetailResponse();
-        calculateTotal();
+        
    }, [])
+
+   useEffect(() => {
+        setSum(0)
+        for (let i = 0; i < orderDetailsInfo.length; i++) {
+            setSum((sum) => {
+                return sum += orderDetailsInfo[i].quantity * productInfo[i].price;
+            })
+        }
+   }, [productInfo])
+   
 
    /*useEffect(() => {
         const fetchOrderResponse = async () => {
@@ -91,8 +95,6 @@ export const OrderDetails = (props : orderDetailsProps) => {
    return(
     
     <>
-    {console.log(productInfo)}
-    {console.log(orderDetailsInfo)}
     <Container style={{alignItems:"center", justifyContent:"center", marginTop:60}}>
     <Grid container spacing={0} direction="column">
         <Grid style={{display:"flex", flexDirection:"column"}}>
@@ -102,8 +104,8 @@ export const OrderDetails = (props : orderDetailsProps) => {
             title="Order Header"
             subheader={
                     <Box style={{display: "flex", flexDirection: "row"}}>
-                        {orderInfo !== undefined && <Typography style={{marginRight:30}}>Order date: {orderInfo.orderDate}</Typography>}
-                        <Typography>Order total: {sum}</Typography>
+                        {orderInfo === undefined || <Typography style={{marginRight:30}}>Order date: {orderInfo.orderDate}</Typography>}
+                        {sum === 0 || <Typography>Order total: ${sum}</Typography>}
                     </Box>
                     }
             >
@@ -124,7 +126,7 @@ export const OrderDetails = (props : orderDetailsProps) => {
                     <Box style={{ display: 'flex', flexDirection: 'row', alignItems:"center"}}>
                         { productInfo[i] !== undefined &&
                         <CardContent >
-                            <Link style={{color: "black",display: "flex",flexDirection: "row",alignItems: "center", textDecoration:"none"}} to={`/products/${item.productId}`}><Typography>{productInfo[i].name}</Typography></Link>
+                            <Link style={{color: "inherit", display: "flex",flexDirection: "row",alignItems: "center", textDecoration:"none"}} to={`/products/${item.productId}`}><Typography>{productInfo[i].name}</Typography></Link>
                             {productInfo[i] !== undefined && <Typography>{productInfo[i].description}</Typography>}
                         </CardContent>
                         }   
