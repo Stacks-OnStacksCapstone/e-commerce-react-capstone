@@ -1,3 +1,4 @@
+import addAuthToken from "./addAuthHeader";
 import eCommerceClient, { eCommerceApiResponse } from "./eCommerceClient";
 
 const baseURL = "/auth"
@@ -12,6 +13,7 @@ export const apiLogin = async (email: string, password: string): Promise<eCommer
 
 export const apiGetCurrentUser = async (): Promise<eCommerceApiResponse> => {
     try {
+        addAuthToken();
         const response = await eCommerceClient.get<any>(
             `${baseURL}`
         );

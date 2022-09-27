@@ -1,9 +1,11 @@
 import Product from "../../models/Product";
+import addAuthToken from "./addAuthHeader";
 import eCommerceClient, { eCommerceApiResponse } from "./eCommerceClient";
 
 const baseURL = "/api/product"
 
 export const apiGetAllProducts = async (): Promise<eCommerceApiResponse> => {
+    addAuthToken();
     const response = await eCommerceClient.get<any>(
         `${baseURL}`
     );
@@ -11,6 +13,7 @@ export const apiGetAllProducts = async (): Promise<eCommerceApiResponse> => {
 }
 
 export const apiGetProductById = async (id: number): Promise<eCommerceApiResponse> => {
+    addAuthToken();
     const response = await eCommerceClient.get<any>(
         `${baseURL}/${id}`
     );
@@ -18,6 +21,7 @@ export const apiGetProductById = async (id: number): Promise<eCommerceApiRespons
 }
 
 export const apiGetProductByKeyword = async (keyword:String): Promise<eCommerceApiResponse> => {
+    addAuthToken();
     const response = await eCommerceClient.get<any>(
         `${baseURL}/search/${keyword}`
     );
@@ -25,6 +29,7 @@ export const apiGetProductByKeyword = async (keyword:String): Promise<eCommerceA
 }
 
 export const apiUpsertProduct = async (product: Product): Promise<eCommerceApiResponse> => {
+    addAuthToken();
     const response = await eCommerceClient.put<any>(
         `${baseURL}`,
         product
@@ -33,6 +38,7 @@ export const apiUpsertProduct = async (product: Product): Promise<eCommerceApiRe
 }
 
 export const apiPurchase = async (products: {id: number, quantity: number}[]): Promise<eCommerceApiResponse> => {
+    addAuthToken();
     const response = await eCommerceClient.patch<any>(
         `${baseURL}`,
         products
@@ -41,6 +47,7 @@ export const apiPurchase = async (products: {id: number, quantity: number}[]): P
 }
 
 export const apiDeleteProduct = async (id: number): Promise<eCommerceApiResponse> => {
+    addAuthToken();
     const response = await eCommerceClient.delete<any>(
         `${baseURL}/${id}`
     );

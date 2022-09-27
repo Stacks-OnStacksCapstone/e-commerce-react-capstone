@@ -1,10 +1,12 @@
 import Product from "../../models/Product";
 import ProductReview from "../../models/ProductReview";
+import addAuthToken from "./addAuthHeader";
 import eCommerceClient, { eCommerceApiResponse } from "./eCommerceClient";
 
 const baseURL = "/api/productreview"
 
 export const apiGetAllReviews = async (): Promise<eCommerceApiResponse> => {
+    addAuthToken();
     const response = await eCommerceClient.get<ProductReview>(
         `${baseURL}`
     );
@@ -13,6 +15,7 @@ export const apiGetAllReviews = async (): Promise<eCommerceApiResponse> => {
 
 export const apiGetAllReviewsForProduct = async (productId: number): Promise<eCommerceApiResponse> => {
     try {
+        addAuthToken();
         const response = await eCommerceClient.get<ProductReview>(
             `${baseURL}/${productId}`
         );
@@ -27,6 +30,7 @@ export const apiGetAllReviewsForProduct = async (productId: number): Promise<eCo
 
 export const apigetProductByScore = async (productId: number, rating: number): Promise<eCommerceApiResponse> =>{
     try{
+        addAuthToken();
         const response = await eCommerceClient.get<ProductReview>(
             `${baseURL}/rate/${productId}/${rating}`
         )
@@ -40,6 +44,7 @@ export const apigetProductByScore = async (productId: number, rating: number): P
 
 export const apigetProductAverageScore = async (productId: number): Promise<eCommerceApiResponse> =>{
     try {
+        addAuthToken();
         const response = await eCommerceClient.get<Number>(
             `${baseURL}/avr/${productId}`
         )
@@ -52,6 +57,7 @@ export const apigetProductAverageScore = async (productId: number): Promise<eCom
 
 export const apicanPost = async (productId: number,userId: number): Promise<eCommerceApiResponse> =>{
     try {
+        addAuthToken();
         const response = await eCommerceClient.get<Boolean>(
             `${baseURL}/post/${productId}/${userId}`
         )
@@ -64,6 +70,7 @@ export const apicanPost = async (productId: number,userId: number): Promise<eCom
 
 
 export const apiUpsertProductReview = async (productRequest: any): Promise<eCommerceApiResponse> => {
+    addAuthToken();
     const response = await eCommerceClient.put<any>(
         `${baseURL}`, productRequest
     );
@@ -71,6 +78,7 @@ export const apiUpsertProductReview = async (productRequest: any): Promise<eComm
 }
 
 export const apiDeleteProductReview = async (reviewId: number): Promise<eCommerceApiResponse> => {
+    addAuthToken();
     const response = await eCommerceClient.delete<ProductReview>(
         `${baseURL}/${reviewId}`
     );

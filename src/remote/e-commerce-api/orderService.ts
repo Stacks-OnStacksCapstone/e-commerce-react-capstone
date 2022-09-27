@@ -1,9 +1,11 @@
 import Address from "../../models/Address";
+import addAuthToken from "./addAuthHeader";
 import eCommerceClient, { eCommerceApiResponse } from "./eCommerceClient"
 
 const baseURL = "/api/order/history"
 
 export const apiGetAllUserOrders = async (): Promise<eCommerceApiResponse> => {
+    addAuthToken();
     const response = await eCommerceClient.get<any>(
         `${baseURL}`
     );
@@ -11,6 +13,7 @@ export const apiGetAllUserOrders = async (): Promise<eCommerceApiResponse> => {
 }
 
 export const apiGetOrderDetails = async (id: any) : Promise<eCommerceApiResponse> => {
+    addAuthToken();
     const response = await eCommerceClient.get<any>(
         `/api/orderdetail/order/${id}`
     );
@@ -18,6 +21,7 @@ export const apiGetOrderDetails = async (id: any) : Promise<eCommerceApiResponse
 }
 
 export const apiCreateOrder = async (paymentId : string, addressInfo : Address) : Promise<eCommerceApiResponse> => {
+    addAuthToken();
     const shipmentAddress : string = `${addressInfo.address1}, ${addressInfo.city}, ${addressInfo.state}, ${addressInfo.zip}, ${addressInfo.country}`;
     const requestBody : any = {
         "paymentId" : paymentId,
