@@ -8,13 +8,15 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import { Button, Container, Snackbar, Stack, Table, TableCell, TableHead, TableRow } from "@mui/material";
+import { Button, Container, IconButton, InputAdornment, Snackbar, Stack, Table, TableCell, TableHead, TableRow } from "@mui/material";
 import Paper from '@mui/material/Paper';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import React from "react";
 import { apiCreatePayment, apiCreatePaymentMethod, apiDeletePayment, apiGetAllUserPaymentMethods } from "../../remote/e-commerce-api/paymentService";
 import UserPayments from "../../models/UserPayments";
 import { positions } from '@mui/system';
+import { Visibility, VisibilityOff } from "@material-ui/icons";
+
 
 
 
@@ -41,6 +43,10 @@ export default function UserProfile() {
     });
     const [userPaymentMethods, setUserPaymentMethods] = useState<UserPayments[]>([]);
     const navigate = useNavigate();
+
+    const [showPassword, setShowPassword] = useState(false);
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
+    const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
     useEffect(() => {
         console.log("effect invoked");
@@ -119,9 +125,11 @@ export default function UserProfile() {
 
             await apiCreatePaymentMethod(paymentFormData.ccv, new Date(paymentFormData.expDate), paymentFormData.cardNumber);
             setPersisted("You've successfully added your payment method!");
+            findAllUserPaymentMethods();
 
         } catch (error: any) {
             setErrorMessage(`Adding payment was unsuccessful because ${error.payload}`);
+            
         }
     }
 
@@ -132,6 +140,7 @@ export default function UserProfile() {
 
             await apiDeletePayment(paymentId);
             setPersisted(`You've successfully removed your payment method!`);
+            findAllUserPaymentMethods();
 
         } catch (error) {
             console.log(error);
@@ -213,10 +222,24 @@ export default function UserProfile() {
                                     fullWidth
                                     name="password"
                                     label="Password"
-                                    type="password"
+                                    type={showPassword ? "text" : "password"}
                                     id="password"
                                     autoComplete="new-password"
                                     onChange={(event) => setFormData({ ...formData, password: event.target.value })}
+                                    InputProps={{ 
+                                        endAdornment: (
+                                          <InputAdornment position="end">
+                                            <IconButton
+                                              aria-label="toggle password visibility"
+                                              onClick={handleClickShowPassword}
+                                              onMouseDown={handleMouseDownPassword}
+                                            >
+                                              {showPassword ? <Visibility /> : <VisibilityOff />}
+                                            </IconButton>
+                                          </InputAdornment>
+                                        )
+                                      }}
+                                    
                                 />
                                 <Box sx={{ mt: 3, mb: 2 }}>
 
@@ -305,11 +328,13 @@ export default function UserProfile() {
                                     required
                                     fullWidth
                                     id="expDate"
-                                    type="date"
-                                    
+                                    label="Expiration Date"
                                     name="expDate"
+                                    type="date"
+                                    defaultValue=""
                                     value={paymentFormData.expDate}
                                     onChange={(event) => setPaymentFormData({ ...paymentFormData, expDate: event.target.value })}
+                                    InputLabelProps={{ shrink: true }}
                                 />
                             </Grid>
                             <br />
