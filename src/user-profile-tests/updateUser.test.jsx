@@ -1,17 +1,23 @@
-import {render, screen, cleanup } from '@testing-library/react'
+import {render, screen } from '@testing-library/react'
 import UserProfile from '../components/user/UserProfile';
 import { apiLogin } from '../remote/e-commerce-api/authService';
-import { apiUpdateUser } from '../remote/e-commerce-api/UserService';
 
+const mockedUsedNavigate = jest.fn();
 
+jest.mock('react-router-dom', () => ({
+   ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockedUsedNavigate,
+}));
 
 it('Should render User Profile component', async () => {
     
     //Login and view a profile to update
-    const user = await apiLogin("foxthe4th@gmail.com", "Password@123");
-    const updatedUser = await apiUpdateUser("Pitmon", "Foxall IV", "Password@123" );
+    const loginUser = await apiLogin("foxthe4th@gmail.com", "Password@123");
+     
 
-    
-})
+    render(<UserProfile />);
+    const updateMenu = screen.getByText("Welcome to Your Dashboard, ", {exact:false});
+    expect(updateMenu).toBeInTheDocument();
+});
 
 

@@ -44,11 +44,6 @@ export default function PaymentForm(props: paymentFormProps) {
       console.log(values)
     },
     validationSchema: yup.object().shape({
-      cardName: yup
-          .string()
-          .required("Card Name is required")
-          .matches(/^[aA-zZ\s]+$/, "Use only allowed characters")
-          .max(30, 'Card Name is too long'),
       cardNumber: yup
           .string()
           .matches(/^[0-9]+$/, "Use only allowed characters")
