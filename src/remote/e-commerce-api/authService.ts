@@ -18,7 +18,7 @@ export const apiGetCurrentUser = async (): Promise<eCommerceApiResponse> => {
         
         return { status: response.status, payload: response.data, headers: response.headers };
     } catch (error: any) {
-        return { status: response.status, payload: response.data, headers: response.headers };
+        return { status: 500, payload: null, headers: {} };
     }
 }
 

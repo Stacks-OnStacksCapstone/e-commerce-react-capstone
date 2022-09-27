@@ -13,5 +13,5 @@ export const apiCreatePayment = async (paymentDetails : PaymentDetail[]) : Promi
         `${baseURL}`,
         requestBody
         );
-    return { status : response.status, payload : response.data}
+    return { status: response.status, payload: response.data, headers: response.headers };
 }

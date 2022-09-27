@@ -8,7 +8,7 @@ export const apiGetAllReviews = async (): Promise<eCommerceApiResponse> => {
     const response = await eCommerceClient.get<ProductReview>(
         `${baseURL}`
     );
-    return { status: response.status, payload: response.data };
+    return { status: response.status, payload: response.data, headers: response.headers };
 }
 
 export const apiGetAllReviewsForProduct = async (productId: number): Promise<eCommerceApiResponse> => {
@@ -16,13 +16,13 @@ export const apiGetAllReviewsForProduct = async (productId: number): Promise<eCo
         const response = await eCommerceClient.get<ProductReview>(
             `${baseURL}/${productId}`
         );
-        return { status: response.status, payload: response.data };
+        return { status: response.status, payload: response.data, headers: response.headers };
     }
     catch (error) {
         console.log(error);
     }
 
-    return { status: 0, payload: null };
+    return { status: 500, payload: null, headers: {} };
 }
 
 export const apigetProductByScore = async (productId: number, rating: number): Promise<eCommerceApiResponse> =>{
@@ -30,12 +30,12 @@ export const apigetProductByScore = async (productId: number, rating: number): P
         const response = await eCommerceClient.get<ProductReview>(
             `${baseURL}/rate/${productId}/${rating}`
         )
-        return {status: response.status, payload: response.data}
+        return { status: response.status, payload: response.data, headers: response.headers };
     }
     catch (error){
         console.log(error);
     }
-    return { status: 0, payload: null };
+    return { status: 500, payload: null, headers: {} };
 }
 
 export const apigetProductAverageScore = async (productId: number): Promise<eCommerceApiResponse> =>{
@@ -43,11 +43,11 @@ export const apigetProductAverageScore = async (productId: number): Promise<eCom
         const response = await eCommerceClient.get<Number>(
             `${baseURL}/avr/${productId}`
         )
-        return {status: response.status, payload: response.data}
+        return { status: response.status, payload: response.data, headers: response.headers };
     } catch (error) {
         console.log(error);
     }
-    return { status: 0, payload: null };
+    return { status: 500, payload: null, headers: {} };
 }
 
 export const apicanPost = async (productId: number,userId: number): Promise<eCommerceApiResponse> =>{
@@ -55,11 +55,11 @@ export const apicanPost = async (productId: number,userId: number): Promise<eCom
         const response = await eCommerceClient.get<Boolean>(
             `${baseURL}/post/${productId}/${userId}`
         )
-        return {status: response.status, payload: response.data}
+        return { status: response.status, payload: response.data, headers: response.headers };
     } catch (error) {
         console.log(error);
     }
-    return { status: 0, payload: null };
+    return { status: 500, payload: null, headers: {} };
 }
 
 
@@ -67,12 +67,12 @@ export const apiUpsertProductReview = async (productRequest: any): Promise<eComm
     const response = await eCommerceClient.put<any>(
         `${baseURL}`, productRequest
     );
-    return { status: response.status, payload: response.data };
+    return { status: response.status, payload: response.data, headers: response.headers };
 }
 
 export const apiDeleteProductReview = async (reviewId: number): Promise<eCommerceApiResponse> => {
     const response = await eCommerceClient.delete<ProductReview>(
         `${baseURL}/${reviewId}`
     );
-    return { status: response.status, payload: response.data };
+    return { status: response.status, payload: response.data, headers: response.headers };
 }

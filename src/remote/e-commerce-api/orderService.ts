@@ -7,14 +7,14 @@ export const apiGetAllUserOrders = async (): Promise<eCommerceApiResponse> => {
     const response = await eCommerceClient.get<any>(
         `${baseURL}`
     );
-    return{ status: response.status, payload: response.data };
+    return { status: response.status, payload: response.data, headers: response.headers };
 }
 
 export const apiGetOrderDetails = async (id: any) : Promise<eCommerceApiResponse> => {
     const response = await eCommerceClient.get<any>(
         `/api/orderdetail/order/${id}`
     );
-    return{ status: response.status, payload: response.data };
+    return { status: response.status, payload: response.data, headers: response.headers };
 }
 
 export const apiCreateOrder = async (paymentId : string, addressInfo : Address) : Promise<eCommerceApiResponse> => {
@@ -27,5 +27,5 @@ export const apiCreateOrder = async (paymentId : string, addressInfo : Address) 
         `/api/order`,
         requestBody
     );
-    return{ status: response.status, payload: response.data};
+    return { status: response.status, payload: response.data, headers: response.headers };
 }

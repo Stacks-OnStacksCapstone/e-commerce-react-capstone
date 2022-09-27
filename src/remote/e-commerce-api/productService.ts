@@ -7,21 +7,21 @@ export const apiGetAllProducts = async (): Promise<eCommerceApiResponse> => {
     const response = await eCommerceClient.get<any>(
         `${baseURL}`
     );
-    return { status: response.status, payload: response.data };
+    return { status: response.status, payload: response.data, headers: response.headers };
 }
 
 export const apiGetProductById = async (id: number): Promise<eCommerceApiResponse> => {
     const response = await eCommerceClient.get<any>(
         `${baseURL}/${id}`
     );
-    return { status: response.status, payload: response.data };
+    return { status: response.status, payload: response.data, headers: response.headers };
 }
 
 export const apiGetProductByKeyword = async (keyword:String): Promise<eCommerceApiResponse> => {
     const response = await eCommerceClient.get<any>(
         `${baseURL}/search/${keyword}`
     );
-    return { status: response.status, payload: response.data };
+    return { status: response.status, payload: response.data, headers: response.headers };
 }
 
 export const apiUpsertProduct = async (product: Product): Promise<eCommerceApiResponse> => {
@@ -29,7 +29,7 @@ export const apiUpsertProduct = async (product: Product): Promise<eCommerceApiRe
         `${baseURL}`,
         product
     );
-    return { status: response.status, payload: response.data };
+    return { status: response.status, payload: response.data, headers: response.headers };
 }
 
 export const apiPurchase = async (products: {id: number, quantity: number}[]): Promise<eCommerceApiResponse> => {
@@ -37,12 +37,12 @@ export const apiPurchase = async (products: {id: number, quantity: number}[]): P
         `${baseURL}`,
         products
     );
-    return { status: response.status, payload: response.data };
+    return { status: response.status, payload: response.data, headers: response.headers };
 }
 
 export const apiDeleteProduct = async (id: number): Promise<eCommerceApiResponse> => {
     const response = await eCommerceClient.delete<any>(
         `${baseURL}/${id}`
     );
-    return { status: response.status, payload: response.data };
+    return { status: response.status, payload: response.data, headers: response.headers };
 }

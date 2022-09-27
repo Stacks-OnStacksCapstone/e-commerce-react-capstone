@@ -7,5 +7,5 @@ export const apiCreateOrderDetail = async (requestBody : any) : Promise<eCommerc
         `${baseURL}`,
         requestBody
     );
-    return { status : response.status, payload : response.data};
+    return { status: response.status, payload: response.data, headers: response.headers };
 }
