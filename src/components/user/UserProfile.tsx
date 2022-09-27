@@ -346,7 +346,7 @@ export default function UserProfile() {
                                     </Snackbar>
                                 </Box>
 
-                                <Paper style={{ padding: "12px 35px 10px" }} elevation={-1}>
+                                <Paper style={{ padding: "12px 35px 10px" }} elevation={1}>
 
                                     <Box color="inherit" component="form" noValidate sx={{ mt: 3 }}>
                                         <Grid container spacing={3}>
