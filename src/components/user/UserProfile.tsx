@@ -333,7 +333,6 @@ export default function UserProfile() {
                                     type="date"
                                     inputProps={{min: "2022-01-01"}}
                                     name="expDate"
-                                    type="date"
                                     defaultValue=""
                                     value={paymentFormData.expDate}
                                     onChange={(event) => setPaymentFormData({ ...paymentFormData, expDate: event.target.value })}
