@@ -44,8 +44,7 @@ export default function Login() {
       console.log(response);
       if (response.status >= 200 && response.status < 300) {
         setUser(response.payload);  // Setting user globally in userContext after user logs in.
-        window.localStorage.setItem("token",response.headers.Authorization);
-        window.localStorage.setItem("user",JSON.stringify(response.payload));
+        window.localStorage.setItem("token",response.headers.authorization);
         setToggle(!toggle);
         navigate('/');
       }
