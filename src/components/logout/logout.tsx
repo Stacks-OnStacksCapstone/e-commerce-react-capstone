@@ -19,6 +19,7 @@ export default function Logout() {
     await apiLogout();
     setUser(undefined);  // Unsetting user globally in userContext after user logs out.
     window.localStorage.removeItem("token");
+    window.localStorage.removeItem("user");
     setToggle(!toggle);
     navigate('/login');
   } catch (error) {
