@@ -68,15 +68,18 @@ const Navbar = () => {
   // }, [user]);
   const {toggle, setToggle} = useContext(RefreshContext)
 
-  async function getUser() {
-    let usr = await apiGetCurrentUser();
-    //console.log("user:", usr);
-    setUser(usr.payload);
-  }
+  // async function getUser() {
+  //   let usr = await apiGetCurrentUser();
+  //   console.log("user:", usr);
+  //   setUser(usr.payload);
+  // }
 
-  useEffect(() => {
-    getUser();
-  }, [toggle]);
+   useEffect(() => {
+    if (!user && window.localStorage.getItem("user")) {
+      const tempUser = window.localStorage.getItem("user");
+      if (tempUser !== null) setUser(JSON.parse(tempUser));
+    }
+   }, [toggle]);
 
 
 

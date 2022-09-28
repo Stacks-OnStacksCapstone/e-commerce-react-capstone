@@ -41,8 +41,10 @@ export default function Login() {
     const data = new FormData(event.currentTarget);
     try {
       const response = await apiLogin(`${data.get('email')}`, `${data.get('password')}`);
+      console.log(response);
       if (response.status >= 200 && response.status < 300) {
         setUser(response.payload);  // Setting user globally in userContext after user logs in.
+        window.localStorage.setItem("token",response.headers.authorization);
         setToggle(!toggle);
         navigate('/');
       }
