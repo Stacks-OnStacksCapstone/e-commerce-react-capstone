@@ -15,6 +15,7 @@ import React from "react";
 import { apiCreatePayment, apiCreatePaymentMethod, apiDeletePayment, apiGetAllUserPaymentMethods } from "../../remote/e-commerce-api/paymentService";
 import UserPayments from "../../models/UserPayments";
 import { positions } from '@mui/system';
+import { AxiosError } from "axios";
 
 
 
@@ -35,8 +36,8 @@ export default function UserProfile() {
     });
 
     const [paymentFormData, setPaymentFormData] = useState({
-        expDate: "",
         ccv: "",
+        expDate: "",
         cardNumber: ""
     });
     const [userPaymentMethods, setUserPaymentMethods] = useState<UserPayments[]>([]);
@@ -67,15 +68,14 @@ export default function UserProfile() {
         if (!formData.firstName && !formData.lastName && !formData.password) {
             setErrorMessage(`Please update a field`)
             return;
-        }
-
-        try {
-            await apiUpdateUser(formData.firstName, formData.lastName, formData.password);
-            setPersisted("You've successfully updated your profile!");
-            getProfile();
-
-        } catch (error: any) {
-            setErrorMessage(`Update was unsuccessful because ${error.payload}`);
+        } else {
+            try {
+                await apiUpdateUser(formData.firstName, formData.lastName, formData.password);
+                setPersisted("You've successfully updated your profile!");
+                getProfile();
+            } catch (error: any) {
+                setErrorMessage(`Update was unsuccessful because ${error.payload}`);
+            }
         }
     }
 
@@ -108,21 +108,20 @@ export default function UserProfile() {
 
         event.preventDefault();
 
-        setOpen(true);
-
         if (!paymentFormData.ccv || !paymentFormData.expDate || !paymentFormData.cardNumber) {
             setErrorMessage(`Please fill out all fields`)
+            setOpen(true);
             return;
-        }
-
-        try {
-
-            await apiCreatePaymentMethod(paymentFormData.ccv, new Date(paymentFormData.expDate), paymentFormData.cardNumber);
-            setPersisted("You've successfully added your payment method!");
-            findAllUserPaymentMethods();
-
-        } catch (error: any) {
-            setErrorMessage(`Adding payment was unsuccessful because ${error.payload}`);
+        } else {
+            try {
+                await apiCreatePaymentMethod(paymentFormData.ccv, new Date(paymentFormData.expDate), paymentFormData.cardNumber);
+                setPersisted("You've successfully added your payment method!");
+                setOpen(true);
+                findAllUserPaymentMethods();
+            } catch (error: any) {
+                setErrorMessage(`Adding payment was unsuccessful because ${error.payload}`);
+                setOpen(true);
+            }
         }
     }
 
@@ -134,7 +133,7 @@ export default function UserProfile() {
             await apiDeletePayment(paymentId);
             setPersisted(`You've successfully removed your payment method!`);
             findAllUserPaymentMethods();
-
+            setOpen(true);
         } catch (error) {
             console.log(error);
         }
@@ -158,8 +157,11 @@ export default function UserProfile() {
             const result = await apiGetAllUserPaymentMethods();
             setUserPaymentMethods(result.payload);
 
-        } catch (error) {
-            console.error(error)
+        } catch (error: unknown) {
+            if (typeof error === "string") console.error(error);
+            else if (error instanceof AxiosError) {
+                console.error(error);
+            }
         }
     }
 
@@ -346,7 +348,7 @@ export default function UserProfile() {
                                     </Snackbar>
                                 </Box>
 
-                                <Paper style={{ padding: "12px 35px 10px" }} elevation={-1}>
+                                <Paper style={{ padding: "12px 35px 10px" }} >
 
                                     <Box color="inherit" component="form" noValidate sx={{ mt: 3 }}>
                                         <Grid container spacing={3}>
