@@ -10,11 +10,11 @@ import Login from '../components/login/Login';
 import Register from '../components/register/Register';
 import ResetPassword from '../components/login/resetPassword';
 import { Orders } from '../components/orders/Orders';
-import { OrderDetails } from '../components/orders/OrderDetails';
 import ForgotPassword from '../components/login/forgotPassword';
 import UserProfile from '../components/user/UserProfile';
-import Logout from '../components/logout/logout';
 import { ProductDetailsPage } from '../components/display-products/ProductDetailsPage';
+import ReviewPage from '../components/reviews/ReviewPage';
+
 
 
 export const AppRoutes: React.FC<unknown> = () => (
@@ -22,11 +22,10 @@ export const AppRoutes: React.FC<unknown> = () => (
     <Route path="/" element={<DisplayProducts />} />
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />
-    <Route path = "/products/:id" element={<ProductDetailsPage/>} />
+    <Route path="/products/:id" element={<ProductDetailsPage/>} />
     <Route path="/checkout" element={<Checkout />} />
     <Route path="/cart" element={<Cart />} />
     <Route path="/orders" element={<Orders />}></Route>
-    <Route path="/orderdetails/:id" element={<OrderDetails />}></Route>
     <Route path="/admin/products/" element={<EditProducts />} />
     <Route path="/admin/products/:page" element={<EditProducts />} />
     <Route path="/admin/product/:id" element={<EditProductPage />} />
@@ -35,5 +34,6 @@ export const AppRoutes: React.FC<unknown> = () => (
     <Route path="/forgot-password" element={<ForgotPassword />} />
     <Route path="/reset-password/:token" element={<ResetPassword />} />
     <Route path="/userProfile" element={<UserProfile/>} />
+    <Route path="/reviewpage/:id" element={<ReviewPage/>} />
   </Routes>
 )

@@ -2,7 +2,7 @@ import { Button, Container, DialogContent, IconButton, Paper, Rating, TextField,
 import React, { useContext, useState } from "react";
 import Product from "../../models/Product"
 import { eCommerceApiResponse } from "../../remote/e-commerce-api/eCommerceClient";
-import { apiGetAllReviewsForProduct, apiUpsertProductReview } from "../../remote/e-commerce-api/productReviewService";
+import { apiGetAllReviewsForProduct, apigetProductAverageScore, apiUpsertProductReview } from "../../remote/e-commerce-api/productReviewService";
 import { CartContext } from "../../context/cart.context";
 import { ReviewCard } from "../reviews/ReviewCard";
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -49,6 +49,7 @@ export const ProductDetailsPage = () => {
   const [newReview, setNewReview] = React.useState<ProductRequest>(new ProductRequest(0, "", product.id));
   const { cart, setCart } = useContext(CartContext);
   const navigate = useNavigate();
+  const [avgRating, setAvgRating] = useState<number>(0);
 
   var formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -65,6 +66,8 @@ export const ProductDetailsPage = () => {
         const result = await apiGetProductById(parseInt(id))
         setProduct(result.payload)
         setDefaultValue({ ...result.payload })
+        const avgResult = await apigetProductAverageScore(parseInt(id))
+        setAvgRating(avgResult.payload)
       } catch (error) {
         console.log(error)
       }
@@ -177,6 +180,7 @@ export const ProductDetailsPage = () => {
           <Typography component="h1" variant="h4" align="center">
             {product.name}
           </Typography>
+          <Rating name = "readOnly" value = {avgRating} readOnly></Rating>
           <br />
           <Typography gutterBottom>
             {product.description}
@@ -202,17 +206,12 @@ export const ProductDetailsPage = () => {
               <IconButton onClick={() => { removeProduct(product) }}>
                 <DeleteIcon />
               </IconButton>
-
             </Grid>
-
             <Grid container justifyContent="flex-end">
               <Typography variant="h5" gutterBottom>
                 Price: {formatter.format(product.price)}
               </Typography>
             </Grid>
-
-
-
           </Grid>
           <br />
           <DialogContent dividers>

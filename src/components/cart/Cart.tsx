@@ -6,6 +6,9 @@ import Product from "../../models/Product";
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
+import { Box, Typography, Radio, FormGroup, RadioGroup, FormControlLabel, FormControl, FormLabel, Table, TableRow } from "@mui/material";
+import { apiGetAllUserPaymentMethods } from "../../remote/e-commerce-api/paymentService";
+import UserPayments from "../../models/UserPayments";
 
 
 
@@ -135,6 +138,21 @@ const CheckoutButton = styled.div`
 
 
 export const Cart = () => {
+  const [paymentInfo, setPaymentInfo] = useState<UserPayments[]>([]);
+  
+  useEffect(() => {
+    setPaymentInfo(() => {return []});
+    const getUserPayments = async () => {
+      const response = await apiGetAllUserPaymentMethods();
+      const paymentArr : UserPayments[] = [];
+      for (let i = 0; i < response.payload.length; i++) {
+        paymentArr.push(response.payload[i]);
+      }
+      setPaymentInfo(() => {return paymentArr});
+    }
+    getUserPayments()
+  }, [])
+
   const { cart, setCart } = useContext(CartContext);
   const [showSummary, setShow] = useState(false);
 

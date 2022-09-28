@@ -12,6 +12,8 @@ import { eCommerceApiResponse } from "../../remote/e-commerce-api/eCommerceClien
 import { RefreshContext } from "../../context/refresh.context";
 import Logout from "../logout/logout";
 import { UserContext } from "../../context/user.context";
+import SearchbarProducts from "../display-products/SearchbarProducts";
+
 
 const Container = styled.div`
   height: 60px;
@@ -22,6 +24,8 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background-color: #0C486B;
+  height:70px;
 `;
 
 const Left = styled.div`
@@ -32,6 +36,7 @@ const Left = styled.div`
 
 const Logo = styled.h1`
   font-weight: bold;
+  cursor: pointer;
 `;
 const Right = styled.div`
   flex: 1;
@@ -44,6 +49,7 @@ const MenuItem = styled.div`
   font-size: 14px;
   cursor: pointer;
   margin-left: 25px;
+  color: white;
 `;
 
 
@@ -62,15 +68,19 @@ const Navbar = () => {
   // }, [user]);
   const {toggle, setToggle} = useContext(RefreshContext)
 
-  async function getUser() {
-    let usr = await apiGetCurrentUser();
-    console.log("user:", usr);
-    setUser(usr.payload);
-  }
+  // async function getUser() {
+  //   let usr = await apiGetCurrentUser();
+  //   console.log("user:", usr);
+  //   setUser(usr.payload);
+  // }
 
-  useEffect(() => {
-    getUser();
-  }, [toggle]);
+   useEffect(() => {
+    if (!user && window.localStorage.getItem("user")) {
+      const tempUser = window.localStorage.getItem("user");
+      if (tempUser !== null) setUser(JSON.parse(tempUser));
+    }
+   }, [toggle]);
+
 
 
   // const [theme, setTheme] = useState('light');
@@ -92,19 +102,21 @@ const Navbar = () => {
     <Container>
       <Wrapper>
         <Left>
-          <Logo onClick={() => { navigate('/') }}>Revature Swag Shop</Logo>
+          <Logo onClick={() => { navigate('/') }}>
+            <img className="congoLogo" src="/congo-logo.png" alt="The Congo logo" />
+          </Logo>
         </Left>
         <Right>
-          <Toggler theme={theme} toggleTheme={themeToggler} />
-          {!(user === undefined || user === null || user.admin != true) && <MenuItem onClick={() => { navigate('/admin/products') }}>EDIT PRODUCTS</MenuItem>}
+        <Toggler theme={theme} toggleTheme={themeToggler} />
+          {!(user === undefined || user === null || user.admin != true) && <MenuItem onClick={() => { navigate('/admin/products') }}><strong>EDIT PRODUCTS</strong></MenuItem>}
           {(user !== undefined && user !== null) ?
             (<>
-              <MenuItem onClick={() => { navigate('/userProfile') }}>PROFILE</MenuItem>
-              <MenuItem onClick={() => { navigate('/orders') }}>ORDERS</MenuItem>
+              <MenuItem onClick={() => { navigate('/userProfile') }}><strong>PROFILE</strong></MenuItem>
+              <MenuItem onClick={() => { navigate('/orders') }}><strong>ORDERS</strong></MenuItem>
               <Logout></Logout>
             </>) :
-            (<><MenuItem onClick={() => { navigate('/register') }}>REGISTER</MenuItem>
-              <MenuItem onClick={() => { navigate('/login') }}>SIGN IN</MenuItem></>)}
+            (<><MenuItem onClick={() => { navigate('/register') }}><strong>REGISTER</strong></MenuItem>
+              <MenuItem onClick={() => { navigate('/login') }}><strong>SIGN IN</strong></MenuItem></>)}
           <MenuItem onClick={() => { navigate('/cart') }}>
             <Badge badgeContent={cartTotal()} color="primary">
               <ShoppingCartOutlined />

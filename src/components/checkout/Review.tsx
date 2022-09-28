@@ -10,6 +10,9 @@ import Address from '../../models/Address';
 import { Box, Button } from '@mui/material';
 import { apiPurchase } from '../../remote/e-commerce-api/productService';
 import { CartContext } from '../../context/cart.context';
+import { apiCreateOrder } from '../../remote/e-commerce-api/orderService';
+import { apiCreatePayment } from '../../remote/e-commerce-api/paymentService';
+import { apiCreateOrderDetail } from '../../remote/e-commerce-api/orderDetailService';
 
 
 
@@ -18,6 +21,7 @@ interface reviewProps {
   handleNext: () => void
   address: Address
   payments: PaymentDetail[]
+  updateOrderId : (orderNumber : number) => void
 }
 
 export default function Review(props: reviewProps) {
@@ -32,6 +36,25 @@ export default function Review(props: reviewProps) {
     }))
     apiPurchase(productPurchaseDtos)
     setCart([])
+    //const response : any = apiCreatePayment(props.payments);
+    async function createOrderDetails() {
+      const orderResponse = await apiCreateOrder(props.payments[0].detail, props.address)
+      let data = orderResponse.payload
+      console.log(data);
+      productPurchaseDtos.map((product) => {
+        const requestBody = {
+          "productId": product.id,
+          "orderId": data.orderId,
+          "quantity" : product.quantity
+        }
+        console.log(data);
+        props.updateOrderId(data.orderId);
+        console.log(requestBody);
+        console.log(requestBody);
+        apiCreateOrderDetail(requestBody);
+      })
+    }
+    createOrderDetails();
     props.handleNext()
   }
 

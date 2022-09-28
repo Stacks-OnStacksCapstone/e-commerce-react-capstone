@@ -18,6 +18,8 @@ export default function Logout() {
     try{
     await apiLogout();
     setUser(undefined);  // Unsetting user globally in userContext after user logs out.
+    window.localStorage.removeItem("token");
+    window.localStorage.removeItem("user");
     setToggle(!toggle);
     navigate('/login');
   } catch (error) {
@@ -27,7 +29,7 @@ export default function Logout() {
 
 
   return (
-        <MenuItem style={{fontSize: "14px", cursor: "pointer", marginLeft: "25px"}} onClick={logout}>LOGOUT</MenuItem>
+        <MenuItem style={{fontSize: "14px", cursor: "pointer", marginLeft: "25px"}} onClick={logout}><strong>LOGOUT</strong></MenuItem>
   );
 }
 

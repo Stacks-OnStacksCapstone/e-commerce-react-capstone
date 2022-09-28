@@ -8,26 +8,38 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import { Button, Container, Snackbar, Stack } from "@mui/material";
+import { Button, Container, Snackbar, Stack, Table, TableCell, TableHead, TableRow } from "@mui/material";
 import Paper from '@mui/material/Paper';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import React from "react";
+import { apiCreatePayment, apiCreatePaymentMethod, apiDeletePayment, apiGetAllUserPaymentMethods } from "../../remote/e-commerce-api/paymentService";
+import UserPayments from "../../models/UserPayments";
+import { positions } from '@mui/system';
+
 
 
 const theme = createTheme();
 
 
 export default function UserProfile() {
-    
+
     const [open, setOpen] = React.useState(false);
     const [user, setUser] = useState<User>()
     const [persisted, setPersisted] = useState<String>("");
     const [errorMessage, setErrorMessage] = useState<String>("");
+    const [value, setValue] = useState<String>("");
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
         password: ""
     });
+
+    const [paymentFormData, setPaymentFormData] = useState({
+        expDate: "",
+        ccv: "",
+        cardNumber: ""
+    });
+    const [userPaymentMethods, setUserPaymentMethods] = useState<UserPayments[]>([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -38,17 +50,21 @@ export default function UserProfile() {
     const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
         props,
         ref,
-      ) {
+    ) {
         return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-      });
-      
+    });
+
+    React.useEffect(() => {
+        findAllUserPaymentMethods();
+    }, []);
+
     async function update(event: { preventDefault: () => void; }) {
-        
+
         event.preventDefault();
 
         setOpen(true);
 
-        if(!formData.firstName && !formData.lastName && !formData.password){
+        if (!formData.firstName && !formData.lastName && !formData.password) {
             setErrorMessage(`Please update a field`)
             return;
         }
@@ -65,12 +81,12 @@ export default function UserProfile() {
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
-          return;
+            return;
         }
         setOpen(false);
         setErrorMessage("");
         setPersisted("");
-      };
+    };
 
     async function deactivateUser() {
         try {
@@ -86,9 +102,47 @@ export default function UserProfile() {
         }
     }
 
+
+
+    async function createPayment(event: { preventDefault: () => void; }) {
+
+        event.preventDefault();
+
+        setOpen(true);
+
+        if (!paymentFormData.ccv || !paymentFormData.expDate || !paymentFormData.cardNumber) {
+            setErrorMessage(`Please fill out all fields`)
+            return;
+        }
+
+        try {
+
+            await apiCreatePaymentMethod(paymentFormData.ccv, new Date(paymentFormData.expDate), paymentFormData.cardNumber);
+            setPersisted("You've successfully added your payment method!");
+            findAllUserPaymentMethods();
+
+        } catch (error: any) {
+            setErrorMessage(`Adding payment was unsuccessful because ${error.payload}`);
+        }
+    }
+
+
+
+    async function deletePayment(paymentId: String) {
+        try {
+
+            await apiDeletePayment(paymentId);
+            setPersisted(`You've successfully removed your payment method!`);
+            findAllUserPaymentMethods();
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     async function getProfile() {
         try {
-            const result = await apiGetProfile()
+            const result = await apiGetProfile();
             setUser(result.payload);
             setFormData({
                 firstName: result.payload.firstName,
@@ -99,26 +153,35 @@ export default function UserProfile() {
             console.error(error)
         }
     }
+    async function findAllUserPaymentMethods() {
+        try {
+            const result = await apiGetAllUserPaymentMethods();
+            setUserPaymentMethods(result.payload);
+
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     return (
         <>
-            <Box color="inherit" sx={{ m: 4 }}>
+            <Box style={{ position: "relative",  top: "42px", right: "-400px" }} color="inherit" sx={{ m: 8 }}>
                 <Typography variant="h2">Welcome to Your Dashboard, {user?.firstName}!</Typography>
             </Box>
 
 
 
-            <Container color="inherit" component="main" maxWidth="xs">
+            <Container style={{ position: "relative", top: "108px", left: "-235px" }} color="inherit" component="main" maxWidth="xs" >
 
-                <Paper style={{ padding: "12px 35px 10px" }} elevation={3}>
+                <Paper style={{ padding: "12px 35px 10px" }} elevation={2}>
 
-                    <Box color="inherit" sx={{ m: 3, mx: "auto" }}>
+                    <Box color="inherit" sx={{ m: 4, mx: "auto" }}>
                         <Typography variant="h5"> Update Your Profile</Typography>
                     </Box>
 
                     <Box color="inherit" component="form" noValidate sx={{ mt: 3 }}>
 
-                        <Grid container spacing={2}>
+                        <Grid container spacing={3}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     autoComplete="given-name"
@@ -157,12 +220,12 @@ export default function UserProfile() {
                                     autoComplete="new-password"
                                     onChange={(event) => setFormData({ ...formData, password: event.target.value })}
                                 />
-                                <Box sx={{ mt: 3, mb: 2}}>
-                                  
+                                <Box sx={{ mt: 3, mb: 2 }}>
+
                                     <Button fullWidth variant="contained" onClick={update}>Update</Button>
-                                    
+
                                     <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                                        <Alert onClose={handleClose} severity= {persisted ? "success" : "error" }  sx={{ width: '100%' }}>
+                                        <Alert onClose={handleClose} severity={persisted ? "success" : "error"} sx={{ width: '100%' }}>
                                             {persisted ? persisted : errorMessage}
                                         </Alert>
                                     </Snackbar>
@@ -174,31 +237,158 @@ export default function UserProfile() {
                 </Paper>
             </Container>
 
-           
 
+            <Container style={{ position: "relative", top: "-225px", right: "-227px" }} color="inherit" maxWidth="xs" > 
 
-            <Container style={{width:"468px"}}color="inherit" component="main" maxWidth="sm" >
+                <Paper style={{ padding: "12px 35px 21px" }} elevation={2}>
 
-            
-                <Paper style={{margin:"12px", padding: "12px 35px 10px" }} elevation={3}>
+                    <Box color="inherit" component="form" noValidate sx={{ mt: 3 }}>
 
-                
-
-                    <Box color="inherit" sx={{ m: 3, mx: "auto" }}>
                         <Typography variant="h5"> Deactivate Your Account</Typography>
-                        
+
+                        <br />
                         <br />
 
-                        <Typography variant="body2">Please proceed with caution! You will be logged out after deactivating your account.</Typography>
+
+                        <Typography variant="body2">Caution! You will be logged out after deactivating your account. Enter 'deactivate' to proceed.</Typography>
+
+                        <br/>
+                        
+                        
+                        
                     </Box>
 
-                    <Box sx={{ mt: 3, mb: 2 }}>
-                        <Button fullWidth variant="contained" onClick={() => deactivateUser()}>Deactivate</Button>
-                    </Box>
+                    <Grid item xs={12}>
+                        <TextField
+                            required
+                            fullWidth
+                            name="Deactivate"
+                            placeholder="deactivate"
+                            type="text"
+                            id="deactivate"
+                            onChange={(event) => setValue(event.target.value)}
+                        />
+
+                            <br/>
+
+                        <Box sx={{ mt: 3, mb: 2 }}>
+                            <Button fullWidth variant="contained" disabled={!(value === 'deactivate')} onClick={() => deactivateUser()}>Deactivate</Button>
+                        </Box>
+                    </Grid>
                 </Paper>
-        
             </Container>
 
+            <Container style={{ position: "relative", bottom: "150px" }} color="inherit" component="main" maxWidth="md">
+
+                <Paper style={{ padding: "12px 35px 45px" }} elevation={3}>
+
+                    <Box color="inherit" sx={{ m: 3, mx: "auto" }}>
+                        <Typography variant="h5"> Manage Your Payment</Typography>
+                    </Box>
+
+
+                    <Box color="inherit" component="form" noValidate sx={{ mt: 3 }}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    id="cardNumber"
+                                    label="Card Number"
+                                    name="cardNumber"
+                                    autoComplete="family-name"
+                                    value={paymentFormData.cardNumber}
+                                    onChange={(event) => setPaymentFormData({ ...paymentFormData, cardNumber: event.target.value })}
+                                />
+                            </Grid>
+                            <br />
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    id="expDate"
+                                    //label="Expiration Date"
+                                    type="date"
+                                    inputProps={{min: "2022-01-01"}}
+                                    name="expDate"
+                                    value={paymentFormData.expDate}
+                                    onChange={(event) => setPaymentFormData({ ...paymentFormData, expDate: event.target.value })}
+                                />
+                            </Grid>
+                            <br />
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    id="ccv"
+                                    label="CCV"
+                                    name="ccv"
+                                    autoComplete="family-name"
+                                    value={paymentFormData.ccv}
+                                    onChange={(event) => setPaymentFormData({ ...paymentFormData, ccv: event.target.value })}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <Box sx={{ mt: 3, mb: 2 }}>
+
+                                    <Button fullWidth variant="contained" onClick={createPayment}>Add Payment</Button>
+
+                                    <br />
+                                    <br />
+                                    <br />
+
+
+                                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                                        <Alert onClose={handleClose} severity={persisted ? "success" : "error"} sx={{ width: '100%' }}>
+                                            {persisted ? persisted : errorMessage}
+                                        </Alert>
+                                    </Snackbar>
+                                </Box>
+
+                                <Paper style={{ padding: "12px 35px 10px" }} elevation={-1}>
+
+                                    <Box color="inherit" component="form" noValidate sx={{ mt: 3 }}>
+                                        <Grid container spacing={3}>
+                                            {
+                                                userPaymentMethods === undefined ?
+                                                    (<p>No payment method currently found</p>)
+                                                    :
+                                                    <Table>
+                                                        <TableHead>
+                                                                <TableCell><h3><strong>Card Number</strong></h3></TableCell>
+                                                                <TableCell><h3><strong>Expiration Date</strong></h3></TableCell>
+                                                                <TableCell><h3><strong>CCV</strong></h3></TableCell>
+                                                                <TableCell><h3><strong>Action</strong></h3></TableCell>
+                                                        </TableHead>
+                                                        <tbody>
+                                                            {
+                                                                userPaymentMethods.map((o) => {
+                                                                    return (
+                                                                        <TableRow>
+                                                                            <TableCell>{o.cardNumber}</TableCell>
+                                                                            <TableCell>{o.expDate.toString()}</TableCell>
+                                                                            <TableCell>{o.ccv}</TableCell>
+                                                                            <TableCell>
+                                                                                {
+                                                                                    (<Button fullWidth variant="contained" onClick={() => deletePayment(o.id)}>DELETE</Button>)
+                                                                                }
+                                                                            </TableCell>
+                                                                        </TableRow>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </tbody>
+                                                    </Table>
+                                            }
+                                        </Grid>
+                                    </Box>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Paper>
+            </Container>
         </>
     );
 }
